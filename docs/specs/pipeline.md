@@ -271,10 +271,28 @@ runs/<split_id>/<model>/<run_id>/
 
 ## 11. Reproducibility
 
-- **Environment.** `environment/requirements.lock` (pip-compile, pinned hashes) on top of the Delta
-  module `pytorch-conda/2.8` (what Kevin's job scripts use). `gval doctor` prints a mismatch report, and
-  `run.json` stores the lock SHA256. Delta (x86, A100) and DeltaAI (aarch64, GH200) are both supported;
-  `run.json` records which one was used.
+- **Environment.** Locks are *recorded* from real environments, never written by hand. There is one lock
+  per platform, because Delta (x86_64, A100) and DeltaAI (aarch64, GH200) cannot share binaries.
+  - `environment/requirements.in`: direct dependencies with lower bounds only (numpy, scipy, matplotlib,
+    torch, jsonschema, plus whatever the ported analyses import). The implementer writes it in
+    milestone 1.
+  - `environment/platforms.json`: per platform, how the base environment is loaded.
+    - `delta-x86_64`: `module reset; module load pytorch-conda/2.8`. Not 2.12, whose matplotlib can't
+      save PNGs (see Kevin's `Fall26/scripts/env_delta.sh`).
+    - `deltaai-aarch64`: there is no pytorch-conda module on DeltaAI. Leave it `null` until the owner
+      names the base environment.
+  - `scripts/record_lock.sbatch <platform>`: run by the owner on a compute node of that machine. It
+    loads the base environment, installs this package, and writes `environment/<platform>.lock`. The
+    lock holds the Python version, torch version + CUDA version, and `pip freeze --all` sorted. The
+    owner commits it.
+  - `gval doctor`:
+    - **no lock for the current platform:** status `warn` with `"environment_locked": false`. Doctor
+      still succeeds, so milestones 1–2 can proceed.
+    - **lock present:** a mismatch in python, torch, CUDA, numpy, scipy or matplotlib is a **fail**;
+      any other package mismatch is a `warn`.
+  - `run.json` records the platform, the lock SHA256 (or null) and `environment_locked`. The leaderboard
+    shows runs from unlocked environments as "unlocked"; the owner's dry run (milestone 7) requires a
+    lock.
 - **Determinism.** Fixed seeds from the protocol, `torch.use_deterministic_algorithms(True)` where
   supported, eval mode, no autocast unless the adapter enables it (recorded).
 - **Golden conformance.**
