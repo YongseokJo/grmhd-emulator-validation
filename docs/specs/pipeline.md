@@ -100,6 +100,106 @@ Tiers:
 
 `error_spectra` is deprecated in Kevin's code; drop it.
 
+### 3.3 Quick-tier definitions (milestone 2: final semantics, not a temporary port)
+
+Milestone 2 implements single_step and rollout_curve with their **final** v1 semantics, including the
+block-bootstrap CIs. Milestone 4 does not revisit them, so the golden made in milestone 2 stays valid.
+The other analyses get their improvements in milestone 4.
+
+**Arithmetic.**
+- The runner casts truth and prediction to float64 numpy on CPU before any metric. All metric code is
+  numpy float64 on CPU.
+- Reductions are `np.mean` / `np.sum` over C-contiguous arrays in `[channel, r, θ, φ]` order.
+- Kevin's code runs the normalizer in float32 torch. That difference is accepted; the regression
+  against Kevin's numbers uses 1e-5 relative for these two analyses.
+
+**Constants.** Add this block to `protocols/forecast_v1.json` under `"constants"`, extend the protocol
+schema, and make `read_protocol` validate it. Values are Kevin's unless marked.
+
+```json
+"constants": {
+  "loss_space": {
+    "floor_rho": 1e-20, "floor_ug": 1e-22,
+    "transforms": ["log10", "log10", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh"]
+  },
+  "skill": {"persistence_min": 1e-6, "epsilon": 1e-30},
+  "rel_l1": {"denominator_min": 1e-30},
+  "growth_curve": {"step1_min": 1e-4},
+  "ci": {"percentiles": [2.5, 97.5], "rollout_resample_unit": "start"},
+  "active_disk": {"r_max": 100.0, "theta_halfwidth": 0.5},
+  "correlation_time": {"r1_clip": 0.999, "r1_saturated": 0.99, "r1_cap": 0.99},
+  "attractor": {"sigma_dump_stride": 10},
+  "figures": {"backend": "Agg", "dpi": 150, "font": "DejaVu Sans", "font_size": 11,
+              "rollout_curve_figsize": [14, 5]}
+}
+```
+
+**Loss-space transform.**
+- `L(x)`: channel 0 → `log10(max(rho, floor_rho))`, channel 1 → `log10(max(ug, floor_ug))`, channels
+  2–7 → `arcsinh(x)`.
+- It is applied by the benchmark to the truth, the prediction and the persistence forecast.
+- No ceilings, no Lorentz clamp. Those belong to the model's own decode, and the output is scored as
+  returned.
+
+**single_step** (`metrics/single_step.json`, `tables/single_step.csv`)
+- **Samples:** every eligible start s (§3.1) of every chunk of the evaluated split. Target is s + 1.
+  Persistence forecast = frame s.
+- **Per sample and channel c:**
+  - `nmae_model[c]` = mean over cells of |L(pred) − L(true)|.
+  - `nmae_persist[c]` is the same with the persistence forecast.
+  - `rel_l1[c]` = mean|pred − true| / mean|true| in physical units, or NaN if the denominator is below
+    `denominator_min`.
+- **Aggregates per channel:**
+  - the mean of `nmae_model` and of `nmae_persist` over samples;
+  - `rel_l1` = nanmean over samples;
+  - `skill` = NaN if `nmae_persist` < `persistence_min`, else `1 − nmae_model / (nmae_persist + epsilon)`.
+  - Rows: the 8 channels, then `mean` (nanmean over channels), then `fluid` (channels 0–4) and
+    `magnetic` (5–7) for nMAE.
+- **CI (block bootstrap):**
+  - Within each chunk, cut that chunk's ordered starts into consecutive blocks of `bootstrap_block`
+    starts; the last block may be shorter.
+  - Pool all blocks of the split. Draw, with replacement, as many blocks as there are, using
+    `np.random.default_rng(seed).integers`.
+  - Concatenate the drawn blocks, recompute the per-channel skill (same NaN rule), and repeat
+    `bootstrap_resamples` times.
+  - CI = `np.nanpercentile` at `ci.percentiles`. Report `n_samples`, `n_blocks` and the method string.
+- `summary.json` gets per-channel `nmae_model`, `nmae_persist`, `skill`, `skill_ci`, `rel_l1`, and the
+  `mean` row.
+
+**rollout_curve** (`metrics/rollout_curve.json`, `tables/rollout_curve.csv`, `figures/fig02_rollout_curve.png`)
+- **Starts:** the protocol rollout starts (§3.1: `n_starts_per_chunk` per chunk, evenly spaced). No
+  random selection.
+  - If a chunk has fewer than `max_steps` + `H_max` dumps, fail; don't silently shorten.
+- **Step k = 1 … max_steps:**
+  - per start and channel: `nmae_model[k, c]`;
+  - `nmae_persist[k, c]`, using frame s held fixed for every k.
+- **Aggregates:**
+  - `mean_nmae[k]` = mean over starts of the channel mean;
+  - `std_nmae[k]` = population std (ddof = 0) over starts of the channel mean;
+  - `mean_persist[k]`;
+  - `skill[k]` = `1 − mean_nmae / (mean_persist + epsilon)`;
+  - `per_channel[k, c]` = mean over starts.
+  - Report all of these at every step in the JSON, and at `report_steps` in the CSV and summary.
+- **CI on `skill[k]`:** bootstrap over starts, resampling individual starts (they are ≥ 100 dumps
+  apart), with the same seed, number of resamples and percentiles.
+- **Attractor saturation:**
+  - `sigma[c]` = mean over truth dumps of the evaluated split, taking every `sigma_dump_stride`-th dump
+    of each chunk starting at its first, of the per-dump std over cells of L(truth).
+  - Flag `ok` if `per_channel[max_steps, c] < sigma[c]`, else `exceeds`.
+  - This replaces Kevin's "first 50 dumps of the folder".
+- **Figure:** Kevin's two panels.
+  - (a) mean nMAE ± std vs persistence.
+  - (b) per-channel growth relative to step 1, using absolute nMAE for channels whose step-1 value is
+    below `step1_min`, labelled "(abs)".
+  - x ticks follow Kevin's `dynamic_xticks`; channel colours follow Kevin's `CHANNEL_COLORS`.
+  - Channel labels are the split-file names (`rho … B3`). The legend says "model", not a model name.
+- **Not in milestone 2:**
+  - the predictability horizon (Table 4) and τ_c, which belong to `correlation_times` in milestone 3,
+    using the `correlation_time` and `active_disk` constants above. For rc300 the disk mask
+    additionally requires `resolved == True`; the pairs are consecutive truth dumps inside one chunk
+    of the evaluated split.
+  - every other analysis.
+
 ## 4. Metric spaces
 
 - **Loss space.** The fixed TRON normalization, identical to `Fall26/common/normalizer.py`: log10 for
@@ -208,7 +308,16 @@ class Adapter(ModelAdapter):
     finiteness, that two calls give identical output in eval mode, that `history_length` is honoured,
     and memory and time per step. It prints a JSON verdict.
 - **Run request** (`run_request.json`, the only other user-written file):
-  `{model: name, version, adapter: ref, checkpoint: path, options: {}, training_record: path|null, notes: ""}`.
+  `{model: name, version, adapter: ref, checkpoint: path|null, options: {}, training_record: path|null, notes: ""}`.
+- **Models without weights.** An adapter class declares `requires_checkpoint = True` (the default) or
+  `False`. Persistence declares `False`.
+  - With `False`, the request must have `"checkpoint": null`. A path is an error, so nobody can attach
+    a meaningless file.
+  - With `True`, `null` is an error.
+  - With no checkpoint: `run.json` has `checkpoint_sha256: null` and `checkpoint: null`; the run_id
+    token is the literal `nockpt`; `ckpt_sha8` is shown as `nockpt` everywhere.
+  - Example: `persistence-v1__nockpt__validation__quick__a1`.
+  - The adapter source SHA256 is still recorded, so persistence runs remain identifiable.
 - Docs: `docs/plugging_in_a_model.md`, a step-by-step walkthrough with the TRON example.
 
 ## 7. Running and outputs
