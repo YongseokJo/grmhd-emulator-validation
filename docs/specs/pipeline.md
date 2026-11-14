@@ -45,9 +45,20 @@ pick up anyone else's results.
   `data_root` + file. A `--data-root` override is allowed (for other machines), but the split file's
   identity is its SHA256 and doesn't depend on the path.
 - **Per-file checksums.** Owner-run Slurm job `gval checksums --split-file …` writes
-  `checksums/<split_id>.sha256` (sha256sum format, path relative to `data_root`). Evaluation verifies
-  the SHA256 of every dump it reads against that file. It fails if a hash is missing or wrong, unless
-  `--no-verify-data`, which is recorded in `run.json` and marks the run unverified.
+  `checksums/<split_id>.sha256`.
+  - It hashes **every file listed in the split file**: train, validation, test **and** excluded, plus
+    `geometry.npz`. The geometry hash is checked against the split file's `geometry_sha256`.
+  - Format: sha256sum, one line per file, path relative to `data_root`, sorted by dump ID.
+  - Evaluation verifies the SHA256 of every dump it reads against that file. It fails if a hash is
+    missing or wrong, unless `--no-verify-data`, which is recorded in `run.json` and marks the run
+    unverified.
+- **What "excluded" means.** The split files say excluded dumps must never be used. That rule is about
+  **models**: an excluded dump is never a training sample, an input, a target or an evaluation sample.
+  Whole-run *truth* tools may still read excluded dumps, because they never feed a model:
+  - checksums;
+  - the data movies and timeline (`docs/specs/movies.md`).
+
+  The runner and the adapter API never pass an excluded dump to a model. A test asserts this.
 - Known data issue (recorded in the split files): rc300 cells with r < 6.11 are a coarse AMR level, each
   value duplicated into 2 × 2 × 2 cells. 5000run uses only the main-folder dumps; `blind/` is outdated.
 
