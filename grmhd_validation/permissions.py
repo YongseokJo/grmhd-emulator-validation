@@ -17,6 +17,7 @@ class SharedStorage:
         self.root = Path(root).absolute()
         self.gid = grp.getgrnam(group).gr_gid
         self.created = {}
+        self.original_modes = {}
 
     def require_owner(self):
         if os.geteuid() != self.root.stat().st_uid:
@@ -27,6 +28,7 @@ class SharedStorage:
         if metadata.st_gid != self.gid:
             raise PermissionError("New entry did not inherit the required group: " + str(path))
         self.created[Path(path)] = (metadata.st_dev, metadata.st_ino)
+        self.original_modes[Path(path)] = stat.S_IMODE(metadata.st_mode)
 
     def folder(self, area, *parts):
         """Open only prescribed areas; create children with the area's fixed mode."""
@@ -36,7 +38,9 @@ class SharedStorage:
         if area in OWNER_AREAS:
             self.require_owner()
         for part in parts:
-            identifier(part)
+            relative_path(part)
+            if Path(part).name != part:
+                raise ValueError("Expected a directory component")
         fd = os.open(self.root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         path = self.root
         try:
@@ -107,3 +111,50 @@ class SharedStorage:
                 os.fchmod(fd, stat.S_IMODE(metadata.st_mode) & ~0o222)
             finally:
                 os.close(fd)
+
+    def exclusive_folder(self, area, *parts):
+        if not parts:
+            raise ValueError("Exclusive creation requires a child name")
+        parent = self.folder(area, *parts[:-1])
+        name = relative_path(parts[-1])
+        if Path(name).name != name:
+            raise ValueError("Expected a directory component")
+        mode = 0o2750 if area in OWNER_AREAS else 0o3770
+        fd = os.open(parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        try:
+            os.mkdir(name, mode, dir_fd=fd)
+            child = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd)
+            try:
+                os.fchmod(child, mode)
+                self._remember(parent / name, child)
+            finally:
+                os.close(child)
+        finally:
+            os.close(fd)
+        return parent / name
+
+    def rewrite_created(self, path):
+        path = Path(path).absolute()
+        if path not in self.created:
+            raise PermissionError("Cannot rewrite a file not created in this invocation")
+        fd = os.open(path, os.O_WRONLY | os.O_NOFOLLOW)
+        metadata = os.fstat(fd)
+        if (metadata.st_dev, metadata.st_ino) != self.created[path]:
+            os.close(fd)
+            raise PermissionError("Created file was replaced")
+        os.ftruncate(fd, 0)
+        return os.fdopen(fd, "wb")
+
+    def restore_created_modes(self, tree):
+        """Recover a failed final rename, touching only this invocation's inodes."""
+        tree = Path(tree).absolute()
+        for path in sorted(self.created, key=lambda p: len(p.parts)):
+            if path == tree or tree in path.parents:
+                fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+                try:
+                    metadata = os.fstat(fd)
+                    if self.created[path] != (metadata.st_dev, metadata.st_ino):
+                        raise PermissionError("Cannot restore a replaced entry")
+                    os.fchmod(fd, self.original_modes[path])
+                finally:
+                    os.close(fd)

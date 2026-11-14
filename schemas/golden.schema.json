@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "environment_locked": {
+      "type": "boolean"
+    },
+    "files": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "lock_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "platform": {
+      "enum": [
+        "delta-x86_64",
+        "deltaai-aarch64"
+      ]
+    },
+    "provisional": {
+      "type": "boolean"
+    },
+    "repo_commit": {
+      "anyOf": [
+        {
+          "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "result_fingerprint": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "result_fingerprint",
+    "files",
+    "platform",
+    "environment_locked",
+    "lock_sha256",
+    "repo_commit",
+    "provisional"
+  ],
+  "type": "object"
+}

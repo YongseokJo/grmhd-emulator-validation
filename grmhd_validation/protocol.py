@@ -7,6 +7,9 @@ from .hashing import sha256
 def read_protocol(path):
     path = Path(path)
     data = json.loads(path.read_text())
+    import jsonschema
+    schema_path = Path(__file__).resolve().parents[1] / "schemas/protocol.schema.json"
+    jsonschema.validate(data, json.loads(schema_path.read_text()))
     for name in ("H_max", "max_steps", "n_starts_per_chunk", "bootstrap_block", "bootstrap_resamples"):
         if type(data[name]) is not int or data[name] <= 0:
             raise ValueError("Protocol requires a positive integer: " + name)
@@ -22,4 +25,10 @@ def read_protocol(path):
     for analyses in data["tiers"].values():
         if len(analyses) != len(set(analyses)) or "error_spectra" in analyses:
             raise ValueError("Duplicate or deprecated analysis")
+    percentiles = data["constants"]["ci"]["percentiles"]
+    if percentiles != sorted(set(percentiles)):
+        raise ValueError("CI percentiles must increase")
+    correlation = data["constants"]["correlation_time"]
+    if correlation["r1_cap"] > correlation["r1_clip"] or correlation["r1_saturated"] > correlation["r1_clip"]:
+        raise ValueError("Correlation cap/saturation cannot exceed clipping bound")
     return data, sha256(path)

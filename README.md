@@ -5,10 +5,11 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestone 1 foundations under review.** Package/CLI setup, frozen split
-reading, protocol configuration, doctor, owner checksum jobs, permission helpers,
-and environment-recording scripts are implemented. Evaluation and adapters begin
-only after milestone 1 is approved. See [milestone 1 usage](docs/milestone_1.md).
+**Status: milestone 2 implementation in review preparation.** Milestone 1 is
+merged. The adapter API, persistence, quick analyses, recorded runner, owner
+goldens, conformance and verification are implemented. Full-tier analyses and
+learned-model examples remain in later milestones. See [milestone 2 usage](docs/milestone_2.md),
+[metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md).
 
 | Path | Contents |
 |---|---|

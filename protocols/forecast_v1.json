@@ -8,6 +8,17 @@
   "bootstrap_resamples": 1000,
   "seed": 42,
   "gpu_tolerance": 0.0001,
+  "constants": {
+    "loss_space": {"floor_rho": 1e-20, "floor_ug": 1e-22, "transforms": ["log10", "log10", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh"]},
+    "skill": {"persistence_min": 1e-6, "epsilon": 1e-30},
+    "rel_l1": {"denominator_min": 1e-30},
+    "growth_curve": {"step1_min": 1e-4},
+    "ci": {"percentiles": [2.5, 97.5], "rollout_resample_unit": "start"},
+    "active_disk": {"r_max": 100.0, "theta_halfwidth": 0.5},
+    "correlation_time": {"r1_clip": 0.999, "r1_saturated": 0.99, "r1_cap": 0.99},
+    "attractor": {"sigma_dump_stride": 10},
+    "figures": {"backend": "Agg", "dpi": 150, "font": "DejaVu Sans", "font_size": 11, "rollout_curve_figsize": [14, 5]}
+  },
   "tiers": {
     "quick": ["single_step", "rollout_curve"],
     "full": [

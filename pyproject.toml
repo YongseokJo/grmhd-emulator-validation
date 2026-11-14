@@ -12,5 +12,8 @@ dependencies = ["numpy>=1.24", "scipy>=1.10", "matplotlib>=3.7", "torch>=2.3", "
 [project.scripts]
 gval = "grmhd_validation.cli:main"
 
+[project.entry-points."grmhd_validation.adapters"]
+persistence = "grmhd_validation.adapters.persistence:Persistence"
+
 [tool.setuptools.packages.find]
 include = ["grmhd_validation*"]
