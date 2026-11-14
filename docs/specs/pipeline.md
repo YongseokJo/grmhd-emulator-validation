@@ -297,9 +297,26 @@ runs/<split_id>/<model>/<run_id>/
 
 - **Environment.** Locks are *recorded* from real environments, never written by hand. There is one lock
   per platform, because Delta (x86_64, A100) and DeltaAI (aarch64, GH200) cannot share binaries.
-  - `environment/requirements.in`: direct dependencies with lower bounds only (numpy, scipy, matplotlib,
-    torch, jsonschema, plus whatever the ported analyses import). The implementer writes it in
-    milestone 1.
+  - `environment/requirements.in`: direct dependencies with lower bounds only. The implementer writes
+    it in milestone 1 with exactly these bounds, and the same bounds go into `pyproject.toml`:
+
+    | Package | Lower bound | Why |
+    |---|---|---|
+    | python | 3.10 | `match` and `X \| Y` types allowed; DeltaAI system Python is 3.10/3.11 |
+    | numpy | 1.24 | code must also run on numpy 2.x; test both |
+    | scipy | 1.10 | |
+    | matplotlib | 3.7 | |
+    | torch | 2.3 | `torch.load(weights_only=…)`, deterministic-algorithms API |
+    | jsonschema | 4.18 | |
+
+    - No upper bounds; the per-platform lock does the pinning.
+    - Analyses ported in milestone 3 may add a dependency only with planner approval, and each needs a
+      lower bound and a reason.
+    - **The base environment's torch, numpy, scipy and matplotlib must never be replaced by pip.**
+      Install this package with `pip install --no-deps -e .` on top of the module, then install only the
+      missing packages (e.g. jsonschema) individually.
+    - `record_lock.sbatch` fails if any installed version is below the bounds above, or if pip would
+      change a base-environment package.
   - `environment/platforms.json`: per platform, how the base environment is loaded.
     - `delta-x86_64`: `module reset; module load pytorch-conda/2.8`. Not 2.12, whose matplotlib can't
       save PNGs (see Kevin's `Fall26/scripts/env_delta.sh`).
