@@ -131,10 +131,14 @@ Tiers:
   | `sachin` | `5034a36` | `fall26/` (TRON originals) |
 
 - Read the other branches with `git -C <checkout> show <commit>:<path>`. Never write to the checkout.
-- **Publication.** This repository is public. Until the owner confirms that the authors (Kevin, Sachin)
-  agree to publication, **no code from that repository may be committed here**, whether copied or
-  ported. Keep ported code on an unpushed local branch, or in a private fork, until the owner says so.
-  Golden regression tests may *read* the original at run time from the reference checkout.
+- **Publication.** The owner approved porting this code into the public repository for validation
+  use (2026-11-14). Every ported module must:
+  - start with a header naming the original file, branch and commit, and its authors (Kevin Fortune,
+    `Fall26/`; Sachin, `sachin:fall26/`);
+  - be listed in `docs/provenance.md`: module → original file@commit → what changed.
+
+  Golden regression tests read the original at run time from the reference checkout. Never vendor an
+  unmodified copy of the original script.
 
 1. **Port, don't wrap.** Turn the 3,500-line script into modules under `grmhd_validation/analyses/`,
    one per analysis. Each has the signature `run(ctx) -> dict` and writes JSON (plus CSV for tables)
