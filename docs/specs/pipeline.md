@@ -118,6 +118,24 @@ Tiers:
 
 ## 5. Required improvements over Kevin's suite (all approved)
 
+**Reference source (read-only).**
+- Kevin's group repository is private. The read-only checkout is at
+  `/u/gkerex/project/reference/neural_operator_msai_spring26`
+  (`git@github.com:KevinFortuneCodes/neural_operator_msai_spring26.git`, reachable over SSH only).
+- Pinned commits:
+
+  | Branch | Commit | Files |
+  |---|---|---|
+  | `main` | `ebcc218` | `Fall26/eval/evaluate_forecast_ds.py`, `Fall26/eval/evaluate_vit.py`, `Fall26/common/*.py` |
+  | `fall26-tron-rc300` | `2667a5f` | `Fall26/eval/evaluate_tron.py` |
+  | `sachin` | `5034a36` | `fall26/` (TRON originals) |
+
+- Read the other branches with `git -C <checkout> show <commit>:<path>`. Never write to the checkout.
+- **Publication.** This repository is public. Until the owner confirms that the authors (Kevin, Sachin)
+  agree to publication, **no code from that repository may be committed here**, whether copied or
+  ported. Keep ported code on an unpushed local branch, or in a private fork, until the owner says so.
+  Golden regression tests may *read* the original at run time from the reference checkout.
+
 1. **Port, don't wrap.** Turn the 3,500-line script into modules under `grmhd_validation/analyses/`,
    one per analysis. Each has the signature `run(ctx) -> dict` and writes JSON (plus CSV for tables)
    with a fixed schema. No text output is parsed, ever. `out_res.txt` is still written, but only as a
@@ -246,7 +264,9 @@ runs/<split_id>/<model>/<run_id>/
 
   | Command | Creates (if missing) |
   |---|---|
-  | `evaluate`, `conformance` | `staging/<user>/` at start. `runs/<split_id>/` and `runs/<split_id>/<model>/` only at the final rename of a COMPLETE run |
+  | `evaluate` | `staging/<user>/` at start. `runs/<split_id>/` and `runs/<split_id>/<model>/` only at the final rename of a COMPLETE run |
+  | `conformance` | `staging/<user>/conformance/` only; never anything in `runs/` |
+  | `reference` (owner) | `references/<split_id>/forecast_v1/persistence_<tier>/<platform>/`, mode 2750 |
   | `record-training` | `training_records/<model>/` |
   | `checksums`, `report`, owner reference jobs | nothing new under the group areas. They write into owner-only areas (`checksums/`, `reports/<split_id>/`, `references/<split_id>/`), creating `<split_id>/` with mode 2750 |
   | `doctor`, `verify`, `check-adapter`, `new-adapter` | nothing in the shared folder (`new-adapter` writes only to the user's target directory) |
@@ -337,12 +357,50 @@ runs/<split_id>/<model>/<run_id>/
 - **Determinism.** Fixed seeds from the protocol, `torch.use_deterministic_algorithms(True)` where
   supported, eval mode, no autocast unless the adapter enables it (recorded).
 - **Golden conformance.**
-  - The owner publishes `references/<split_id>/forecast_v1/persistence_quick/` (and the full tier).
-  - `gval conformance` runs persistence on CPU and must match it **bit for bit** (float64 accumulation,
-    fixed reduction order).
-  - Every agent runs this once per environment before its first submission.
-  - For learned models on GPU, two runs must agree within `gpu_tolerance` = 1e-4 relative on
-    summary.json numbers.
+  - **Result content vs run metadata.** Every run's files fall into two groups.
+    - **Result content** (deterministic): `summary.json`, `metrics/*.json` and `tables/*.csv`. These
+      files must not contain anything run-specific: no timestamps, run_id, attempt, user, host, paths,
+      durations or versions. JSON is written with `sort_keys=True`, `indent=1`, `allow_nan=False` and
+      a trailing newline, with floats in Python `repr` (shortest round-trip). CSV uses `\n` line
+      endings and `repr` floats.
+    - **Run metadata** (varies by design): `run.json`, `logs/`, `checksums.json`, `out_res.txt`,
+      `figures/`, `COMPLETE`.
+  - **Result fingerprint.** `run.json` stores `result_fingerprint`: the SHA256 of the text formed by
+    one line `<sha256>  <relative path>\n` per result-content file, sorted by path. `summary.json`
+    doesn't contain the fingerprint, which would be circular.
+  - **Creating the golden (owner only).**
+    - `gval reference persistence --split-id <id> --tier quick --split validation`, through
+      `scripts/reference_delta.sbatch` on a **CPU** node (`--device cpu`, 1 thread:
+      `OMP_NUM_THREADS=1`, `torch.set_num_threads(1)`). It runs exactly the normal evaluation code path
+      with the persistence adapter.
+    - It writes `references/<split_id>/forecast_v1/persistence_quick/<platform>/`, containing:
+      - the result-content files;
+      - `run.json`;
+      - `golden.json`: `{result_fingerprint, files: {path: sha256}, platform, environment_locked,
+        lock_sha256, repo_commit, provisional}`.
+    - `provisional` is `true` while the platform has no environment lock. Once a lock is committed,
+      the owner regenerates the golden with `provisional: false`.
+    - The command refuses to overwrite an existing golden with different content. A changed golden
+      requires a new protocol version or a recorded owner decision.
+  - **Conformance (everyone).**
+    - `gval conformance --split-id <id>` runs the same persistence quick-tier validation evaluation on
+      CPU with 1 thread. Output goes to `staging/<user>/conformance/<platform>__<n>/`, **never** to
+      `runs/`, so it never appears on the leaderboard.
+    - It then compares its `result_fingerprint` with `golden.json` for the **same platform**. Pass =
+      identical fingerprint. On failure it reports which files differ, and for JSON numbers the largest
+      relative difference.
+    - If only the other platform has a golden, conformance compares every number within 1e-12
+      relative and reports `status: warn` with `cross_platform: true`. That is not a failure, but it
+      is recorded.
+    - If no golden exists, it fails with `next: "ask the owner to run scripts/reference_delta.sbatch"`.
+    - Every agent runs conformance once per environment (platform + lock) before its first
+      submission. `run.json` of later runs records the last passing conformance fingerprint.
+  - **Learned models on GPU.** Two runs of the same request must have result-content numbers that
+    agree within `gpu_tolerance` = 1e-4 relative. `gval verify --compare <run_a> <run_b>` checks this.
+  - **Milestone 2 bootstrapping.** No golden exists yet. The implementer delivers the commands and the
+    Slurm script, and tests them against a synthetic split in a temporary directory. The owner then
+    runs `scripts/reference_delta.sbatch` for `rc300_reduced_v1` and `5000run_v1` (provisional, on
+    DeltaAI). After that, `gval conformance` on real data is part of the milestone 2 review.
 
 ## 12. Agent instructions (deliverables)
 
