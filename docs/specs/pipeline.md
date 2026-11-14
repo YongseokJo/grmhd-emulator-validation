@@ -1,10 +1,10 @@
 # Spec: end-to-end validation pipeline (v1)
 
-Status: draft for implementation. The owner of the repository and of this spec is the benchmark owner;
+Status: approved for implementation (2026-11-14); all protocol settings are decided. The owner of the repository and of this spec is the benchmark owner;
 the planner maintains this text. The implementer follows it exactly.
 
-- Anything marked **[OWNER]** is a decision still open. Implement it as a protocol setting with the
-  stated default, so changing it never needs a code change.
+- Every protocol setting lives in `protocols/forecast_v1.json`, so changing one never needs a code
+  change.
 - Anything not covered here is a question for the planner, not a decision for the implementer.
 
 ## 0. Goal and principles
@@ -63,20 +63,20 @@ pick up anyone else's results.
   adapter's `history_length` (1 ≤ h ≤ `H_max`). It receives nothing later than s.
 - **Same starts for every model.** In each chunk, eligible starts are
   `[chunk_first + H_max − 1, chunk_last − max_steps]`, whatever h a model uses.
-  - `H_max` = 10 **[OWNER]**.
+  - `H_max` = 10.
   - Single-step metrics use every eligible start.
   - Rollout analyses use `n_starts_per_chunk` starts, evenly spaced over the eligible range:
     `round(linspace(lo, hi, n))`, de-duplicated.
 - **Rollout.** Autoregressive. After step 1, the adapter's own outputs become its history, mixed with
   the true frames still inside the window, i.e. the standard rolling buffer. The runner, not the
   adapter, keeps that buffer.
-- **Horizon.** `max_steps` steps, scored at `report_steps` **[OWNER]**: Kevin's code defaults to 50 steps
-  and reports at 1, 10, 25 and 50.
+- **Horizon.** `max_steps` = 50 steps, scored at `report_steps` = 1, 10, 25 and 50 (Kevin's
+  defaults).
 
 ### 3.2 Analyses (all from Kevin's suite, `Fall26/eval/evaluate_forecast_ds.py`)
 
-The protocol lists which analyses run in each tier; the default is all of them **[OWNER: may remove
-some]**. Tiers:
+The protocol lists which analyses run in each tier; v1 runs all of them.
+Tiers:
 - `quick`: single_step, rollout_curve. Minutes; used during development.
 - `full`: every analysis listed in the protocol. Required for the leaderboard.
 
@@ -283,7 +283,7 @@ runs/<split_id>/<model>/<run_id>/
     fixed reduction order).
   - Every agent runs this once per environment before its first submission.
   - For learned models on GPU, two runs must agree within `gpu_tolerance` = 1e-4 relative on
-    summary.json numbers **[OWNER]**.
+    summary.json numbers.
 
 ## 12. Agent instructions (deliverables)
 
@@ -328,13 +328,13 @@ runs/<split_id>/<model>/<run_id>/
 6. `report`, leaderboard, GitHub CI, agent instructions and skill.
 7. Owner dry run: persistence, TRON and ViT on `rc300_reduced_v1` validation; then publish references.
 
-## Open [OWNER] decisions
+## Protocol settings (decided 2026-11-14)
 
-| Setting | Default | Note |
+| Setting | Value | Note |
 |---|---|---|
 | `H_max` | 10 | longest history any model may use |
 | `max_steps`, `report_steps` | 50; 1, 10, 25, 50 | Kevin's defaults; the same steps are 4× longer in time on rc300 than on 5000run |
 | `n_starts_per_chunk` | 4 (12 per split) | Kevin uses 10 starts total |
-| Analyses in `full` | all except error_spectra | remove any you don't want |
+| Analyses in `full` | all except error_spectra | |
 | `bootstrap_block`, resamples, seed | 10 starts, 1000, 42 | |
 | `gpu_tolerance` | 1e-4 relative | |
