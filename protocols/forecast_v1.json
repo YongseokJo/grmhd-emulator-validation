@@ -1,0 +1,22 @@
+{
+  "protocol_id": "forecast_v1",
+  "H_max": 10,
+  "max_steps": 50,
+  "report_steps": [1, 10, 25, 50],
+  "n_starts_per_chunk": 4,
+  "bootstrap_block": 10,
+  "bootstrap_resamples": 1000,
+  "seed": 42,
+  "gpu_tolerance": 0.0001,
+  "tiers": {
+    "quick": ["single_step", "rollout_curve"],
+    "full": [
+      "single_step", "rollout_curve", "error_correlation", "correlation_times", "stability", "cost",
+      "physics_table", "shell_profiles", "temporal_consistency", "conservation_closure",
+      "accretion_diagnostics", "mdot", "lorentz", "mean_profiles",
+      "statistical_props", "spectrum", "azimuthal_spectra", "coherence", "temporal_spectrum",
+      "turbulence_stats", "conditional_error", "bias_analysis", "spatial_error",
+      "meridional_slice", "rollout_evolution"
+    ]
+  }
+}

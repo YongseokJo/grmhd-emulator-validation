@@ -228,14 +228,27 @@ runs/<split_id>/<model>/<run_id>/
 - Owner-only directories have ACLs `g::r-x` plus the same as default.
 - Group-writable directories inherit default ACLs `g::rwx`, so files are group-readable whatever a
   user's umask is.
-- The CLI must, every time:
-  - set `os.umask(0o007)` at start;
-  - create `runs/<split_id>/<model>/` and `staging/<user>/` with mode 3770 (setgid + sticky);
-  - make completed runs read-only;
-  - never `chmod` anything it didn't create.
+- **Every** `gval` command sets `os.umask(0o007)` as its first action, before any import that might
+  write files.
+- Directories are created lazily, only by the command that writes into them, with mode 3770
+  (setgid + sticky) and group `delta_bgun`:
+
+  | Command | Creates (if missing) |
+  |---|---|
+  | `evaluate`, `conformance` | `staging/<user>/` at start. `runs/<split_id>/` and `runs/<split_id>/<model>/` only at the final rename of a COMPLETE run |
+  | `record-training` | `training_records/<model>/` |
+  | `checksums`, `report`, owner reference jobs | nothing new under the group areas. They write into owner-only areas (`checksums/`, `reports/<split_id>/`, `references/<split_id>/`), creating `<split_id>/` with mode 2750 |
+  | `doctor`, `verify`, `check-adapter`, `new-adapter` | nothing in the shared folder (`new-adapter` writes only to the user's target directory) |
+
+- `<user>` is the login name (`getpass.getuser()`).
+- Completed runs are made read-only (`chmod -R a-w`) before the rename.
+- `gval` never runs `chmod` on anything it didn't create in the same invocation.
 - **Agents never copy files in by hand** (`cp`/`rsync` from a home directory keeps 600 permissions);
-  only `gval` writes here. `gval doctor` checks write access and the group, and reports any file in the
-  tree that the group can't read.
+  only `gval` writes here.
+- `gval doctor` is read-only:
+  - It checks the group and the expected modes of the top-level directories.
+  - It checks write access to `staging/` with `os.access`; it does not test with a real file.
+  - It reports any file in the tree that the group can't read.
 
 ## 9. Training provenance (record, not required)
 

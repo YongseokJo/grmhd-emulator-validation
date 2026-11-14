@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grmhd-emulator-validation"
+version = "0.1.0"
+description = "Shared validation contracts for GRMHD forecasting emulators"
+requires-python = ">=3.9"
+
+[project.scripts]
+gval = "grmhd_validation.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["grmhd_validation*"]
