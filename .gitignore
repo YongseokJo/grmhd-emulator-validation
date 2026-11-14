@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
 .venv/
+.venv-*/
+gval-*.log
 *.egg-info/
 *.npy
 *.npz

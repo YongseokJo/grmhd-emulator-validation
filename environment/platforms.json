@@ -1,0 +1,7 @@
+{
+  "delta-x86_64": {
+    "reset_modules": true,
+    "modules": ["pytorch-conda/2.8"]
+  },
+  "deltaai-aarch64": null
+}

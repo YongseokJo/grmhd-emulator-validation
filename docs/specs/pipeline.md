@@ -45,9 +45,20 @@ pick up anyone else's results.
   `data_root` + file. A `--data-root` override is allowed (for other machines), but the split file's
   identity is its SHA256 and doesn't depend on the path.
 - **Per-file checksums.** Owner-run Slurm job `gval checksums --split-file …` writes
-  `checksums/<split_id>.sha256` (sha256sum format, path relative to `data_root`). Evaluation verifies
-  the SHA256 of every dump it reads against that file. It fails if a hash is missing or wrong, unless
-  `--no-verify-data`, which is recorded in `run.json` and marks the run unverified.
+  `checksums/<split_id>.sha256`.
+  - It hashes **every file listed in the split file**: train, validation, test **and** excluded, plus
+    `geometry.npz`. The geometry hash is checked against the split file's `geometry_sha256`.
+  - Format: sha256sum, one line per file, path relative to `data_root`, sorted by dump ID.
+  - Evaluation verifies the SHA256 of every dump it reads against that file. It fails if a hash is
+    missing or wrong, unless `--no-verify-data`, which is recorded in `run.json` and marks the run
+    unverified.
+- **What "excluded" means.** The split files say excluded dumps must never be used. That rule is about
+  **models**: an excluded dump is never a training sample, an input, a target or an evaluation sample.
+  Whole-run *truth* tools may still read excluded dumps, because they never feed a model:
+  - checksums;
+  - the data movies and timeline (`docs/specs/movies.md`).
+
+  The runner and the adapter API never pass an excluded dump to a model. A test asserts this.
 - Known data issue (recorded in the split files): rc300 cells with r < 6.11 are a coarse AMR level, each
   value duplicated into 2 × 2 × 2 cells. 5000run uses only the main-folder dumps; `blind/` is outdated.
 
@@ -228,14 +239,27 @@ runs/<split_id>/<model>/<run_id>/
 - Owner-only directories have ACLs `g::r-x` plus the same as default.
 - Group-writable directories inherit default ACLs `g::rwx`, so files are group-readable whatever a
   user's umask is.
-- The CLI must, every time:
-  - set `os.umask(0o007)` at start;
-  - create `runs/<split_id>/<model>/` and `staging/<user>/` with mode 3770 (setgid + sticky);
-  - make completed runs read-only;
-  - never `chmod` anything it didn't create.
+- **Every** `gval` command sets `os.umask(0o007)` as its first action, before any import that might
+  write files.
+- Directories are created lazily, only by the command that writes into them, with mode 3770
+  (setgid + sticky) and group `delta_bgun`:
+
+  | Command | Creates (if missing) |
+  |---|---|
+  | `evaluate`, `conformance` | `staging/<user>/` at start. `runs/<split_id>/` and `runs/<split_id>/<model>/` only at the final rename of a COMPLETE run |
+  | `record-training` | `training_records/<model>/` |
+  | `checksums`, `report`, owner reference jobs | nothing new under the group areas. They write into owner-only areas (`checksums/`, `reports/<split_id>/`, `references/<split_id>/`), creating `<split_id>/` with mode 2750 |
+  | `doctor`, `verify`, `check-adapter`, `new-adapter` | nothing in the shared folder (`new-adapter` writes only to the user's target directory) |
+
+- `<user>` is the login name (`getpass.getuser()`).
+- Completed runs are made read-only (`chmod -R a-w`) before the rename.
+- `gval` never runs `chmod` on anything it didn't create in the same invocation.
 - **Agents never copy files in by hand** (`cp`/`rsync` from a home directory keeps 600 permissions);
-  only `gval` writes here. `gval doctor` checks write access and the group, and reports any file in the
-  tree that the group can't read.
+  only `gval` writes here.
+- `gval doctor` is read-only:
+  - It checks the group and the expected modes of the top-level directories.
+  - It checks write access to `staging/` with `os.access`; it does not test with a real file.
+  - It reports any file in the tree that the group can't read.
 
 ## 9. Training provenance (record, not required)
 
@@ -271,10 +295,45 @@ runs/<split_id>/<model>/<run_id>/
 
 ## 11. Reproducibility
 
-- **Environment.** `environment/requirements.lock` (pip-compile, pinned hashes) on top of the Delta
-  module `pytorch-conda/2.8` (what Kevin's job scripts use). `gval doctor` prints a mismatch report, and
-  `run.json` stores the lock SHA256. Delta (x86, A100) and DeltaAI (aarch64, GH200) are both supported;
-  `run.json` records which one was used.
+- **Environment.** Locks are *recorded* from real environments, never written by hand. There is one lock
+  per platform, because Delta (x86_64, A100) and DeltaAI (aarch64, GH200) cannot share binaries.
+  - `environment/requirements.in`: direct dependencies with lower bounds only. The implementer writes
+    it in milestone 1 with exactly these bounds, and the same bounds go into `pyproject.toml`:
+
+    | Package | Lower bound | Why |
+    |---|---|---|
+    | python | 3.10 | `match` and `X \| Y` types allowed; DeltaAI system Python is 3.10/3.11 |
+    | numpy | 1.24 | code must also run on numpy 2.x; test both |
+    | scipy | 1.10 | |
+    | matplotlib | 3.7 | |
+    | torch | 2.3 | `torch.load(weights_only=…)`, deterministic-algorithms API |
+    | jsonschema | 4.18 | |
+
+    - No upper bounds; the per-platform lock does the pinning.
+    - Analyses ported in milestone 3 may add a dependency only with planner approval, and each needs a
+      lower bound and a reason.
+    - **The base environment's torch, numpy, scipy and matplotlib must never be replaced by pip.**
+      Install this package with `pip install --no-deps -e .` on top of the module, then install only the
+      missing packages (e.g. jsonschema) individually.
+    - `record_lock.sbatch` fails if any installed version is below the bounds above, or if pip would
+      change a base-environment package.
+  - `environment/platforms.json`: per platform, how the base environment is loaded.
+    - `delta-x86_64`: `module reset; module load pytorch-conda/2.8`. Not 2.12, whose matplotlib can't
+      save PNGs (see Kevin's `Fall26/scripts/env_delta.sh`).
+    - `deltaai-aarch64`: there is no pytorch-conda module on DeltaAI. Leave it `null` until the owner
+      names the base environment.
+  - `scripts/record_lock.sbatch <platform>`: run by the owner on a compute node of that machine. It
+    loads the base environment, installs this package, and writes `environment/<platform>.lock`. The
+    lock holds the Python version, torch version + CUDA version, and `pip freeze --all` sorted. The
+    owner commits it.
+  - `gval doctor`:
+    - **no lock for the current platform:** status `warn` with `"environment_locked": false`. Doctor
+      still succeeds, so milestones 1–2 can proceed.
+    - **lock present:** a mismatch in python, torch, CUDA, numpy, scipy or matplotlib is a **fail**;
+      any other package mismatch is a `warn`.
+  - `run.json` records the platform, the lock SHA256 (or null) and `environment_locked`. The leaderboard
+    shows runs from unlocked environments as "unlocked"; the owner's dry run (milestone 7) requires a
+    lock.
 - **Determinism.** Fixed seeds from the protocol, `torch.use_deterministic_algorithms(True)` where
   supported, eval mode, no autocast unless the adapter enables it (recorded).
 - **Golden conformance.**
