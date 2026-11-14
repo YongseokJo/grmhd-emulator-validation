@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["protocol_id", "H_max", "max_steps", "report_steps", "n_starts_per_chunk", "bootstrap_block", "bootstrap_resamples", "seed", "gpu_tolerance", "tiers"],
+  "additionalProperties": false,
+  "properties": {
+    "protocol_id": {"type": "string"},
+    "H_max": {"type": "integer", "minimum": 1},
+    "max_steps": {"type": "integer", "minimum": 1},
+    "report_steps": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}, "uniqueItems": true},
+    "n_starts_per_chunk": {"type": "integer", "minimum": 1},
+    "bootstrap_block": {"type": "integer", "minimum": 1},
+    "bootstrap_resamples": {"type": "integer", "minimum": 1},
+    "seed": {"type": "integer"},
+    "gpu_tolerance": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "tiers": {"type": "object", "required": ["quick", "full"], "additionalProperties": false, "properties": {"quick": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "full": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}}}
+  }
+}

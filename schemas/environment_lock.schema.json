@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "platform", "python", "torch", "cuda", "packages", "pip_freeze", "torch_error"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "platform": {"enum": ["delta-x86_64", "deltaai-aarch64"]},
+    "python": {"type": "string"},
+    "torch": {"type": "string"},
+    "cuda": {"type": ["string", "null"]},
+    "packages": {"type": "object", "required": ["torch", "numpy", "scipy", "matplotlib", "jsonschema"], "additionalProperties": {"type": ["string", "null"]}},
+    "pip_freeze": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "torch_error": {"type": "null"}
+  }
+}

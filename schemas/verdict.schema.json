@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["ok", "next"],
+  "properties": {
+    "ok": {"type": "boolean"},
+    "next": {"type": "string", "minLength": 1},
+    "status": {"enum": ["pass", "warn", "fail"]},
+    "environment_locked": {"type": "boolean"}
+  }
+}

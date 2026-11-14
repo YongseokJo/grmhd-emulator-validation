@@ -1,0 +1,6 @@
+# Python >=3.10. Install over the approved base without replacing its core packages.
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+torch>=2.3
+jsonschema>=4.18

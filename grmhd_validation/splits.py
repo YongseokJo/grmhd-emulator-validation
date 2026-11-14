@@ -4,6 +4,7 @@ import json
 import math
 import re
 from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path, PurePosixPath
 
 SPLIT_NAMES = ("train", "validation", "test", "excluded")
@@ -79,8 +80,17 @@ class SplitFile:
             raise ValueError("Unknown split selection")
         return tuple(dump for chunk in self.segments if chunk.split in names for dump in chunk.dumps)
 
+    def model_dumps(self, split):
+        if split not in ("train", "validation", "test"):
+            raise ValueError("Excluded dumps must never be model inputs or samples")
+        return self.dumps((split,))
+
+    @cached_property
+    def _dumps_by_index(self):
+        return {dump.index: dump for chunk in self.segments for dump in chunk.dumps}
+
     def dump_path(self, dump):
-        if not isinstance(dump, Dump) or not any(dump in c.dumps for c in self.segments):
+        if not isinstance(dump, Dump) or self._dumps_by_index.get(dump.index) != dump:
             raise ValueError("Dump does not belong to this split file")
         # Resolving symlinks is a containment check, not directory discovery.
         path = (self.data_root / dump.file).resolve()
