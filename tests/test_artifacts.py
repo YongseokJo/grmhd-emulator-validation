@@ -1,9 +1,12 @@
 """Serialization, schema, publication and provenance integrity checks."""
 import copy
+import ctypes
+import errno
 import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import jsonschema
 
@@ -47,6 +50,46 @@ class ArtifactTests(unittest.TestCase):
                 no_replace_rename(a,b)
             self.assertEqual((a/'value').read_text(),'preserve')
             self.assertFalse(list(b.iterdir()))
+
+    def test_shared_filesystem_fallback_serializes_writers_and_preserves_empty_target(self):
+        from concurrent.futures import ThreadPoolExecutor
+        from types import SimpleNamespace
+        def unsupported(*args):
+            ctypes.set_errno(errno.EINVAL)
+            return -1
+        with tempfile.TemporaryDirectory() as temporary, \
+                patch('grmhd_validation.runstore.ctypes.CDLL',return_value=SimpleNamespace(renameat2=unsupported)):
+            root=Path(temporary);target=root/'target'
+            left,right=root/'left',root/'right';left.mkdir();right.mkdir()
+            inodes={p:p.stat().st_ino for p in (left,right)}
+            def publish(source):
+                try:
+                    no_replace_rename(source,target)
+                    return source
+                except FileExistsError:
+                    return None
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                winners=[p for p in executor.map(publish,(left,right)) if p is not None]
+            self.assertEqual(len(winners),1)
+            self.assertEqual(target.stat().st_ino,inodes[winners[0]])
+            loser=right if winners[0]==left else left
+            self.assertTrue(loser.is_dir())
+            with self.assertRaises(FileExistsError):
+                no_replace_rename(loser,target)
+            self.assertEqual(target.stat().st_ino,inodes[winners[0]])
+
+    def test_real_rename_errors_do_not_trigger_fallback(self):
+        from types import SimpleNamespace
+        def denied(*args):
+            ctypes.set_errno(errno.EACCES)
+            return -1
+        with tempfile.TemporaryDirectory() as temporary, \
+                patch('grmhd_validation.runstore.ctypes.CDLL',return_value=SimpleNamespace(renameat2=denied)):
+            root=Path(temporary);left=root/'left';left.mkdir()
+            with patch('grmhd_validation.runstore.os.rename',side_effect=AssertionError('Do not mask access errors')):
+                with self.assertRaises(PermissionError):
+                    no_replace_rename(left,root/'target')
+            self.assertTrue(left.is_dir())
 
     def test_all_schemas_valid_and_request_closed(self):
         for path in (REPO/'schemas').glob('*.json'):

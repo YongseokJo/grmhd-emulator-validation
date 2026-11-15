@@ -12,12 +12,18 @@ base=json.load(open('environment/platforms.json')).get(sys.argv[1])
 if base is None:
     print(json.dumps({'ok':False,'next':'Ask the owner to name this platform base environment','error':'Base environment is null or platform is unknown'}))
     sys.exit(1)
-if sys.argv[1] != 'deltaai-aarch64' or base['modules'] != ['python/anaconda3/2.15.0'] or base['reset_modules']:
+if sys.argv[1] != 'deltaai-aarch64' or base['reset_modules']:
     raise ValueError('Unsupported platform recipe; consult the owner')
+if base['activation'] != ['source "$(conda info --base)/etc/profile.d/conda.sh"', 'conda activate base']:
+    raise ValueError('Unsupported activation recipe; consult the owner')
+if base['venv']['create'] != ['python','-m','venv','--system-site-packages','<venv>']:
+    raise ValueError('Unsupported venv recipe; consult the owner')
+print(json.dumps(base))
 PY
 ) || { printf '%s\n' "$gval_supported"; return 1; }
 # Do not purge/reset: the module extensions need the default cudatoolkit.
-module load python/anaconda3/2.15.0
+mapfile -t gval_modules < <("$gval_bootstrap_python" -c 'import json,sys; print("\n".join(json.loads(sys.argv[1])["modules"]))' "$gval_supported")
+module load "${gval_modules[@]}"
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate base
 gval_base_python="$(conda info --base)/bin/python"

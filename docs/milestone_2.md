@@ -9,22 +9,35 @@ Full-tier analyses, learned-model examples, training records and reporting remai
 in their later milestones.
 
 Install on the chosen base with `python -m pip install --no-deps -e .`; never let
-pip replace the module's torch/numpy/scipy/matplotlib. Delta uses
-`module reset; module load pytorch-conda/2.8`. DeltaAI's base remains unnamed.
-Without a platform lock, doctor warns and goldens stay provisional.
+pip replace the module's torch/numpy/scipy/matplotlib. DeltaAI uses
+`module load python/anaconda3/2.15.0`, conda base activation, and a personal
+`--system-site-packages` venv. Never purge/reset modules or load pytorch-conda.
+Set GVAL_VENV to your venv path; all job wrappers load the common recipe.
+Delta x86_64 is unsupported (null). Without a platform lock, doctor warns and
+goldens stay provisional.
 
 ## Owner: create a golden during review
 
-Submit from this repository root on a CPU partition with your CPU account:
+Enter one DeltaAI interactive job from the repository root; chain commands on
+its compute node (one interactive allocation per user):
 
 ```bash
 export GVAL_VENV=/absolute/path/to/personal/system-site-packages-venv
-sbatch --account=YOUR_CPU_ACCOUNT --partition=cpu scripts/reference_delta.sbatch rc300_reduced_v1
-sbatch --account=YOUR_CPU_ACCOUNT --partition=cpu scripts/reference_delta.sbatch 5000run_v1
+salloc --account=YOUR_ACCOUNT --partition=ghx4-interactive --gpus-per-node=1 \
+  --cpus-per-task=32 --mem=64G --time=02:00:00 srun --pty bash -l
+# On the compute node, owner only:
+bash scripts/record_lock.sbatch deltaai-aarch64
+# Commit the recorded environment/deltaai-aarch64.lock before creating goldens.
+bash scripts/reference_delta.sbatch rc300_reduced_v1
+bash scripts/reference_delta.sbatch 5000run_v1
+source scripts/load_environment.sh deltaai-aarch64
+gval conformance --split-id rc300_reduced_v1
+gval conformance --split-id 5000run_v1
 ```
 
-On DeltaAI, override account/partition and reserve the GPU Slurm requires; the
-script hides CUDA and still uses CPU with one thread. All wrappers load the approved DeltaAI base through scripts/load_environment.sh. The wrapper runs:
+The scripts hide CUDA and use CPU with one thread while reserving the GPU Slurm
+requires. All wrappers load the approved base through scripts/load_environment.sh.
+The reference wrapper runs:
 
 ```bash
 gval reference persistence --split-id rc300_reduced_v1 --tier quick --split validation --device cpu
@@ -35,7 +48,8 @@ Reference output is `references/<split_id>/forecast_v1/persistence_quick/<platfo
 content is refused and the candidate retained. Identical content can acquire
 updated metadata when the owner records a real lock. Figures and runtime
 metadata do not enter the fingerprint. Failed or unfinished candidates are not
-goldens.
+goldens. Doctor reports leftover `.candidate-*` directories as an
+`unfinished_reference_candidates` warning without deleting or modifying them.
 
 ## Everyone: conformance and quick evaluation
 
@@ -60,10 +74,10 @@ leaderboard attempts.
 GPU model requests can use the corresponding wrapper:
 
 ```bash
-sbatch --account=YOUR_ACCOUNT --partition=YOUR_A100_PARTITION scripts/evaluate_delta.sbatch \
+sbatch --account=YOUR_ACCOUNT --partition=YOUR_GH200_PARTITION scripts/evaluate_deltaai.sbatch \
   --request /absolute/path/run_request.json --split-id rc300_reduced_v1 \
   --split validation --tier quick --device cuda
-# On GH200 use scripts/evaluate_deltaai.sbatch with your personal GVAL_VENV.
+# Delta x86_64 jobs fail until the owner names a supported base.
 ```
 
 No protocol settings are CLI flags. `--data-root` relocates physical reads while
@@ -81,6 +95,11 @@ read-only. Failures before publication retain FAILED, run metadata and a traceba
 staging. Destination namespaces are created only during final publication.
 Existing shared permissions are never repaired, and only invocation-created
 inodes can be chmodded, except for the owner recovery command below.
+
+Run IDs are `<model>-<version>__<ckpt_sha8>__<split_id>__<split>__<tier>__a<N>`.
+The split ID keeps datasets and split versions on separate counters. Reservation
+counts only direct child directories under runs/<split_id>/<model>/ and
+staging/*/; it never walks into runs or conformance attempts.
 
 ```bash
 gval verify /work/nvme/bgun/share/validation/runs/<split_id>/<model>/<run_id>

@@ -1,6 +1,7 @@
 """Globally serialized attempt reservation and atomic, no-replace publication."""
 from contextlib import contextmanager
 import ctypes
+import errno
 import fcntl
 import getpass
 import os
@@ -53,21 +54,31 @@ def reserve_conformance(storage, platform):
 
 
 def no_replace_rename(source, destination):
-    # Linux renameat2 is atomic on the same filesystem and cannot replace an
-    # existing attempt, even an empty directory created by another process.
+    # Prefer kernel no-replace. Some shared filesystems reject its flag; all
+    # gval writers also serialize on the destination parent for a POSIX fallback.
     libc = ctypes.CDLL(None, use_errno=True)
     function = getattr(libc, "renameat2", None)
-    if function is None:
-        raise RuntimeError("Atomic no-replace rename is unavailable")
-    function.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
-    function.restype = ctypes.c_int
+    if function is not None:
+        function.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
+        function.restype = ctypes.c_int
     source, destination = Path(source), Path(destination)
     left = os.open(source.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     right = os.open(destination.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     try:
-        if function(left, os.fsencode(source.name), right, os.fsencode(destination.name), 1):
+        fcntl.flock(right, fcntl.LOCK_EX)
+        try:
+            os.stat(destination.name, dir_fd=right, follow_symlinks=False)
+        except FileNotFoundError:
+            pass
+        else:
+            raise FileExistsError(errno.EEXIST, os.strerror(errno.EEXIST), str(destination))
+        if function is None or function(left, os.fsencode(source.name), right, os.fsencode(destination.name), 1):
             error = ctypes.get_errno()
-            raise OSError(error, os.strerror(error), str(destination))
+            if function is not None and error not in {errno.EINVAL, errno.ENOSYS, errno.ENOTSUP, errno.EOPNOTSUPP}:
+                raise OSError(error, os.strerror(error), str(destination))
+            # POSIX rename is atomic. Parent locking plus this existence check
+            # prevents replacement among the only permitted writers: gval.
+            os.rename(source.name, destination.name, src_dir_fd=left, dst_dir_fd=right)
     finally:
         os.close(left); os.close(right)
 

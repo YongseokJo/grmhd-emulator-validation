@@ -35,8 +35,9 @@ Submit from the repository root with the account/partition for your machine:
 
 ```bash
 export GVAL_VENV=/absolute/path/to/personal/system-site-packages-venv
-sbatch --account=YOUR_ACCOUNT --partition=cpu scripts/checksums.sbatch splits/rc300_reduced_v1.json
-sbatch --account=YOUR_ACCOUNT --partition=cpu scripts/checksums.sbatch splits/5000run_v1.json
+# Inside one ghx4-interactive allocation on its compute node:
+bash scripts/checksums.sbatch splits/rc300_reduced_v1.json
+bash scripts/checksums.sbatch splits/5000run_v1.json
 ```
 
 DeltaAI requires a GPU reservation even though this job uses only CPUs; select
@@ -65,7 +66,8 @@ added with the actual runner in milestone 2.
 ## Record a platform lock
 
 ```bash
-sbatch --account=YOUR_ACCOUNT --partition=cpu scripts/record_lock.sbatch delta-x86_64
+# Owner, on the allocated DeltaAI compute node:
+bash scripts/record_lock.sbatch deltaai-aarch64
 ```
 
 The owner runs this on the target machine. The script loads the approved platform base and personal venv,
