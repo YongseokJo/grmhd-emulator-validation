@@ -230,6 +230,11 @@ latency, peak memory and runtime profiling live only in run.json/logs, and are
 excluded from fingerprints. Timing measurements cannot be golden numerical
 comparisons; their measurement arithmetic is tested using a controlled clock.
 
+The physical structure-function signed third moment uses the same positive lag
+on both slices. This avoids the original Python precedence error for odd
+maximum lag (`[:-max_lag//2]`); the legacy regression path retains that original
+expression. A synthetic linear field tests the physical formula separately.
+
 Adding the full-tier settings changes the protocol file hash but must not change
 any quick result bytes. The normal owner reference path can regenerate identical
 quick content and refresh its metadata; an unequal quick fingerprint is an error,
