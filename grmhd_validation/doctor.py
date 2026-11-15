@@ -72,7 +72,7 @@ def storage_checks(root=SHARED_ROOT, group="delta_bgun"):
     scanned = 0
     root = Path(root)
     gid = grp.getgrnam(group).gr_gid
-    errors, unreadable = [], []
+    errors, unreadable, candidates = [], [], []
     if gid not in {*os.getgroups(), os.getgid(), os.getegid()}:
         errors.append("Current user is not in " + group)
     owner_uid = root.stat().st_uid
@@ -121,6 +121,8 @@ def storage_checks(root=SHARED_ROOT, group="delta_bgun"):
                     elif not _group_has(reader.read(path, metadata), gid, "r"):
                         unreadable.append(str(path))
                 elif stat.S_ISDIR(metadata.st_mode):
+                    if path.name.startswith(".candidate-") and root / "references" in path.parents:
+                        candidates.append(str(path))
                     if metadata.st_mode & (stat.S_IRGRP | stat.S_IXGRP) != stat.S_IRGRP | stat.S_IXGRP:
                         errors.append("Group cannot read/search directory: " + str(path))
                     elif not _group_has(reader.read(path, metadata), gid, "rx"):
@@ -129,8 +131,9 @@ def storage_checks(root=SHARED_ROOT, group="delta_bgun"):
                 errors.append(str(path) + ": " + str(error))
     if unreadable:
         errors.append("Shared files are not group-readable")
-    return {"status": "fail" if errors else "pass", "root": str(root), "group": group,
+    return {"status": "fail" if errors else "warn" if candidates else "pass", "root": str(root), "group": group,
             "errors": errors, "group_unreadable_files": sorted(unreadable),
+            "unfinished_reference_candidates": sorted(candidates),
             "scan_duration_seconds": time.perf_counter() - started,
             "scanned_entries": scanned, "acl_subprocesses": reader.subprocesses}
 

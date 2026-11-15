@@ -10,9 +10,6 @@
 set -euo pipefail
 umask 007
 cd "${SLURM_SUBMIT_DIR:?}"
-# Submit with the A100 partition/account appropriate to your allocation.
-module reset
-module load pytorch-conda/2.8
+source "$PWD/scripts/load_environment.sh" delta-x86_64
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
-gval_python=${GVAL_PYTHON:-python}
-exec "$gval_python" -m grmhd_validation evaluate "$@"
+exec "$GVAL_PYTHON" -m grmhd_validation evaluate "$@"

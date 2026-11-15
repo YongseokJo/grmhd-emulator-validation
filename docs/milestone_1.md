@@ -15,8 +15,11 @@ gval doctor
 ```
 
 The approved lower bounds are in `environment/requirements.in` and `pyproject.toml`.
-The Delta base is `module reset; module load pytorch-conda/2.8`. DeltaAI's base is
-deliberately null. No environment lock is invented: doctor returns an unlocked
+The supported DeltaAI base is `module load python/anaconda3/2.15.0`, then
+`source "$(conda info --base)/etc/profile.d/conda.sh"; conda activate base`.
+Do not purge/reset modules. Jobs use a personal `--system-site-packages` venv
+selected by GVAL_VENV, adding only this editable package and missing jsonschema.
+Delta x86_64 is unsupported (null). No environment lock is invented: doctor returns an unlocked
 environment warning until the owner records that machine's lock.
 
 Every CLI invocation sets umask 007 before command imports. Every command's last
@@ -31,7 +34,7 @@ The reported `next: gval conformance` becomes available in milestone 2.
 Submit from the repository root with the account/partition for your machine:
 
 ```bash
-export GVAL_PYTHON=/absolute/path/to/approved/python
+export GVAL_VENV=/absolute/path/to/personal/system-site-packages-venv
 sbatch --account=YOUR_ACCOUNT --partition=cpu scripts/checksums.sbatch splits/rc300_reduced_v1.json
 sbatch --account=YOUR_ACCOUNT --partition=cpu scripts/checksums.sbatch splits/5000run_v1.json
 ```
@@ -65,13 +68,13 @@ added with the actual runner in milestone 2.
 sbatch --account=YOUR_ACCOUNT --partition=cpu scripts/record_lock.sbatch delta-x86_64
 ```
 
-The owner runs this on the target machine. The script loads the platform base,
+The owner runs this on the target machine. The script loads the approved platform base and personal venv,
 checks all approved lower bounds, refuses missing core packages or any pip plan
 that changes them, installs this package with `--no-deps -e .`, and adds only
 missing non-core packages. Its `.lock` file is JSON with Python/torch/CUDA
 versions, core package versions and sorted `pip freeze --all`. No lock is
-committed until it has actually been recorded on that platform. DeltaAI recording
-fails while its base is null. Doctor treats core-version differences as failures
+committed until it has actually been recorded on that platform. DeltaAI recording uses the approved base and personal venv; Delta x86_64
+recording fails while its base is null. Doctor treats core-version differences as failures
 and other freeze differences as warnings.
 
 ## Tests

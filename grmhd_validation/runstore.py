@@ -25,17 +25,19 @@ def reservation_lock(storage):
         os.close(fd)
 
 
-def reserve(storage, model, version, checkpoint_sha256, partition, tier):
+def reserve(storage, model, version, checkpoint_sha256, split_id, partition, tier):
     user = getpass.getuser()
     storage.staging_user()
     token = checkpoint_sha256[:8] if checkpoint_sha256 else "nockpt"
-    prefix = f"{model}-{version}__{token}__{partition}__{tier}__a"
+    prefix = f"{model}-{version}__{token}__{split_id}__{partition}__{tier}__a"
     pattern = re.compile(re.escape(prefix) + r"\d+")
     with reservation_lock(storage):
-        count = 0
-        for area in ("runs", "staging"):
-            for parent, dirs, _files in os.walk(storage.root / area, followlinks=False):
-                count += sum(bool(pattern.fullmatch(name)) and not (Path(parent) / name).is_symlink() for name in dirs)
+        parents = [storage.root / "runs" / split_id / model]
+        # Exactly one level per user, never descend into attempts/conformance.
+        parents.extend(path for path in (storage.root / "staging").iterdir()
+                       if path.is_dir() and not path.is_symlink())
+        count = sum(bool(pattern.fullmatch(path.name)) and path.is_dir() and not path.is_symlink()
+                    for parent in parents if parent.is_dir() for path in parent.iterdir())
         attempt = count + 1
         run_id = prefix + str(attempt)
         root = storage.exclusive_folder("staging", user, run_id)

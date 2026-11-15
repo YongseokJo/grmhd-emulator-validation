@@ -18,14 +18,13 @@ Without a platform lock, doctor warns and goldens stay provisional.
 Submit from this repository root on a CPU partition with your CPU account:
 
 ```bash
-export GVAL_PYTHON=/absolute/path/to/prepared/python
+export GVAL_VENV=/absolute/path/to/personal/system-site-packages-venv
 sbatch --account=YOUR_CPU_ACCOUNT --partition=cpu scripts/reference_delta.sbatch rc300_reduced_v1
 sbatch --account=YOUR_CPU_ACCOUNT --partition=cpu scripts/reference_delta.sbatch 5000run_v1
 ```
 
 On DeltaAI, override account/partition and reserve the GPU Slurm requires; the
-script hides CUDA and still uses CPU with one thread. It does not invent a
-DeltaAI base environment. The wrapper runs:
+script hides CUDA and still uses CPU with one thread. All wrappers load the approved DeltaAI base through scripts/load_environment.sh. The wrapper runs:
 
 ```bash
 gval reference persistence --split-id rc300_reduced_v1 --tier quick --split validation --device cpu
@@ -64,7 +63,7 @@ GPU model requests can use the corresponding wrapper:
 sbatch --account=YOUR_ACCOUNT --partition=YOUR_A100_PARTITION scripts/evaluate_delta.sbatch \
   --request /absolute/path/run_request.json --split-id rc300_reduced_v1 \
   --split validation --tier quick --device cuda
-# On GH200 use scripts/evaluate_deltaai.sbatch with your prepared GVAL_PYTHON.
+# On GH200 use scripts/evaluate_deltaai.sbatch with your personal GVAL_VENV.
 ```
 
 No protocol settings are CLI flags. `--data-root` relocates physical reads while

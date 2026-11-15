@@ -77,6 +77,7 @@ def run(ctx):
     models, persistence = [], []
     for selected in ctx.starts:
         for start in selected.rollout:
+            print(f"rollout_curve {selected.chunk}: start {start}", flush=True)
             history = ctx.reader.history(start, ctx.adapter.history_length, ctx.device)
             initial = history[0, -1].cpu().numpy().copy()
             model_curve, baseline_curve = [], []

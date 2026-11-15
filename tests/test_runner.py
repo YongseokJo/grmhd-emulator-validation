@@ -124,6 +124,36 @@ class RunnerFixture(unittest.TestCase):
 
 
 class RunnerTests(RunnerFixture):
+    def test_run_ids_are_split_specific_and_attempt_scan_is_one_level(self):
+        from grmhd_validation.runstore import reserve
+        storage=self.storage()
+        args=(storage,'persistence','v1',None,'synthetic_v1','validation','quick')
+        first,name,number=reserve(*args)
+        self.assertEqual(name,'persistence-v1__nockpt__synthetic_v1__validation__quick__a1')
+        self.assertEqual(number,1)
+        # Decoys inside attempts and conformance must never be visited/counted.
+        (first/name.replace('__a1','__a99')).mkdir()
+        conformance_dir=storage.folder('staging',getpass.getuser(),'conformance')
+        (conformance_dir/name.replace('__a1','__a98')).mkdir()
+        other_model=storage.destination('synthetic_v1','other-model')
+        (other_model/name.replace('__a1','__a97')).mkdir()
+        second,_,number=reserve(*args)
+        self.assertEqual(number,2)
+        destination=storage.destination('synthetic_v1','persistence')
+        second.rename(destination/second.name)
+        peer=storage.folder('staging','another-user')
+        (peer/name.replace('__a1','__a3')).mkdir()
+        _,other,number=reserve(storage,'persistence','v1',None,'different_v1','validation','quick')
+        self.assertEqual(number,1);self.assertIn('__different_v1__',other)
+        original=Path.iterdir
+        def shallow(path):
+            self.assertNotIn(path,{first,conformance_dir,other_model,destination/second.name})
+            return original(path)
+        with patch('grmhd_validation.runstore.os.walk',side_effect=AssertionError('No recursive attempt scan')), \
+                patch.object(Path,'iterdir',shallow):
+            _,_,number=reserve(*args)
+        self.assertEqual(number,4)
+
     def test_common_starts_excluded_and_chunk_boundaries(self):
         starts = select_starts(self.split, 'validation', self.protocol)
         self.assertEqual(list(starts[0].every), list(range(6,11)))

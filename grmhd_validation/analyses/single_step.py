@@ -32,7 +32,9 @@ def run(ctx):
     models, persistence, relatives, sizes = [], [], [], []
     for selected in ctx.starts:
         sizes.append(len(selected.every))
-        for start in selected.every:
+        for position, start in enumerate(selected.every):
+            if position % 100 == 0:
+                print(f"single_step {selected.chunk}: {position}/{len(selected.every)} starts", flush=True)
             history = ctx.reader.history(start, ctx.adapter.history_length, ctx.device)
             initial = history[0, -1].cpu().numpy().copy()
             prediction = ctx.step(history)[0].cpu().numpy()
@@ -40,6 +42,7 @@ def run(ctx):
             models.append(nmae(prediction, truth, ctx.constants))
             persistence.append(nmae(initial, truth, ctx.constants))
             relatives.append(relative_l1(prediction, truth, ctx.constants))
+        print(f"single_step {selected.chunk}: {len(selected.every)}/{len(selected.every)} starts", flush=True)
     models, persistence = np.ascontiguousarray(models), np.ascontiguousarray(persistence)
     model, baseline = models.mean(axis=0), persistence.mean(axis=0)
     relative = nanmean(relatives)

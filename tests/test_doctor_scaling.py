@@ -14,6 +14,24 @@ from grmhd_validation.permissions import GROUP_AREAS, OWNER_AREAS
 
 @unittest.skipUnless(shutil.which("getfacl") and shutil.which("setfacl"), "requires POSIX ACL tools")
 class DoctorScalingTests(unittest.TestCase):
+    def test_unfinished_reference_candidates_are_reported_without_deletion(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);root.chmod(0o2750)
+            group=grp.getgrgid(os.getegid()).gr_name
+            for name in OWNER_AREAS + GROUP_AREAS:
+                path=root/name;path.mkdir();path.chmod(0o2750 if name in OWNER_AREAS else 0o3770)
+            for path in [root,*(root/n for n in OWNER_AREAS+GROUP_AREAS)]:
+                rights='rwx' if path.name in GROUP_AREAS and path!=root else 'r-x'
+                subprocess.run(['setfacl','-m',f'g::{rights},m::{rights},d:u::rwx,d:g::{rights},d:m::{rights},d:o::---',str(path)],check=True)
+            candidate=root/'references/synthetic_v1/forecast_v1/persistence_quick/.candidate-cancelled'
+            candidate.mkdir(parents=True)
+            (candidate/'run.json').write_text('{}\n')
+            before={p:(p.stat().st_mode,p.stat().st_mtime_ns) for p in root.rglob('*')}
+            result=storage_checks(root,group)
+            self.assertEqual(result['status'],'warn',result)
+            self.assertEqual(result['unfinished_reference_candidates'],[str(candidate)])
+            self.assertEqual(before,{p:(p.stat().st_mode,p.stat().st_mtime_ns) for p in root.rglob('*')})
+
     def test_thousand_run_tree_and_shared_acl_cache(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

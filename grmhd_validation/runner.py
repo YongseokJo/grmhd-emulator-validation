@@ -192,7 +192,7 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
         raise ValueError("Shared frozen split differs from repository")
     protocol, protocol_sha = read_protocol(Path(repo) / "protocols/forecast_v1.json")
     checkpoint_sha = sha256(request["checkpoint"]) if request["checkpoint"] is not None else None
-    root, run_id, attempt = reserve(storage, request["model"], request["version"], checkpoint_sha, partition, tier)
+    root, run_id, attempt = reserve(storage, request["model"], request["version"], checkpoint_sha, split_id, partition, tier)
     writer = Writer(storage, root)
     info = {"request": request, "run_id": run_id, "attempt": attempt, "split": partition, "tier": tier,
             "start_time": now(), "end_time": None, "status": "failed"}
