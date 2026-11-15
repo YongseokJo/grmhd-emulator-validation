@@ -5,8 +5,7 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestone 2 ready for owner review.** Milestone 1 is
-merged. The adapter API, persistence, quick analyses, recorded runner, owner
+**Status: milestones 1–2 merged; milestone 3 in progress.** The adapter API, persistence, quick analyses, recorded runner, owner
 goldens, conformance and verification are implemented. Full-tier analyses and
 learned-model examples remain in later milestones. See [milestone 2 usage](docs/milestone_2.md),
 [metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md). Locked DeltaAI references and real-data
@@ -23,11 +22,11 @@ Shared results folder (Delta and DeltaAI, group `delta_bgun`): `/work/nvme/bgun/
 
 ## Planned prediction mode (milestone 5)
 
-Prediction mode is agent-driven and requires all 12 protocol rollout starts;
-agents cannot select a smaller subset. Eden's three methods will be wrapped as
-adapters and use the common split, inference, metric and artifact contracts.
-This is milestone 5 scope; its detailed planner spec and implementation remain
-pending. Milestone 2 is ready for review and no later milestone has started.
+The full [prediction-mode specification](docs/specs/pipeline.md#61-agent-driven-prediction-mode-milestone-5)
+defines the forecasting agent, host and scorer roles; task/packet commands;
+versioned prompts; fixed prediction layout; complete 12-start × 50-step coverage;
+provenance/attestation; and Eden's three credited adapters. Implementation is
+milestone 5. Missing required predictions are reported as “not evaluated”.
 
 ## Split rules (every model, every agent)
 
