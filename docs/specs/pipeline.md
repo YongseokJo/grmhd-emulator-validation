@@ -251,6 +251,17 @@ not a new golden to accept. No frozen split definitions change.
   RMS, computed once by the owner into `references/<split_id>/channel_scales.json` from training dumps
   only. Every run uses this file.
 
+The owner creates these scales on a compute node with
+`gval reference channel-scales --split-id <id>`. The closed-schema JSON records
+`split_id`, `split_file_sha256`, `data_manifest_sha256`, the eight `channels` in
+split order, `n_dumps`, `n_cells_per_channel`, arrays `mean_abs` and `rms`, and
+`data_verified: true`. Every cell of every training dump has equal weight.
+Reductions use float64 NumPy in dump-ID order; RMS is sqrt(sum(x*x)/N), not the
+standard deviation. Checksums are mandatory. No validation, test or excluded
+dump contributes. An existing unequal file is an error; an identical file is
+reused. Full-tier runs verify its split identity and record its SHA256 in
+run.json. This truth-only owner command creates only references/<split_id>/.
+
 ## 5. Required improvements over Kevin's suite (all approved)
 
 **Reference source (read-only).**
