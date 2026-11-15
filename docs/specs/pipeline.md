@@ -249,6 +249,32 @@ schema, and make `read_protocol` validate it. Values are Kevin's unless marked.
    numbers. Golden test: persistence, plus one fixed TRON checkpoint, on a fixed dump range, run
    through both the original script and the port; they agree within 1e-6 relative.
    - Every intended change (items 3–9) gets its own test and an entry in `docs/metrics.md`.
+**Milestone-3 regression and milestone boundary (owner decision, 2026-11-15).**
+- Milestone 3 ports all analyses, applies §4 metric spaces and the resolved rc300
+  mask for correlation times. The broader §5.3–9 improvements remain milestone 4.
+- Computations whose space or sampling changes expose `space="loss"|"physical"`
+  and explicit start selection (one start or all starts). The production settings
+  come from the protocol; regression can select Kevin's original configuration
+  without a separate implementation of the formula.
+- In Kevin's configuration, port/original numbers agree within **1e-5 relative**.
+  Changed physical-space/selection configurations are documented deviations in
+  docs/metrics.md with independent synthetic tests. Do not claim that comparing
+  different metric spaces establishes numerical faithfulness.
+- The learned regression checkpoint is
+  `/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth`, pinned by
+  SHA256 in the regression fixture. Missing files or hash mismatches fail the
+  regression; they are never skipped or silently repinned.
+- Regression start is 4216; approved history is 4207–4216 and targets are
+  4217–4266. Kevin's original evaluator receives a temporary directory of symlinks
+  to **exactly 4216–4266 (51 dumps) plus geometry.npz**. Neither source data nor
+  the read-only reference checkout is copied or modified.
+- This checkpoint was trained on Kevin's older 80/10/10 split, including this
+  validation chunk. This is a **regression-only, not benchmark** experiment.
+  Results go only to a temporary directory, never runs/, references/ or the
+  leaderboard. Test names, logs and documentation state this limitation.
+- Run the real regression through ghx4-interactive, one allocation per user;
+  synthetic kernel tests cover additional edge cases.
+
 3. **Statistics over all starts.** Physics tables, drift, Lorentz, spectra and slices are averaged over
    all rollout starts, with 95% CIs, instead of following one rollout from one start.
 4. **Bootstrap.** A block bootstrap over starts that respects chunks: resample whole blocks of
@@ -741,6 +767,10 @@ runs/<split_id>/<model>/<run_id>/
       still succeeds, so milestones 1–2 can proceed.
     - **lock present:** a mismatch in python, torch, CUDA, numpy, scipy or matplotlib is a **fail**;
       any other package mismatch is a `warn`.
+  - When comparing pip_freeze, exclude only this package's own editable entry
+    (grmhd-emulator-validation); keep the recorded lock unchanged. Its source
+    commit is already in run.json. Other editable/package differences still warn,
+    and python/torch/CUDA/numpy/scipy/matplotlib mismatches still fail.
   - `run.json` records the platform, the lock SHA256 (or null) and `environment_locked`. The leaderboard
     shows runs from unlocked environments as "unlocked"; the owner's dry run (milestone 7) requires a
     lock.
