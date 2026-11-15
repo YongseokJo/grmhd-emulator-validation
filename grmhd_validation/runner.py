@@ -77,6 +77,9 @@ class Context:
     device: object
     writer: Writer
     channels: tuple = CHANNELS
+    full: object = None
+    channel_scales: object = None
+    run_info: object = None
 
     @property
     def constants(self):
@@ -106,7 +109,7 @@ def metadata(request, split, protocol, protocol_sha, checkpoint_sha, device, env
             "result_fingerprint": None, "runner_autocast": False}
 
 
-def execute(request, split, protocol, protocol_sha, partition, writer, device, verify_data, repo=REPO, run_info=None):
+def execute(request, split, protocol, protocol_sha, partition, writer, device, verify_data, repo=REPO, run_info=None, tier='quick'):
     """Shared by evaluate, reference and conformance; callers own output placement."""
     environment = check_environment(repo)
     if environment["status"] == "fail":
@@ -135,11 +138,24 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
             info["history_length"] = adapter.history_length
             info["rollout_starts"] = {entry.chunk: list(entry.rollout) for entry in starts}
             ctx = Context(adapter, geometry, reader, starts, protocol, split, partition, device, writer)
+            ctx.run_info = info
             from .analyses import single_step, rollout_curve
             analyses = {"single_step": single_step, "rollout_curve": rollout_curve}
+            if tier=='full':
+                from .analyses._analysis_io import FullStore
+                from .channel_scales import read_channel_scales
+                import importlib
+                ctx.full=FullStore(ctx)
+                scale_path=writer.storage.root/'references'/split.split_id/'channel_scales.json'
+                ctx.channel_scales=read_channel_scales(scale_path,split)
+                info['channel_scales_sha256']=sha256(scale_path)
+                for name in protocol['tiers']['full']:
+                    if name not in analyses:analyses[name]=importlib.import_module('.analyses.'+name,__package__)
             summary = {}
-            for name in protocol["tiers"]["quick"]:
+            for name in protocol["tiers"][tier]:
+                print('analysis:',name,flush=True)
                 summary[name] = analyses[name].run(ctx)
+            if ctx.full is not None:ctx.full.cleanup()
             schema_validate(summary, "summary.schema.json")
             writer.json("summary.json", summary)
             for name in summary:
@@ -180,8 +196,8 @@ def record_failure(writer, info, error):
 def evaluate(request_path, split_id, partition="validation", tier="quick", device=None, data_root=None, no_verify_data=False,
              storage=None, repo=REPO):
     require_compute()
-    if tier != "quick":
-        raise ValueError("Only quick tier is implemented in milestone 2; full analyses require later milestones")
+    if tier not in {'quick','full'}:
+        raise ValueError('Tier must be quick or full')
     storage = SharedStorage() if storage is None else storage
     request = read_request(request_path)
     identifier(split_id)
@@ -204,7 +220,7 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
         from .conformance import last_conformance
         info["conformance"] = last_conformance(storage, split_id, protocol_sha, environment)
         info["no_verify_data"] = no_verify_data
-        execute(request, split, protocol, protocol_sha, partition, writer, device, not no_verify_data, repo, info)
+        execute(request, split, protocol, protocol_sha, partition, writer, device, not no_verify_data, repo, info,tier)
         info["status"] = "complete"
         writer.json("run.json", info)
         bundle_checksums(writer)

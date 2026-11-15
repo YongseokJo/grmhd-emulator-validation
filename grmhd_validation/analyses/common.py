@@ -57,6 +57,7 @@ def ci(values, constants):
 
 
 def clean(value):
+    if isinstance(value,np.bool_):return bool(value)
     if isinstance(value, np.ndarray):
         return clean(value.tolist())
     if isinstance(value, (np.floating, float)):

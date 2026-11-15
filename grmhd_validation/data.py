@@ -18,6 +18,8 @@ def load_geometry(split, device, hashes=None):
     with np.load(split.geometry_path, allow_pickle=False) as archive:
         values = {name: archive[name] for name in ("r", "h", "ph", "gcov", "gcon", "gdet", "dx", "spin", "dt_dump")}
         values["resolved"] = archive["resolved"] if "resolved" in archive else np.ones(split.shape[1:], dtype=bool)
+        if 'eos_gamma' in archive:
+            values['eos_gamma'] = archive['eos_gamma']
     for name in ("r", "h", "ph", "resolved"):
         if tuple(values[name].shape) != split.shape[1:]:
             raise ValueError("Geometry shape mismatch: " + name)
@@ -25,7 +27,7 @@ def load_geometry(split, device, hashes=None):
     if not all(torch.isfinite(value).all() for name, value in tensors.items() if name != "resolved"):
         raise ValueError("Geometry contains non-finite values")
     return Geometry(tensors["r"], tensors["h"], tensors["ph"], tensors["gcov"], tensors["gcon"],
-                    tensors["gdet"], tensors["dx"], tensors["spin"], tensors["dt_dump"], tensors["resolved"])
+                    tensors["gdet"], tensors["dx"], tensors["spin"], tensors["dt_dump"], tensors["resolved"], tensors.get('eos_gamma'))
 
 
 def _identity(path):
@@ -34,8 +36,8 @@ def _identity(path):
 
 
 class FrameReader:
-    def __init__(self, split, partition, manifest=None, verify=True):
-        if partition not in {"validation", "test"}:
+    def __init__(self, split, partition, manifest=None, verify=True, *, training_truth=False):
+        if partition not in {"validation", "test"} and not (training_truth and partition=='train'):
             raise ValueError("Evaluation reads validation or test chunks only")
         self.split, self.partition = split, partition
         self.allowed = {dump.index: dump for dump in split.model_dumps(partition)}

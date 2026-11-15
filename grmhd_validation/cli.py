@@ -32,7 +32,7 @@ def main(argv=None):
     command.add_argument("--data-root")
     command.add_argument("--no-verify-data", action="store_true")
     command = sub.add_parser("reference", help="Owner-only persistence golden on a Slurm CPU")
-    command.add_argument("adapter", choices=("persistence",))
+    command.add_argument("adapter", choices=("persistence", "channel-scales"))
     command.add_argument("--split-id", required=True)
     command.add_argument("--split", choices=("validation",), default="validation")
     command.add_argument("--tier", choices=("quick",), default="quick")
@@ -60,8 +60,12 @@ def main(argv=None):
             from .runner import evaluate
             verdict = evaluate(args.request, args.split_id, args.split, args.tier, args.device, args.data_root, args.no_verify_data)
         elif args.command == "reference":
-            from .conformance import reference
-            verdict = reference(args.split_id, args.tier, args.split, args.device, data_root=args.data_root)
+            if args.adapter=='channel-scales':
+                from .channel_scales import generate
+                verdict=generate(args.split_id,data_root=args.data_root)
+            else:
+                from .conformance import reference
+                verdict = reference(args.split_id, args.tier, args.split, args.device, data_root=args.data_root)
         elif args.command == "conformance":
             from .conformance import conformance
             verdict = conformance(args.split_id, data_root=args.data_root)

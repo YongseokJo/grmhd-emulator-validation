@@ -83,6 +83,7 @@ def run(ctx):
             model_curve, baseline_curve = [], []
             for step in range(1, ctx.protocol["max_steps"] + 1):
                 output = ctx.step(history)
+                if getattr(ctx,'full',None) is not None:ctx.full.save('rollout',start,step,output[0].cpu().numpy())
                 truth = ctx.reader.numpy(start + step)
                 model_curve.append(nmae(output[0].cpu().numpy(), truth, ctx.constants))
                 baseline_curve.append(nmae(initial, truth, ctx.constants))

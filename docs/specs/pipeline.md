@@ -1,7 +1,8 @@
 # Spec: end-to-end validation pipeline (v1)
 
 Status: approved for implementation (2026-11-14); all protocol settings are decided. The owner of the repository and of this spec is the benchmark owner;
-the planner maintains this text. The implementer follows it exactly.
+the implementer maintains this text and the owner reviews spec edits (2026-11-15).
+Spec edits are committed separately before their implementation.
 
 - Every protocol setting lives in `protocols/forecast_v1.json`, so changing one never needs a code
   change.
@@ -200,6 +201,45 @@ schema, and make `read_protocol` validate it. Values are Kevin's unless marked.
     of the evaluated split.
   - every other analysis.
 
+### 3.4 Milestone-3 full-tier port configuration
+
+The original evaluator's non-quick defaults are recorded in constants.full in
+forecast_v1.json (source main@ebcc218); numerical guards and fixed plot/table
+conventions remain part of each credited computation. The core accepts explicit
+metric space and start selection for regression. The milestone-3 production
+start policy is single: the first common protocol rollout start, with original
+within-analysis pair/statistic sampling restricted to the frozen split. This is
+an intermediate port, not the milestone-4 final all-start aggregate/CIs. The all
+selection remains a callable core configuration, tested independently and enabled
+for final aggregates in milestone 4. No CLI setting may select a more favorable
+start or change the metric space.
+
+Outside the loss-space analyses enumerated in §4, production uses physical
+fields; legacy loss space is a regression option only. Physical relative errors
+and stability perturbations/response use the owner-generated training mean-abs or
+RMS channel scale (§4). This change is tested separately from legacy numerical
+regression. Do not alter the final milestone-2 single_step/rollout_curve semantics.
+
+Every remaining analysis writes metrics/<analysis>.json and tables/<analysis>.csv
+with a closed schema. Numeric arrays, counts and selection/space labels are
+result content; paths, times, versions and host information are not. Diagnostic
+figures keep fixed figNN_<analysis>.png names, the corresponding original panel
+sizes, Agg/150 dpi/DejaVu Sans 11 and no timestamp metadata. Cost parameter counts
+and measurement configuration are deterministic result content; measured wall
+latency, peak memory and runtime profiling live only in run.json/logs, and are
+excluded from fingerprints. Timing measurements cannot be golden numerical
+comparisons; their measurement arithmetic is tested using a controlled clock.
+
+The physical structure-function signed third moment uses the same positive lag
+on both slices. This avoids the original Python precedence error for odd
+maximum lag (`[:-max_lag//2]`); the legacy regression path retains that original
+expression. A synthetic linear field tests the physical formula separately.
+
+Adding the full-tier settings changes the protocol file hash but must not change
+any quick result bytes. The normal owner reference path can regenerate identical
+quick content and refresh its metadata; an unequal quick fingerprint is an error,
+not a new golden to accept. No frozen split definitions change.
+
 ## 4. Metric spaces
 
 - **Loss space.** The fixed TRON normalization, identical to `Fall26/common/normalizer.py`: log10 for
@@ -215,6 +255,17 @@ schema, and make `read_protocol` validate it. Values are Kevin's unless marked.
 - Physical relative errors need a reference scale. Use the training-split per-channel mean of |x| or
   RMS, computed once by the owner into `references/<split_id>/channel_scales.json` from training dumps
   only. Every run uses this file.
+
+The owner creates these scales on a compute node with
+`gval reference channel-scales --split-id <id>`. The closed-schema JSON records
+`split_id`, `split_file_sha256`, `data_manifest_sha256`, the eight `channels` in
+split order, `n_dumps`, `n_cells_per_channel`, arrays `mean_abs` and `rms`, and
+`data_verified: true`. Every cell of every training dump has equal weight.
+Reductions use float64 NumPy in dump-ID order; RMS is sqrt(sum(x*x)/N), not the
+standard deviation. Checksums are mandatory. No validation, test or excluded
+dump contributes. An existing unequal file is an error; an identical file is
+reused. Full-tier runs verify its split identity and record its SHA256 in
+run.json. This truth-only owner command creates only references/<split_id>/.
 
 ## 5. Required improvements over Kevin's suite (all approved)
 
@@ -246,8 +297,34 @@ schema, and make `read_protocol` validate it. Values are Kevin's unless marked.
    human-readable rendering of the JSON.
 2. **Regression against the original.** Where a method is unchanged, the port must reproduce Kevin's
    numbers. Golden test: persistence, plus one fixed TRON checkpoint, on a fixed dump range, run
-   through both the original script and the port; they agree within 1e-6 relative.
+   through both the original script and the port; they agree within 1e-5 relative (milestone-3 owner decision below).
    - Every intended change (items 3–9) gets its own test and an entry in `docs/metrics.md`.
+**Milestone-3 regression and milestone boundary (owner decision, 2026-11-15).**
+- Milestone 3 ports all analyses, applies §4 metric spaces and the resolved rc300
+  mask for correlation times. The broader §5.3–9 improvements remain milestone 4.
+- Computations whose space or sampling changes expose `space="loss"|"physical"`
+  and explicit start selection (one start or all starts). The production settings
+  come from the protocol; regression can select Kevin's original configuration
+  without a separate implementation of the formula.
+- In Kevin's configuration, port/original numbers agree within **1e-5 relative**.
+  Changed physical-space/selection configurations are documented deviations in
+  docs/metrics.md with independent synthetic tests. Do not claim that comparing
+  different metric spaces establishes numerical faithfulness.
+- The learned regression checkpoint is
+  `/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth`, pinned by
+  SHA256 in the regression fixture. Missing files or hash mismatches fail the
+  regression; they are never skipped or silently repinned.
+- Regression start is 4216; approved history is 4207–4216 and targets are
+  4217–4266. Kevin's original evaluator receives a temporary directory of symlinks
+  to **exactly 4216–4266 (51 dumps) plus geometry.npz**. Neither source data nor
+  the read-only reference checkout is copied or modified.
+- This checkpoint was trained on Kevin's older 80/10/10 split, including this
+  validation chunk. This is a **regression-only, not benchmark** experiment.
+  Results go only to a temporary directory, never runs/, references/ or the
+  leaderboard. Test names, logs and documentation state this limitation.
+- Run the real regression through ghx4-interactive, one allocation per user;
+  synthetic kernel tests cover additional edge cases.
+
 3. **Statistics over all starts.** Physics tables, drift, Lorentz, spectra and slices are averaged over
    all rollout starts, with 95% CIs, instead of following one rollout from one start.
 4. **Bootstrap.** A block bootstrap over starts that respects chunks: resample whole blocks of
@@ -319,6 +396,252 @@ class Adapter(ModelAdapter):
   - Example: `persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1`.
   - The adapter source SHA256 is still recorded, so persistence runs remain identifiable.
 - Docs: `docs/plugging_in_a_model.md`, a step-by-step walkthrough with the TRON example.
+
+## 6.1 Agent-driven prediction mode (milestone 5)
+
+This section specifies milestone 5, not an additional milestone-3 analysis.
+Prediction mode feeds the same scorer as adapters. It does not change the frozen
+splits, common starts, horizons, physical tensor contract or metric definitions.
+A prompt or agent-provider change does not create a new data split.
+
+### Roles and access
+
+| Role | Responsibility | May see |
+|---|---|---|
+| Forecasting agent | Produce forecasting code (A), or the active one-step prediction (B). | Only its exported packet, its prompt, allowed tools and its own submission. |
+| Host | Create tasks/packets, enforce the history boundary, freeze outputs, advance the rolling buffer and collect submissions. | Frozen split/configuration and source data needed to construct allowed histories; never send future truth or scores to the forecasting agent. |
+| Scorer | Validate collected predictions and compute common metrics/figures. | The frozen predictions, provenance, geometry and truth from the evaluated split. |
+
+The host and scorer may be the same operator, but the forecasting agent must be a
+separate generation session with only the packet workspace exposed. Opening the
+whole benchmark/data repository in that session is forbidden. Packet creation
+must materialize allowed arrays, not symlink to a parent data tree. The host
+records the actual isolation mechanism and any exceptions; a directory name or
+an agent's self-report is not evidence of enforced isolation. Results without a
+complete host attestation are labelled unattested, not claimed as blind results.
+Neither tools, transcripts nor packet metadata may expose API credentials.
+
+### Two protocols
+
+- **A — code generation.** The agent writes a reusable one-step method from its
+  packet. The host freezes its source and wraps it as a ModelAdapter (§6). The
+  host runs that fixed code for every required start and all 50 steps. The agent
+  is not consulted again during those rollouts. The runner owns history and
+  scoring; data paths, truth lookups and changes of method between starts are
+  forbidden. Code changes require a new model version and recorded attempt.
+- **B — stepwise generation.** The agent produces exactly the active step. The
+  host freezes and validates it, advances using that prediction, then gives the
+  next packet to the agent. There are 50 accepted generation steps per rollout
+  start. A request for step k cannot receive truth for steps 1..k, including as
+  feedback, a correction or an example. Code-only host rollouts must not be
+  described as B.
+
+Record protocol A or B explicitly. They are distinct methods even when provider,
+model and prompt are otherwise equal. Protocol A may use normal adapter evaluation
+and may also export a prediction bundle. Protocol B uses collected predictions.
+For B, inference-cost and perturbation/stability metrics requiring an executable
+adapter are `not evaluated` with a reason; generation wall time is provenance,
+not a substitute for model inference cost. No placeholder zeros are scored.
+
+### Task, packet and scoring commands
+
+All commands set umask 007 and return the standard final JSON verdict (§12).
+Task/packet paths below are user-owned workspaces outside shared validation
+storage; they do not add a new top-level shared-folder area. Only evaluate writes
+a benchmark attempt using the existing staging/publish/seal lifecycle (§7).
+
+```bash
+# Host: freeze the request and all required start/target identities.
+gval task --request run_request.json --split-id <id> --split validation|test \
+  --protocol A|B --prompt-id <prompt_id> --output <task_dir>
+
+# Host: export one isolated start/step; S must belong to task.json.
+gval packet create --task <task_dir> --kind rollout|single_step --start S \
+  --output <packet_dir>
+
+# Host: validate/freeze the active submission and advance using its prediction.
+gval packet advance --task <task_dir> --packet <packet_dir>
+
+# Host: validate and collect frozen outputs into the fixed bundle layout.
+gval packet collect --task <task_dir> --output <prediction_bundle>
+
+# Scorer: no model-specific metric or figure path.
+gval evaluate --request run_request.json --predictions <prediction_bundle> \
+  --split-id <id> --split validation|test --tier quick|full
+```
+
+`task` reads the committed protocol and frozen split and writes immutable
+`task.json`: task/schema IDs, request hash, split/protocol/geometry hashes,
+partition, protocol A/B, prompt identity/hash, history length, all required start
+IDs grouped by chunk, every required target ID/step, expected shape/dtype/channel
+order, seed, and completeness rules. Its identity is its SHA256. The host keeps
+source paths and truth manifests separately; they are not exported to agents.
+There is no CLI option to shorten the horizon or select a benchmark subset.
+Creating one packet at a time is scheduling, not permission to reduce coverage.
+
+`packet create` follows Eden's episode contract: README.md, prompt.md, format.md,
+output_schema.json, episode.json, inputs/geometry.npz and inputs/current_state.npy,
+plus inputs/history.npy when h > 1. Arrays are physical float32; history is
+[h,8,Nr,Ntheta,Nphi], current_state equals its last frame. Geometry and shape are
+from this dataset, with no hard-coded rc300 dimensions/cadence. episode.json names
+task/episode/prompt IDs, chunk/start, kind, active_step, required_steps,
+required_prediction_files, input hashes and state_from_step. A fresh agent
+context is required for each independent start/single-step sample. Within a B
+rollout the declared prompt template fixes fresh-per-step versus continued-per-
+start sessions; record the actual session IDs. Never carry one start's true
+history into another start's generation context.
+
+The agent writes only submission/prediction_step_XXXX.npy for the active step,
+submission/submission.json, and any reproducible source under submission/code/.
+It may read only allowed packet inputs; it does not call advance, collect or the
+scorer. Unlike Eden's original permissive dtype list, this benchmark requires
+finite float32 of exact shape [8,Nr,Ntheta,Nphi], with allow_pickle=False and
+channels rho, ug, utilde1, utilde2, utilde3, B1, B2, B3. The host does not cast,
+clamp, repair, interpolate or silently replace submitted values.
+
+`advance` validates task/episode/step identity and input hashes, freezes the file
+and its metadata by hash without overwrite, then advances active_step. The new
+history is the standard rolling buffer: remaining initial history plus accepted
+predictions; no later truth is inserted. An accepted step cannot be replaced by
+a retry or by a scorer's preferred candidate. Rejected attempts and their reasons
+are recorded. Generation may resume an interrupted task from its last frozen
+step only if the chain of input/output hashes still verifies.
+
+`collect` checks the whole frozen chain and copies only verified frozen outputs
+into the bundle. It emits an explicit coverage manifest listing required,
+received, missing and invalid entries. It never pads a chain, repeats a missing
+file, uses persistence for a missing step or averages multiple submissions.
+
+### Fixed prediction bundle
+
+`<chunk>` is the frozen chunk name; `<s>` is the decimal start dump ID. Filenames
+use Eden's four-digit step numbering, independent of absolute dump ID.
+
+```text
+<prediction_bundle>/
+  task.json
+  predictions.json                 coverage, paths and SHA256 of every entry
+  provenance.json                  per-run generation/host provenance
+  host_attestation.json
+  code/                            frozen source for A; optional reproducible B tools
+  rollout/<chunk>/start_<s>/
+    prediction_step_0001.npy        all steps 0001..0050, one physical cube each
+    ...
+    prediction_step_0050.npy
+    steps/step_0001.json            one immutable provenance record per step
+    ...
+    steps/step_0050.json
+  single_step/<chunk>/start_<s>/
+    prediction_step_0001.npy
+    steps/step_0001.json
+```
+
+Paths are relative, canonical and confined to the bundle. No symlinks or pickle
+objects are accepted. The scorer verifies file hashes, shapes, dtype, finiteness,
+task/request identities and the autoregressive input/output chain before scoring.
+Both adapters and prediction files supply identical physical states to the same
+analysis modules; imported predictions must not introduce an alternate metric
+implementation. The collected bundle and its provenance hashes go in run.json.
+Run-specific provenance never enters summary/metric/table result content (§11).
+
+### Completeness and `not evaluated`
+
+- All **12 rollout starts** (four per each of the three evaluated chunks) and
+  **all 50 steps per start** are required: 600 distinct required entries. The
+  authoritative IDs come from §3.1, not Eden's historical starts or a hand list.
+- If any required rollout entry is missing, invalid or unverified, rollout
+  analyses are **not evaluated**. Report exact missing/invalid (chunk,start,step)
+  entries; do not score the available subset or shorten to a common prefix.
+- Single-step is evaluated only when **every** eligible common start in every
+  chunk is present with a valid s+1 prediction. Fifty-step rollout step-1 files
+  cover only the 12 rollout starts and do not stand in for the complete
+  single-step set. Shared files may be referenced only when the input histories,
+  task/prompt/protocol provenance and output hashes are identical.
+- Coverage is explicit for each analysis. A valid complete rollout may produce
+  rollout diagnostics while single-step is `not evaluated`; this does not make
+  an incomplete quick/full request eligible for the corresponding leaderboard.
+  Any requested analysis lacking required inputs is marked `not evaluated`, with
+  metric values null/absent and a reason, never zero or a misleading mean.
+- An incomplete attempt is recorded in staging with status `not evaluated`, a
+  NOT_EVALUATED marker and its coverage diagnostics; no COMPLETE or successful
+  benchmark verdict is written. Inspection artifacts for eligible analyses are
+  clearly labelled partial and are not published as a complete run. Completing
+  the task requires a new recorded evaluation attempt; earlier attempts remain.
+
+### Versioned prompts and provenance
+
+Prompt templates live in `prompts/<prompt_id>/` with template.md and manifest.json.
+A prompt_id is immutable and versioned. Its manifest records the source packet
+contract/commit, protocol A/B, session policy, allowed tool/network access, input
+and output schema versions, rendering fields and template SHA256. Template
+changes, provider-specific additions or changed session policy require a new
+prompt_id; neither the agent nor host may silently edit the rendered prompt.
+Store both template and rendered-prompt hashes. The initial A/B templates adapt
+Eden's `primary_ar_onestep` packet/prompt, with attribution, dynamic grid/cadence,
+the benchmark's h-frame history and strict float32/coverage rules.
+
+Per-run provenance records task/request/split/protocol/geometry hashes; protocol
+A/B; prompt_id and hashes; forecasting provider, actual model identifier/version,
+agent client/version, declared generation parameters and seed (null if unavailable);
+source repository/commit and code/checkpoint hashes; training record and known
+prior data exposure; allowed/actual tool and network access; transcript/tool-log
+hashes; host/scorer identity, host/job, environment lock and code commit;
+start/end times and submission/collection identities. Never infer a provider
+version, seed or isolation claim from a model nickname.
+
+Per-step records contain episode/task IDs, chunk/start/target ID, step,
+active_step, input-history and geometry hashes, previous frozen-output hash,
+rendered-prompt hash, session/request/response IDs, actual provider/model,
+code hash for A or tool-code hashes for B, prediction path/hash/shape/dtype,
+generation/freeze times and elapsed generation time, transcript/tool-log hashes,
+rejections/retries and the host's validation result. Unknown fields are explicit
+null with a reason; required file/history identity fields cannot be unknown.
+
+The host attests, against the collected manifest hash, to the actual workspace
+and access controls; permitted history only; absence of future truth, evaluator,
+other starts and scorer feedback in generation sessions; context/session policy;
+autoregressive advancement from frozen predictions; source and prompt freezing;
+and complete collection without selection or replacement. It names the operator,
+host/job, implementation commit, logs and attestation time. Missing evidence or
+exceptions remain visible as unattested/exposure flags; scorer output must not
+claim a blind experiment on the basis of an unchecked agent statement.
+
+Role-specific instructions are separate deliverables: forecasting instructions
+inside each packet; host instructions for task/create/advance/collect and audit;
+scorer instructions for completeness, evaluate --predictions and reporting.
+Benchmark-repository instructions are not the forecasting-agent prompt.
+
+### Eden's three reference methods and credit
+
+Pinned source: KevinFortuneCodes/neural_operator_msai_spring26, branch
+`eden/rc300-frontier-15nov`, commit `f8cd379a562e9b0fc6f96ee36d5f9855ddc1d27a`.
+Author/curator: Eden Growney; originating coding agents are recorded individually.
+The packet contract is under `eden_rc300_pilot/benchmark_pilot/rc300_packets/`;
+`tools/drive_rc300_ar_host.py` and `tools/advance_rc300_ar.py` implement its host
+workflow. Read it through git show in the read-only reference checkout.
+
+Milestone 5 wraps these **start-11672** methods as three adapters:
+
+| Originating agent | Source under rc300_packets/ | Adapter name |
+|---|---|---|
+| Claude | start_11672_claude/submission/code/forecast_one_step.py | eden-claude |
+| GPT | start_11672_gpt/submission/code/predict_one_step.py | eden-gpt |
+| Gemini | start_11672_gemini/submission/code/predict_step.py | eden-gemini |
+
+Each port names Eden, the originating agent, original path/branch/commit and its
+changes in a header and docs/provenance.md. Remove packet-specific paths and
+read inputs only from adapter arguments; preserve/document the numerical method,
+model-owned preprocessing and corrections. Fixed spatial/cadence assumptions must
+be made explicit and unsupported geometry must fail, not silently broadcast.
+Do not commit unchanged original scripts or historical cubes. Pin dependency
+bounds through the normal approval process (§11).
+
+These are protocol A examples: source written by an agent, then host-executed.
+They must be rerun on this protocol's 12 starts × 50 steps and all single-step
+starts before the relevant analyses count as evaluated. Eden's historical
+start 11672/ten-start pilot scores are provenance, not this benchmark's scores,
+and are not imported as results. Known pilot exposure is recorded; rewrapping
+historical code does not establish that its development was blind to this split.
 
 ## 7. Running and outputs
 
@@ -494,6 +817,10 @@ runs/<split_id>/<model>/<run_id>/
       still succeeds, so milestones 1–2 can proceed.
     - **lock present:** a mismatch in python, torch, CUDA, numpy, scipy or matplotlib is a **fail**;
       any other package mismatch is a `warn`.
+  - When comparing pip_freeze, exclude only this package's own editable entry
+    (grmhd-emulator-validation); keep the recorded lock unchanged. Its source
+    commit is already in run.json. Other editable/package differences still warn,
+    and python/torch/CUDA/numpy/scipy/matplotlib mismatches still fail.
   - `run.json` records the platform, the lock SHA256 (or null) and `environment_locked`. The leaderboard
     shows runs from unlocked environments as "unlocked"; the owner's dry run (milestone 7) requires a
     lock.
@@ -584,7 +911,10 @@ runs/<split_id>/<model>/<run_id>/
    (single_step, rollout_curve), conformance golden.
 3. Port the remaining analyses, with the golden regression against Kevin's suite.
 4. Improvements 3–9, each with a test and a `docs/metrics.md` entry.
-5. TRON example adapter; ViT adapter (from `Fall26/eval/evaluate_vit.py`); `record-training`.
+5. TRON example adapter; ViT adapter (from `Fall26/eval/evaluate_vit.py`); `record-training`;
+   agent-driven prediction mode (§6.1): roles, task/packet workflow, versioned prompts, prediction
+   bundle scoring/provenance and host attestation, and Eden's three credited start-11672 adapters.
+   All 12 rollout starts × 50 steps are mandatory; incomplete inputs are `not evaluated`.
 6. `report`, leaderboard, GitHub CI, agent instructions and skill.
 7. Owner dry run: persistence, TRON and ViT on `rc300_reduced_v1` validation; then publish references.
 

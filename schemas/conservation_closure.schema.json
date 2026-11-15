@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "analysis": {
+      "const": "conservation_closure"
+    },
+    "space": {
+      "enum": [
+        "loss",
+        "physical"
+      ]
+    },
+    "starts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "per_start": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "values": {
+                "type": "object",
+                "properties": {
+                  "pred_bare": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "truth_bare": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "pred_physical": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "truth_physical": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "imbalance_pred_bare": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "imbalance_truth_bare": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "imbalance_pred_physical": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "imbalance_truth_physical": {
+                    "$ref": "#/$defs/value"
+                  }
+                },
+                "required": [
+                  "pred_bare",
+                  "truth_bare",
+                  "pred_physical",
+                  "truth_physical",
+                  "imbalance_pred_bare",
+                  "imbalance_truth_bare",
+                  "imbalance_pred_physical",
+                  "imbalance_truth_physical"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "start",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "per_start"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "analysis",
+    "space",
+    "starts",
+    "data"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      ]
+    }
+  }
+}

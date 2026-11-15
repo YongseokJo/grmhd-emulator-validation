@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "analysis": {
+      "const": "cost"
+    },
+    "space": {
+      "enum": [
+        "loss",
+        "physical"
+      ]
+    },
+    "starts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "per_start": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "values": {
+                "type": "object",
+                "properties": {
+                  "parameters": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "warmup_steps": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "timed_steps": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "required": [
+                  "parameters",
+                  "warmup_steps",
+                  "timed_steps"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "start",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "per_start"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "analysis",
+    "space",
+    "starts",
+    "data"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      ]
+    }
+  }
+}

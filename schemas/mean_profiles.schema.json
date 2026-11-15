@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "analysis": {
+      "const": "mean_profiles"
+    },
+    "space": {
+      "enum": [
+        "loss",
+        "physical"
+      ]
+    },
+    "starts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "per_start": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "values": {
+                "type": "object",
+                "properties": {
+                  "r": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "theta": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "omega_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "omega_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "omega_keplerian": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "rho_theta_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "rho_theta_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "beta_log10_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "beta_log10_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "sigma_log10_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "sigma_log10_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "n_steps": {
+                    "$ref": "#/$defs/value"
+                  }
+                },
+                "required": [
+                  "r",
+                  "theta",
+                  "omega_pred",
+                  "omega_truth",
+                  "omega_keplerian",
+                  "rho_theta_pred",
+                  "rho_theta_truth",
+                  "beta_log10_pred",
+                  "beta_log10_truth",
+                  "sigma_log10_pred",
+                  "sigma_log10_truth",
+                  "n_steps"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "start",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "per_start"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "analysis",
+    "space",
+    "starts",
+    "data"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      ]
+    }
+  }
+}

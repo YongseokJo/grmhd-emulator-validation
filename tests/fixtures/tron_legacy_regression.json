@@ -1,0 +1,14 @@
+{
+ "purpose": "legacy numerical port regression only; checkpoint training overlaps benchmark validation",
+ "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+ "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+ "split_id": "rc300_reduced_v1",
+ "partition": "validation",
+ "history_first": 4207,
+ "start": 4216,
+ "target_last": 4266,
+ "max_steps": 50,
+ "reference_main_commit": "ebcc218",
+ "reference_tron_commit": "2667a5f",
+ "relative_tolerance": 0.00001
+}

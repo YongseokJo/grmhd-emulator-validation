@@ -1,34 +1,525 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": ["protocol_id", "H_max", "max_steps", "report_steps", "n_starts_per_chunk", "bootstrap_block", "bootstrap_resamples", "seed", "gpu_tolerance", "tiers", "constants"],
+  "required": [
+    "protocol_id",
+    "H_max",
+    "max_steps",
+    "report_steps",
+    "n_starts_per_chunk",
+    "bootstrap_block",
+    "bootstrap_resamples",
+    "seed",
+    "gpu_tolerance",
+    "tiers",
+    "constants"
+  ],
   "additionalProperties": false,
   "properties": {
-    "protocol_id": {"type": "string"},
-    "H_max": {"type": "integer", "minimum": 1},
-    "max_steps": {"type": "integer", "minimum": 1},
-    "report_steps": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}, "uniqueItems": true},
-    "n_starts_per_chunk": {"type": "integer", "minimum": 1},
-    "bootstrap_block": {"type": "integer", "minimum": 1},
-    "bootstrap_resamples": {"type": "integer", "minimum": 1},
-    "seed": {"type": "integer"},
-    "gpu_tolerance": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "protocol_id": {
+      "type": "string"
+    },
+    "H_max": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "max_steps": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "report_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "uniqueItems": true
+    },
+    "n_starts_per_chunk": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "bootstrap_block": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "bootstrap_resamples": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "gpu_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 1
+    },
     "constants": {
-      "type": "object", "additionalProperties": false,
-      "required": ["loss_space", "skill", "rel_l1", "growth_curve", "ci", "active_disk", "correlation_time", "attractor", "figures"],
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "loss_space",
+        "skill",
+        "rel_l1",
+        "growth_curve",
+        "ci",
+        "active_disk",
+        "correlation_time",
+        "attractor",
+        "figures",
+        "full"
+      ],
       "properties": {
-        "loss_space": {"type": "object", "required": ["floor_rho", "floor_ug", "transforms"], "additionalProperties": false, "properties": {"floor_rho": {"$ref": "#/$defs/positive"}, "floor_ug": {"$ref": "#/$defs/positive"}, "transforms": {"const": ["log10", "log10", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh"]}}},
-        "skill": {"type": "object", "required": ["persistence_min", "epsilon"], "additionalProperties": false, "properties": {"persistence_min": {"$ref": "#/$defs/positive"}, "epsilon": {"$ref": "#/$defs/positive"}}},
-        "rel_l1": {"type": "object", "required": ["denominator_min"], "additionalProperties": false, "properties": {"denominator_min": {"$ref": "#/$defs/positive"}}},
-        "growth_curve": {"type": "object", "required": ["step1_min"], "additionalProperties": false, "properties": {"step1_min": {"$ref": "#/$defs/positive"}}},
-        "ci": {"type": "object", "required": ["percentiles", "rollout_resample_unit"], "additionalProperties": false, "properties": {"percentiles": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "minimum": 0, "maximum": 100}}, "rollout_resample_unit": {"const": "start"}}},
-        "active_disk": {"type": "object", "required": ["r_max", "theta_halfwidth"], "additionalProperties": false, "properties": {"r_max": {"$ref": "#/$defs/positive"}, "theta_halfwidth": {"$ref": "#/$defs/positive"}}},
-        "correlation_time": {"type": "object", "required": ["r1_clip", "r1_saturated", "r1_cap"], "additionalProperties": false, "properties": {"r1_clip": {"$ref": "#/$defs/correlation"}, "r1_saturated": {"$ref": "#/$defs/correlation"}, "r1_cap": {"$ref": "#/$defs/correlation"}}},
-        "attractor": {"type": "object", "required": ["sigma_dump_stride"], "additionalProperties": false, "properties": {"sigma_dump_stride": {"type": "integer", "minimum": 1}}},
-        "figures": {"type": "object", "required": ["backend", "dpi", "font", "font_size", "rollout_curve_figsize"], "additionalProperties": false, "properties": {"backend": {"const": "Agg"}, "dpi": {"type": "integer", "minimum": 1}, "font": {"type": "string", "minLength": 1}, "font_size": {"$ref": "#/$defs/positive"}, "rollout_curve_figsize": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/positive"}}}}
+        "loss_space": {
+          "type": "object",
+          "required": [
+            "floor_rho",
+            "floor_ug",
+            "transforms"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "floor_rho": {
+              "$ref": "#/$defs/positive"
+            },
+            "floor_ug": {
+              "$ref": "#/$defs/positive"
+            },
+            "transforms": {
+              "const": [
+                "log10",
+                "log10",
+                "arcsinh",
+                "arcsinh",
+                "arcsinh",
+                "arcsinh",
+                "arcsinh",
+                "arcsinh"
+              ]
+            }
+          }
+        },
+        "skill": {
+          "type": "object",
+          "required": [
+            "persistence_min",
+            "epsilon"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "persistence_min": {
+              "$ref": "#/$defs/positive"
+            },
+            "epsilon": {
+              "$ref": "#/$defs/positive"
+            }
+          }
+        },
+        "rel_l1": {
+          "type": "object",
+          "required": [
+            "denominator_min"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "denominator_min": {
+              "$ref": "#/$defs/positive"
+            }
+          }
+        },
+        "growth_curve": {
+          "type": "object",
+          "required": [
+            "step1_min"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "step1_min": {
+              "$ref": "#/$defs/positive"
+            }
+          }
+        },
+        "ci": {
+          "type": "object",
+          "required": [
+            "percentiles",
+            "rollout_resample_unit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "percentiles": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "rollout_resample_unit": {
+              "const": "start"
+            }
+          }
+        },
+        "active_disk": {
+          "type": "object",
+          "required": [
+            "r_max",
+            "theta_halfwidth"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "r_max": {
+              "$ref": "#/$defs/positive"
+            },
+            "theta_halfwidth": {
+              "$ref": "#/$defs/positive"
+            }
+          }
+        },
+        "correlation_time": {
+          "type": "object",
+          "required": [
+            "r1_clip",
+            "r1_saturated",
+            "r1_cap"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "r1_clip": {
+              "$ref": "#/$defs/correlation"
+            },
+            "r1_saturated": {
+              "$ref": "#/$defs/correlation"
+            },
+            "r1_cap": {
+              "$ref": "#/$defs/correlation"
+            }
+          }
+        },
+        "attractor": {
+          "type": "object",
+          "required": [
+            "sigma_dump_stride"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "sigma_dump_stride": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "figures": {
+          "type": "object",
+          "required": [
+            "backend",
+            "dpi",
+            "font",
+            "font_size",
+            "rollout_curve_figsize"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "backend": {
+              "const": "Agg"
+            },
+            "dpi": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "font": {
+              "type": "string",
+              "minLength": 1
+            },
+            "font_size": {
+              "$ref": "#/$defs/positive"
+            },
+            "rollout_curve_figsize": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "$ref": "#/$defs/positive"
+              }
+            }
+          }
+        },
+        "full": {
+          "type": "object",
+          "properties": {
+            "epsilon": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "ceiling_rho": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "ceiling_ug": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "max_gamma": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "flux_local_cells": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "histogram_bins": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "conditional_bins": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "conditional_edge_dumps": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "conditional_cell_fraction": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "conditional_min_cells": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "error_correlation_pairs": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "correlation_variance_min": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "stability_draws": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "stability_amplitude": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "cost_warmup_steps": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "cost_timed_steps": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "lorentz_percentile": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "spatial_bins_min": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "spatial_bins_max": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "spatial_bin_divisor": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "structure_max_order": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "structure_lag_divisor": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "structure_min_max_lag": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "histogram_linear_percentiles": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number"
+              }
+            },
+            "histogram_log_percentiles": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number"
+              }
+            },
+            "js_epsilon": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "spectrum_truth_percentile": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "spectrum_fit_fraction": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number"
+              }
+            },
+            "turbulence_r_min": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "turbulence_theta_halfwidth": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "azimuthal_theta_halfwidth": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "temporal_disk_r_min": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "temporal_jet_r_min": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "temporal_theta_halfwidth": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "jet_theta_offset": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "jet_sigma_min": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "mean_theta_halfwidth": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "mean_profile_radii": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              }
+            },
+            "distribution_step_divisor": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "mean_step_divisor": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "milestone3_start_policy": {
+              "enum": [
+                "single",
+                "all"
+              ]
+            },
+            "regression_relative_tolerance": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": [
+            "epsilon",
+            "ceiling_rho",
+            "ceiling_ug",
+            "max_gamma",
+            "flux_local_cells",
+            "histogram_bins",
+            "conditional_bins",
+            "conditional_edge_dumps",
+            "conditional_cell_fraction",
+            "conditional_min_cells",
+            "error_correlation_pairs",
+            "correlation_variance_min",
+            "stability_draws",
+            "stability_amplitude",
+            "cost_warmup_steps",
+            "cost_timed_steps",
+            "lorentz_percentile",
+            "spatial_bins_min",
+            "spatial_bins_max",
+            "spatial_bin_divisor",
+            "structure_max_order",
+            "structure_lag_divisor",
+            "structure_min_max_lag",
+            "histogram_linear_percentiles",
+            "histogram_log_percentiles",
+            "js_epsilon",
+            "spectrum_truth_percentile",
+            "spectrum_fit_fraction",
+            "turbulence_r_min",
+            "turbulence_theta_halfwidth",
+            "azimuthal_theta_halfwidth",
+            "temporal_disk_r_min",
+            "temporal_jet_r_min",
+            "temporal_theta_halfwidth",
+            "jet_theta_offset",
+            "jet_sigma_min",
+            "mean_theta_halfwidth",
+            "mean_profile_radii",
+            "distribution_step_divisor",
+            "mean_step_divisor",
+            "milestone3_start_policy",
+            "regression_relative_tolerance"
+          ],
+          "additionalProperties": false
+        }
       }
     },
-    "tiers": {"type": "object", "required": ["quick", "full"], "additionalProperties": false, "properties": {"quick": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "full": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}}}
+    "tiers": {
+      "type": "object",
+      "required": [
+        "quick",
+        "full"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "quick": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "full": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
   },
-  "$defs": {"positive": {"type": "number", "exclusiveMinimum": 0}, "correlation": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1}}
+  "$defs": {
+    "positive": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "correlation": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 1
+    }
+  }
 }

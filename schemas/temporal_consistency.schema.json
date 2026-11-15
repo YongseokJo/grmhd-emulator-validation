@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "analysis": {
+      "const": "temporal_consistency"
+    },
+    "space": {
+      "enum": [
+        "loss",
+        "physical"
+      ]
+    },
+    "starts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "per_start": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "values": {
+                "type": "object",
+                "properties": {
+                  "steps": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "mass_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "mass_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "energy_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "energy_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "angular_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "angular_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "mass_scale": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "energy_scale": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "angular_scale": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "mass_drift_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "mass_drift_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "energy_drift_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "energy_drift_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "angular_drift_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "angular_drift_truth": {
+                    "$ref": "#/$defs/value"
+                  }
+                },
+                "required": [
+                  "steps",
+                  "mass_pred",
+                  "mass_truth",
+                  "energy_pred",
+                  "energy_truth",
+                  "angular_pred",
+                  "angular_truth",
+                  "mass_scale",
+                  "energy_scale",
+                  "angular_scale",
+                  "mass_drift_pred",
+                  "mass_drift_truth",
+                  "energy_drift_pred",
+                  "energy_drift_truth",
+                  "angular_drift_pred",
+                  "angular_drift_truth"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "start",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "per_start"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "analysis",
+    "space",
+    "starts",
+    "data"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      ]
+    }
+  }
+}

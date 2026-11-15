@@ -233,7 +233,10 @@
       ]
     },
     "tier": {
-      "const": "quick"
+      "enum": [
+        "quick",
+        "full"
+      ]
     },
     "torch": {
       "type": "string"
@@ -243,6 +246,42 @@
     },
     "version": {
       "type": "string"
+    },
+    "analysis_runtime": {
+      "type": "object",
+      "properties": {
+        "cost": {
+          "type": "object",
+          "properties": {
+            "milliseconds_per_step": {
+              "type": "number",
+              "minimum": 0
+            },
+            "timed_steps": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "parameters": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
+          },
+          "required": [
+            "milliseconds_per_step",
+            "timed_steps",
+            "parameters"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "channel_scales_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
     }
   },
   "required": [

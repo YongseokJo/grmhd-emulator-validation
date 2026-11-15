@@ -38,6 +38,7 @@ def run(ctx):
             history = ctx.reader.history(start, ctx.adapter.history_length, ctx.device)
             initial = history[0, -1].cpu().numpy().copy()
             prediction = ctx.step(history)[0].cpu().numpy()
+            if getattr(ctx,'full',None) is not None:ctx.full.save('single',start,1,prediction)
             truth = ctx.reader.numpy(start + 1)
             models.append(nmae(prediction, truth, ctx.constants))
             persistence.append(nmae(initial, truth, ctx.constants))
