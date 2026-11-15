@@ -119,6 +119,15 @@ normalized-divergence magnetic denominator. Spectra/structure/conditional errors
 in physical space can rank models differently from normalized-space diagnostics;
 this is the intended §4 change and should be reviewed as such.
 
+The milestone-3 mass shell plots/table retain the original normalization by
+`gdet.shape[-2]*gdet.shape[-1]`. When geometry stores a singleton phi axis, this
+is not the number of physical angular cells. Energy/angular profiles use the
+physical array's angular count. This source convention is exposed for review
+and is not silently repaired in the legacy port. Full all-start/ring/transport
+improvements remain deferred as above. Temporal-spectrum frequency labels use
+`c/R_g` instead of the original unsupported mathtext `text` command, so the
+declared Matplotlib 3.7 minimum can render every full-tier figure.
+
 ## Regression-only checkpoint
 
 `tests/fixtures/tron_legacy_regression.json` pins the owner-approved checkpoint

@@ -96,7 +96,7 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         ax.loglog(f_plot, psd_t_jet[valid_f], ':', color='#17becf', linewidth=1.4, label='Truth Jet')
         ax.loglog(f_plot, psd_p_jet[valid_f], '-.', color='#ff7f0e', linewidth=1.3, label='TRON Jet')
         ax.set_title(f'{CHANNEL_NAMES[c]}')
-        ax.set_xlabel('$f\\;[1/R_g\\text{-}c]$')
+        ax.set_xlabel('$f\\;[c/R_g]$')
         ax.set_ylabel('PSD $P(f)$')
         ax.legend(fontsize=8, loc='lower left', frameon=True, framealpha=0.9)
         ax.grid(True, alpha=0.3, which='both')
