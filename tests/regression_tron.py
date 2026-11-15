@@ -162,6 +162,9 @@ def run(fixture,kind,base,device):
         def lorentz_clamp_count(self,reset=True):
             return 0 if kind=='persistence' else gpu_norm.lorentz_clamp_count(reset=reset)
     adapter=RegressionAdapter()
+    # The host executes decode on GPU while the original metric normalizer stays
+    # on CPU. Its clamp diagnostic must observe that same decoder, too.
+    original_norm.lorentz_clamp_count=adapter.lorentz_clamp_count
     ctx=Context(adapter,geometry,reader,select_starts(split,fixture['partition'],protocol),
                 protocol,split,fixture['partition'],device,Writer(storage,output))
     ctx.regression_ids=list(range(start,start+steps+1));ctx.run_info={};ctx.full=FullStore(ctx)
@@ -182,6 +185,7 @@ def run(fixture,kind,base,device):
         print(kind,name,flush=True)
         try:
             function,fields=FIELDS[name]
+            adapter.lorentz_clamp_count(reset=True)
             with (base/(name+'-original.log')).open('w') as log,contextlib.redirect_stdout(log), \
                  patch.object(Figure,'savefig',return_value=None):
                 _,locals_=observe_return(ev[function],args,model,original_norm,original_norm,
@@ -189,6 +193,7 @@ def run(fixture,kind,base,device):
                                         loop_fields=LAST_SAMPLE.get(name),tree=source_tree)
             with patch('grmhd_validation.analyses._analysis_io.save_figure',return_value=None):
                 module=importlib.import_module('grmhd_validation.analyses.'+name)
+                adapter.lorentz_clamp_count(reset=True)
                 # Modules hold their imported save function directly.
                 with patch.object(module,'save_figure',return_value=None):
                     actual=module.compute(ctx,space='loss',starts=None)['per_start'][0]['values']

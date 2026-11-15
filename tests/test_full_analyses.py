@@ -33,7 +33,7 @@ class FullFixture(RunnerFixture):
         super().setUp()
         self.protocol.update(max_steps=8, report_steps=[1,2,4,8])
         (self.repo/'protocols/forecast_v1.json').write_bytes(json_bytes(self.protocol))
-        nr,nt,nph=16,8,8
+        nr,nt,nph=16,9,8
         r,t,p=np.meshgrid(np.geomspace(2,160,nr),np.linspace(.1,np.pi-.1,nt),
                           np.arange(nph)*2*np.pi/nph,indexing='ij')
         metric=np.broadcast_to(np.diag([-1.,1.,1.,1.])[:,:,None,None,None],(4,4,nr,nt,nph)).copy()
@@ -84,6 +84,11 @@ class FullAnalysisTests(FullFixture):
                 self.assertEqual(result['analysis'],name)
                 self.assertTrue((ctx.writer.root/'metrics'/(name+'.json')).is_file())
                 self.assertTrue((ctx.writer.root/'tables'/(name+'.csv')).is_file())
+                if name=='azimuthal_spectra':
+                    spectra=result['data']['per_start'][0]['values']['truth']
+                    self.assertTrue(np.isfinite(next(iter(next(iter(spectra.values())).values()))).all())
+                if name=='mean_profiles':
+                    self.assertTrue(np.isfinite(result['data']['per_start'][0]['values']['omega_truth']).all())
         ctx.full.cleanup()
         self.assertFalse((ctx.writer.root/'.scratch').exists())
 
