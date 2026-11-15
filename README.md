@@ -21,6 +21,14 @@ conformance for both datasets pass; see the [validation receipt](docs/milestone_
 
 Shared results folder (Delta and DeltaAI, group `delta_bgun`): `/work/nvme/bgun/share/validation`.
 
+## Planned prediction mode (milestone 5)
+
+Prediction mode is agent-driven and requires all 12 protocol rollout starts;
+agents cannot select a smaller subset. Eden's three methods will be wrapped as
+adapters and use the common split, inference, metric and artifact contracts.
+This is milestone 5 scope; its detailed planner spec and implementation remain
+pending. Milestone 2 is ready for review and no later milestone has started.
+
 ## Split rules (every model, every agent)
 
 - Use only the dumps listed in a split file. Every input and target frame of a sample must lie in one chunk of one split.
