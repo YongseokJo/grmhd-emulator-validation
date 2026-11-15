@@ -26,6 +26,7 @@ class Geometry:
     spin: torch.Tensor
     dt_dump: torch.Tensor
     resolved: torch.Tensor
+    eos_gamma: torch.Tensor | None = None
 
     @property
     def shape(self):

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "analysis": {
+      "const": "meridional_slice"
+    },
+    "space": {
+      "enum": [
+        "loss",
+        "physical"
+      ]
+    },
+    "starts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "per_start": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "values": {
+                "type": "object",
+                "properties": {
+                  "X": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "Y": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "rho_pred": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "rho_truth": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "rho_error": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "B2_pred_log10": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "B2_truth_log10": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "B2_error": {
+                    "$ref": "#/$defs/value"
+                  },
+                  "step": {
+                    "$ref": "#/$defs/value"
+                  }
+                },
+                "required": [
+                  "X",
+                  "Y",
+                  "rho_pred",
+                  "rho_truth",
+                  "rho_error",
+                  "B2_pred_log10",
+                  "B2_truth_log10",
+                  "B2_error",
+                  "step"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "start",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "per_start"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "analysis",
+    "space",
+    "starts",
+    "data"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      ]
+    }
+  }
+}

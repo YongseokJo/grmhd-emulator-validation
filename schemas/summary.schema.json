@@ -98,6 +98,29 @@
         "rel_l1"
       ],
       "type": "object"
+    },
+    "full_numeric_value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/full_numeric_value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/full_numeric_value"
+          }
+        }
+      ]
     }
   },
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -389,6 +412,2559 @@
         "magnetic"
       ],
       "type": "object"
+    },
+    "accretion_diagnostics": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "accretion_diagnostics"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "flux_profiles": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "jet_power_profiles": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "phi_bh": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mdot_pred": {
+                        "type": "object",
+                        "properties": {
+                          "r_H": {
+                            "$ref": "#/$defs/full_numeric_value"
+                          },
+                          "r10": {
+                            "$ref": "#/$defs/full_numeric_value"
+                          }
+                        },
+                        "required": [
+                          "r_H",
+                          "r10"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "mdot_truth": {
+                        "type": "object",
+                        "properties": {
+                          "r_H": {
+                            "$ref": "#/$defs/full_numeric_value"
+                          },
+                          "r10": {
+                            "$ref": "#/$defs/full_numeric_value"
+                          }
+                        },
+                        "required": [
+                          "r_H",
+                          "r10"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "horizon_index": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "r10_index": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "r": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "table": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "step": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "funnel_fraction_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "funnel_fraction_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "jet_power_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "jet_power_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "efficiency_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "efficiency_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "jet_relative_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "phi_bh_relative_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "step",
+                            "funnel_fraction_pred",
+                            "funnel_fraction_truth",
+                            "jet_power_pred",
+                            "jet_power_truth",
+                            "efficiency_pred",
+                            "efficiency_truth",
+                            "jet_relative_error",
+                            "phi_bh_relative_error"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "mdot_correlation": {
+                        "type": "object",
+                        "properties": {
+                          "r_H": {
+                            "$ref": "#/$defs/full_numeric_value"
+                          },
+                          "r10": {
+                            "$ref": "#/$defs/full_numeric_value"
+                          }
+                        },
+                        "required": [
+                          "r_H",
+                          "r10"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "flux_profiles",
+                      "jet_power_profiles",
+                      "phi_bh",
+                      "mdot_pred",
+                      "mdot_truth",
+                      "steps",
+                      "horizon_index",
+                      "r10_index",
+                      "r",
+                      "table",
+                      "mdot_correlation"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "azimuthal_spectra": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "azimuthal_spectra"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "modes": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "modes",
+                      "truth",
+                      "pred",
+                      "steps"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "bias_analysis": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "bias_analysis"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "bias": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rmse": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "n_samples": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "bias",
+                      "rmse",
+                      "n_samples"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "coherence": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "coherence"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "coherence": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "steps",
+                      "coherence"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "conditional_error": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "conditional_error"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "edges": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "model": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "persistence": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "counts": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "edges",
+                      "model",
+                      "persistence",
+                      "counts"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "conservation_closure": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "conservation_closure"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "pred_bare": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "truth_bare": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "pred_physical": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "truth_physical": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "imbalance_pred_bare": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "imbalance_truth_bare": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "imbalance_pred_physical": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "imbalance_truth_physical": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "pred_bare",
+                      "truth_bare",
+                      "pred_physical",
+                      "truth_physical",
+                      "imbalance_pred_bare",
+                      "imbalance_truth_bare",
+                      "imbalance_pred_physical",
+                      "imbalance_truth_physical"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "correlation_times": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "correlation_times"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "tau_c": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "r1": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "saturated": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "n_pairs": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "n_dumps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "n_cells": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "skill": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "crossing_steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "never_crossed": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "last_positive_steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "fraction_positive_after_first": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mean_skill_25_50": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "horizon_rg_c": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "horizon_tau_c": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "tau_c_rg_c": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "resolved_mask": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "starts": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "tau_c",
+                      "r1",
+                      "saturated",
+                      "n_pairs",
+                      "n_dumps",
+                      "n_cells",
+                      "steps",
+                      "skill",
+                      "crossing_steps",
+                      "never_crossed",
+                      "last_positive_steps",
+                      "fraction_positive_after_first",
+                      "mean_skill_25_50",
+                      "horizon_rg_c",
+                      "horizon_tau_c",
+                      "tau_c_rg_c",
+                      "resolved_mask",
+                      "starts"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "cost"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "parameters": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "warmup_steps": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "timed_steps": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "required": [
+                      "parameters",
+                      "warmup_steps",
+                      "timed_steps"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "error_correlation": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "error_correlation"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "model": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "persistence": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "model_errors": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "persistence_errors": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "model",
+                      "persistence",
+                      "model_errors",
+                      "persistence_errors"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "lorentz": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "lorentz"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "step": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "gamma_max": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "gamma_p999": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "step",
+                            "gamma_max",
+                            "gamma_p999"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "max": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "max_step": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "max_p999": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "clamp_count": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "samples",
+                      "max",
+                      "max_step",
+                      "max_p999",
+                      "clamp_count"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "mdot": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "mdot"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "step": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "relative_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "step",
+                            "pred",
+                            "truth",
+                            "relative_error"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "r": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "samples",
+                      "r"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "mean_profiles": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "mean_profiles"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "r": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "theta": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "omega_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "omega_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "omega_keplerian": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rho_theta_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rho_theta_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "beta_log10_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "beta_log10_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "sigma_log10_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "sigma_log10_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "n_steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "r",
+                      "theta",
+                      "omega_pred",
+                      "omega_truth",
+                      "omega_keplerian",
+                      "rho_theta_pred",
+                      "rho_theta_truth",
+                      "beta_log10_pred",
+                      "beta_log10_truth",
+                      "sigma_log10_pred",
+                      "sigma_log10_truth",
+                      "n_steps"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "meridional_slice": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "meridional_slice"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "X": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "Y": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rho_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rho_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rho_error": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "B2_pred_log10": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "B2_truth_log10": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "B2_error": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "step": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "X",
+                      "Y",
+                      "rho_pred",
+                      "rho_truth",
+                      "rho_error",
+                      "B2_pred_log10",
+                      "B2_truth_log10",
+                      "B2_error",
+                      "step"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "physics_table": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "physics_table"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "step": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "mass_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "energy_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "angular_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "divb_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "divb_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "normalized_divb_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "normalized_divb_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "flux_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "flux_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "gamma_max": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "step",
+                            "mass_error",
+                            "energy_error",
+                            "angular_error",
+                            "divb_pred",
+                            "divb_truth",
+                            "normalized_divb_pred",
+                            "normalized_divb_truth",
+                            "flux_pred",
+                            "flux_truth",
+                            "gamma_max"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "initial_divb": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "initial_normalized_divb": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "initial_normalized_divb_global": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "samples",
+                      "initial_divb",
+                      "initial_normalized_divb",
+                      "initial_normalized_divb_global"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "rollout_evolution": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "rollout_evolution"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "X": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "Y": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "step": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "step",
+                            "truth",
+                            "pred",
+                            "error"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "X",
+                      "Y",
+                      "samples"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "shell_profiles": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "shell_profiles"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "step": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "mass_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "mass_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "energy_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "energy_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "angular_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "angular_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "mass_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "energy_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "angular_error": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "step",
+                            "mass_pred",
+                            "mass_truth",
+                            "energy_pred",
+                            "energy_truth",
+                            "angular_pred",
+                            "angular_truth",
+                            "mass_error",
+                            "energy_error",
+                            "angular_error"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "r": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "samples",
+                      "r"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "spatial_error": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "spatial_error"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "step": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "radius": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "disk": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "jet": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "step",
+                            "radius",
+                            "disk",
+                            "jet"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": [
+                      "samples"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "spectrum": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "spectrum"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "channel": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "modes": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "power_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "power_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "slope_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "slope_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "fit_r2_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "fit_r2_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "channel",
+                            "modes",
+                            "power_pred",
+                            "power_truth",
+                            "slope_pred",
+                            "slope_truth",
+                            "fit_r2_pred",
+                            "fit_r2_truth"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "rho_modes": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rho_ratio": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "rho_ratio_mask": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "B1_modes": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "B1_ratio": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "B1_ratio_mask": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "step": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "samples",
+                      "rho_modes",
+                      "rho_ratio",
+                      "rho_ratio_mask",
+                      "B1_modes",
+                      "B1_ratio",
+                      "B1_ratio_mask",
+                      "step"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "stability": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "stability"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "draws": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mean": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "std": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "skipped_draws": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "draws",
+                      "mean",
+                      "std",
+                      "skipped_draws"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "statistical_props": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "statistical_props"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "channels": {
+                        "type": "object",
+                        "properties": {
+                          "0": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "1": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "2": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "3": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "4": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "5": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "6": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "7": {
+                            "type": "object",
+                            "properties": {
+                              "js": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "pred_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              },
+                              "true_mean": {
+                                "$ref": "#/$defs/full_numeric_value"
+                              }
+                            },
+                            "required": [
+                              "js",
+                              "pred_mean",
+                              "true_mean"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "0",
+                          "1",
+                          "2",
+                          "3",
+                          "4",
+                          "5",
+                          "6",
+                          "7"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "channel": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "centers": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "pdf_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "pdf_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "widths": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "js": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "channel",
+                            "centers",
+                            "pdf_pred",
+                            "pdf_truth",
+                            "widths",
+                            "js"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "step": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "channels",
+                      "samples",
+                      "step"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "temporal_consistency": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "temporal_consistency"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mass_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mass_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "energy_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "energy_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "angular_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "angular_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mass_scale": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "energy_scale": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "angular_scale": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mass_drift_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "mass_drift_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "energy_drift_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "energy_drift_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "angular_drift_pred": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "angular_drift_truth": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "steps",
+                      "mass_pred",
+                      "mass_truth",
+                      "energy_pred",
+                      "energy_truth",
+                      "angular_pred",
+                      "angular_truth",
+                      "mass_scale",
+                      "energy_scale",
+                      "angular_scale",
+                      "mass_drift_pred",
+                      "mass_drift_truth",
+                      "energy_drift_pred",
+                      "energy_drift_truth",
+                      "angular_drift_pred",
+                      "angular_drift_truth"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "temporal_spectrum": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "temporal_spectrum"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "frequencies": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "pred_disk": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "truth_disk": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "pred_jet": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "truth_jet": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      },
+                      "n_steps": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "frequencies",
+                      "pred_disk",
+                      "truth_disk",
+                      "pred_jet",
+                      "truth_jet",
+                      "n_steps"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "turbulence_stats": {
+      "type": "object",
+      "properties": {
+        "analysis": {
+          "const": "turbulence_stats"
+        },
+        "space": {
+          "enum": [
+            "loss",
+            "physical"
+          ]
+        },
+        "starts": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "per_start": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "values": {
+                    "type": "object",
+                    "properties": {
+                      "samples": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "channel": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "exponents_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "exponents_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "fit_r2_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "fit_r2_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "s3_pred": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            },
+                            "s3_truth": {
+                              "$ref": "#/$defs/full_numeric_value"
+                            }
+                          },
+                          "required": [
+                            "channel",
+                            "exponents_pred",
+                            "exponents_truth",
+                            "fit_r2_pred",
+                            "fit_r2_truth",
+                            "s3_pred",
+                            "s3_truth"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "step": {
+                        "$ref": "#/$defs/full_numeric_value"
+                      }
+                    },
+                    "required": [
+                      "samples",
+                      "step"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "start",
+                  "values"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "per_start"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "analysis",
+        "space",
+        "starts",
+        "data"
+      ],
+      "additionalProperties": false
     }
   },
   "required": [

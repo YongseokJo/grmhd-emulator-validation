@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "analysis": {
+      "const": "turbulence_stats"
+    },
+    "space": {
+      "enum": [
+        "loss",
+        "physical"
+      ]
+    },
+    "starts": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "per_start": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer"
+              },
+              "values": {
+                "type": "object",
+                "properties": {
+                  "samples": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "channel": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "exponents_pred": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "exponents_truth": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "fit_r2_pred": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "fit_r2_truth": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "s3_pred": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "s3_truth": {
+                          "$ref": "#/$defs/value"
+                        }
+                      },
+                      "required": [
+                        "channel",
+                        "exponents_pred",
+                        "exponents_truth",
+                        "fit_r2_pred",
+                        "fit_r2_truth",
+                        "s3_pred",
+                        "s3_truth"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "step": {
+                    "$ref": "#/$defs/value"
+                  }
+                },
+                "required": [
+                  "samples",
+                  "step"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "start",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "per_start"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "analysis",
+    "space",
+    "starts",
+    "data"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        }
+      ]
+    }
+  }
+}

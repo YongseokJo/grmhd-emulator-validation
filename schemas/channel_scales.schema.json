@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "split_id": {
+      "type": "string"
+    },
+    "split_file_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "data_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "channels": {
+      "const": [
+        "rho",
+        "ug",
+        "utilde1",
+        "utilde2",
+        "utilde3",
+        "B1",
+        "B2",
+        "B3"
+      ]
+    },
+    "n_dumps": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "n_cells_per_channel": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "mean_abs": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "rms": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "data_verified": {
+      "const": true
+    }
+  },
+  "required": [
+    "split_id",
+    "split_file_sha256",
+    "data_manifest_sha256",
+    "channels",
+    "n_dumps",
+    "n_cells_per_channel",
+    "mean_abs",
+    "rms",
+    "data_verified"
+  ],
+  "additionalProperties": false
+}

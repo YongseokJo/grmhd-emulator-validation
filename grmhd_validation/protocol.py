@@ -31,4 +31,9 @@ def read_protocol(path):
     correlation = data["constants"]["correlation_time"]
     if correlation["r1_cap"] > correlation["r1_clip"] or correlation["r1_saturated"] > correlation["r1_clip"]:
         raise ValueError("Correlation cap/saturation cannot exceed clipping bound")
+    full=data['constants']['full']
+    if full['spatial_bins_min']>full['spatial_bins_max']:
+        raise ValueError('Spatial bin minimum exceeds maximum')
+    for name in ('histogram_linear_percentiles','histogram_log_percentiles','spectrum_fit_fraction'):
+        if not full[name][0]<full[name][1]:raise ValueError(name+' must increase')
     return data, sha256(path)

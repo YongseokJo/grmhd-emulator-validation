@@ -50,7 +50,7 @@ class RunnerFixture(unittest.TestCase):
         metric = np.broadcast_to(np.diag([-1., 1., 1., 1.])[:, :, None, None, None], (4, 4, *shape)).copy()
         np.savez(self.data / 'geometry.npz', r=coordinates[0] + 8, h=coordinates[1] + 1,
                  ph=coordinates[2], gcov=metric, gcon=metric, gdet=np.ones(shape),
-                 resolved=np.ones(shape, bool), dx=np.ones(3), spin=np.array(.94), dt_dump=np.array(25.))
+                 resolved=np.ones(shape, bool), dx=np.ones(3), spin=np.array(.94), dt_dump=np.array(25.), eos_gamma=np.array(5./3.))
         self.spec = dict(schema_version=2, split_id='synthetic_v1', dataset='synthetic', data_root=str(self.data),
                          geometry_file='geometry.npz', geometry_sha256=sha256(self.data / 'geometry.npz'), times_file=None,
                          array=dict(shape=[8, *shape], dtype='float32', channels=list(CHANNELS), axes=['channel','r','theta','phi']),
