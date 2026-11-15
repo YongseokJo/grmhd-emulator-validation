@@ -65,5 +65,14 @@ class FullSourceRegressionTests(FullFixture):
             if isinstance(expected,torch.Tensor):expected=expected.detach().cpu().numpy()
             np.testing.assert_allclose(actual,expected,rtol=1e-5,atol=0,equal_nan=True)
 
+    def test_correlation_legacy_retains_original_float32_error_reduction(self):
+        from grmhd_validation.analyses.correlation_times import legacy_nmae
+        original,_=load_reference();ctx=self.context()
+        norm=original['DataNormalizer'](gcov=ctx.geometry.gcov[None,None].float(),
+                                       gcon=ctx.geometry.gcon[None,None].float())
+        truth=ctx.reader.numpy(7);prediction=ctx.reader.numpy(6)
+        np.testing.assert_array_equal(legacy_nmae(prediction,truth,ctx.constants),
+                                      original['nmae_per_channel'](prediction,truth,norm))
+
 
 if __name__=='__main__':unittest.main()

@@ -10,9 +10,23 @@ from .common import loss_space,physical,clean,nmae,skill
 from ._analysis_io import FullStore,emit,production_starts
 
 
-def transform(raw, constants, space):
+def legacy_loss_tensor(raw,constants):
+    """Pinned source arithmetic, exclusively for legacy regression."""
+    value=torch.from_numpy(np.ascontiguousarray(raw,dtype=np.float32))[None]
+    floors=constants['loss_space']
+    return torch.cat((torch.log10(torch.clamp(value[:,0:1],min=floors['floor_rho'])),
+                      torch.log10(torch.clamp(value[:,1:2],min=floors['floor_ug'])),
+                      torch.arcsinh(value[:,2:])),dim=1)
+
+
+def legacy_nmae(prediction,truth,constants):
+    return (legacy_loss_tensor(prediction,constants)-legacy_loss_tensor(truth,constants)).abs().mean(dim=(2,3,4))[0].numpy()
+
+
+def transform(raw, constants, space, legacy=False):
     if space=='physical':return physical(raw)
     if space!='loss':raise ValueError('Metric space must be loss or physical')
+    if legacy:return legacy_loss_tensor(raw,constants)[0].numpy()
     return loss_space(raw,constants)
 
 
@@ -24,20 +38,20 @@ def disk_mask(geometry, constants, resolved=False):
     return mask
 
 
-def decorrelation(reader, geometry, constants, *, space='loss', ids=None, resolved=False, max_dumps=None):
+def decorrelation(reader, geometry, constants, *, space='loss', ids=None, resolved=False, max_dumps=None, legacy=False):
     """Lag-1 fluctuations with the temporal background removed, as in Kevin."""
     selected=sorted(reader.allowed) if ids is None else list(ids)
     if max_dumps is not None:selected=selected[:max_dumps]
     if len(selected)<2:raise ValueError('Correlation time requires at least two truth dumps')
     mask=disk_mask(geometry,constants,resolved)
     total=np.zeros((8,int(mask.sum())),dtype=np.float64)
-    for index in selected:total+=transform(reader.numpy(index),constants,space)[:,mask]
+    for index in selected:total+=transform(reader.numpy(index),constants,space,legacy)[:,mask]
     background=total/len(selected)
     allowed=set(selected);cov=np.zeros(8);var_a=np.zeros(8);var_b=np.zeros(8);count=0
     for index in selected:
         if index+1 not in allowed or reader.allowed[index].chunk!=reader.allowed[index+1].chunk:continue
-        a=transform(reader.numpy(index),constants,space)[:,mask]-background
-        b=transform(reader.numpy(index+1),constants,space)[:,mask]-background
+        a=transform(reader.numpy(index),constants,space,legacy)[:,mask]-background
+        b=transform(reader.numpy(index+1),constants,space,legacy)[:,mask]-background
         for channel in range(8):
             cov[channel]+=np.dot(a[channel],b[channel])
             var_a[channel]+=np.dot(a[channel],a[channel]);var_b[channel]+=np.dot(b[channel],b[channel])
@@ -76,19 +90,24 @@ def compute(ctx, *, space='loss', starts=None, legacy=False):
     ids=getattr(ctx,'regression_ids',None) if legacy else None
     resolved=not legacy and ctx.split.split_id.startswith('rc300')
     truth=decorrelation(ctx.reader,ctx.geometry,ctx.constants,space=space,ids=ids,
-                         resolved=resolved,max_dumps=200 if legacy else None)
+                         resolved=resolved,max_dumps=200 if legacy else None,legacy=legacy)
     model=[];persistence=[]
     for start in selected:
         states=ctx.full.ensure_rollout(start,ctx.protocol['max_steps']);initial=ctx.reader.numpy(start)
         errors=[];baseline=[]
         for step in range(1,ctx.protocol['max_steps']+1):
+            if legacy and space=='loss':
+                true=ctx.reader.numpy(start+step)
+                errors.append(legacy_nmae(states[step],true,ctx.constants))
+                baseline.append(legacy_nmae(initial,true,ctx.constants))
+                continue
             true=transform(ctx.reader.numpy(start+step),ctx.constants,space)
             predicted=transform(states[step],ctx.constants,space)
             held=transform(initial,ctx.constants,space)
             errors.append(np.mean(np.abs(predicted-true).reshape(8,-1),axis=1))
             baseline.append(np.mean(np.abs(held-true).reshape(8,-1),axis=1))
         model.append(errors);persistence.append(baseline)
-    result={**truth,**horizon(np.asarray(model),np.asarray(persistence),truth['tau_c'],ctx.split.dt_dump,ctx.constants),
+    result={**truth,**horizon(np.asarray(model,dtype=np.float64),np.asarray(persistence,dtype=np.float64),truth['tau_c'],ctx.split.dt_dump,ctx.constants),
             'resolved_mask':resolved,'starts':selected}
     return {'per_start':[{'start':int(selected[0]),'values':result}]}
 
