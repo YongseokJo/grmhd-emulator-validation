@@ -1,4 +1,9 @@
-# Milestone 2 validation receipt
+# Milestone 2 initial synthetic validation receipt
+
+The current follow-ups pass **54 tests** in both the approved NumPy 2.x base
+and the isolated NumPy 1.24 environment. Locked real-data reference/conformance
+results and timings are in [the real-data receipt](milestone_2_real_validation.md).
+The 50-test matrix below records the earlier sealing implementation.
 
 Milestone 2 follows spec §7/§8 at planner commit 91d04ac: write files, checksums
 and COMPLETE; freeze the contents bottom-up; atomically publish without replacing
@@ -7,7 +12,7 @@ FD to seal the same invocation-created inode after rename.
 
 ## Compute environment
 
-The final scientific suite ran in interactive Slurm allocation 3605215 on
+The initial synthetic suite ran in interactive Slurm allocation 3605215 on
 DeltaAI node `gh151`. No real evaluation or golden was generated; reference jobs
 on the two real datasets remain the owner's milestone-2 review action.
 
@@ -66,6 +71,6 @@ invented; those earlier planner questions remain for the later model-integration
 work. The milestone-2 API/persistence/quick runner and golden workflow are ready
 for review. The runner disables autocast around inference and records that fact.
 
-The owner runs scripts/reference_delta.sbatch for rc300_reduced_v1 and
-5000run_v1, then reviews real-data conformance before merging PR #2. Without a
-platform lock those references remain provisional, as the spec requires.
+The owner-authorized locked references and real-data conformance have now run
+for both datasets; both pass exactly and both goldens are non-provisional. See
+the real-data receipt linked above. PR #2 remains for owner review and merging.

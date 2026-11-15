@@ -9,7 +9,8 @@ compare them.
 merged. The adapter API, persistence, quick analyses, recorded runner, owner
 goldens, conformance and verification are implemented. Full-tier analyses and
 learned-model examples remain in later milestones. See [milestone 2 usage](docs/milestone_2.md),
-[metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md).
+[metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md). Locked DeltaAI references and real-data
+conformance for both datasets pass; see the [validation receipt](docs/milestone_2_real_validation.md).
 
 | Path | Contents |
 |---|---|
