@@ -1,7 +1,34 @@
 {
-  "delta-x86_64": {
-    "reset_modules": true,
-    "modules": ["pytorch-conda/2.8"]
-  },
-  "deltaai-aarch64": null
+  "delta-x86_64": null,
+  "deltaai-aarch64": {
+    "reset_modules": false,
+    "modules": [
+      "python/anaconda3/2.15.0"
+    ],
+    "activation": [
+      "source \"$(conda info --base)/etc/profile.d/conda.sh\"",
+      "conda activate base"
+    ],
+    "venv": {
+      "create": [
+        "python",
+        "-m",
+        "venv",
+        "--system-site-packages",
+        "<venv>"
+      ],
+      "editable_install": [
+        "python",
+        "-m",
+        "pip",
+        "install",
+        "--no-deps",
+        "-e",
+        "<repo>"
+      ],
+      "missing_packages": [
+        "jsonschema>=4.18"
+      ]
+    }
+  }
 }

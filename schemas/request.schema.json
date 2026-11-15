@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adapter": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "checkpoint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model": {
+      "pattern": "^[a-z0-9-]+$",
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "options": {
+      "type": "object"
+    },
+    "training_record": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "model",
+    "version",
+    "adapter",
+    "checkpoint",
+    "options",
+    "training_record",
+    "notes"
+  ],
+  "type": "object"
+}

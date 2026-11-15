@@ -1,0 +1,9 @@
+{
+ "adapter": "persistence",
+ "checkpoint": null,
+ "model": "persistence",
+ "notes": "",
+ "options": {},
+ "training_record": null,
+ "version": "v1"
+}

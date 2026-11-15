@@ -1,8 +1,10 @@
 """Read-only installation and shared-storage diagnostics."""
 import grp
+import errno
 import os
 import stat
 import subprocess
+import time
 from pathlib import Path
 
 from .checksums import read_checksums
@@ -24,10 +26,53 @@ def acl(path):
     return entries
 
 
+def _mode_permissions(mode, shift):
+    bits = (mode >> shift) & 7
+    return "".join(character if bits & bit else "-" for character, bit in (("r", 4), ("w", 2), ("x", 1)))
+
+
+class ACLReader:
+    """No subprocess for a plain mode ACL; reuse identical inherited ACLs."""
+    def __init__(self):
+        self.cache = {}
+        self.subprocesses = 0
+
+    @staticmethod
+    def _attribute(path, name):
+        try:
+            return os.getxattr(path, name, follow_symlinks=False)
+        except OSError as error:
+            if error.errno in {errno.ENODATA, errno.ENOTSUP, errno.EOPNOTSUPP}:
+                return None
+            raise
+
+    def read(self, path, metadata, defaults=False):
+        access = self._attribute(path, "system.posix_acl_access")
+        default = self._attribute(path, "system.posix_acl_default") if defaults else None
+        if access is None and default is None:
+            mode = stat.S_IMODE(metadata.st_mode)
+            return {"user:": _mode_permissions(mode, 6), "group:": _mode_permissions(mode, 3),
+                    "other:": _mode_permissions(mode, 0)}
+        key = (access, default, defaults, stat.S_IMODE(metadata.st_mode))
+        if key not in self.cache:
+            self.cache[key] = acl(path)
+            self.subprocesses += 1
+        return self.cache[key]
+
+
+def _group_has(entries, gid, required):
+    permissions = set(entries.get("group:", "")) | set(entries.get(f"group:{gid}", ""))
+    mask = entries.get("mask:", "rwx")
+    return all(character in permissions and character in mask for character in required)
+
+
 def storage_checks(root=SHARED_ROOT, group="delta_bgun"):
+    started = time.perf_counter()
+    reader = ACLReader()
+    scanned = 0
     root = Path(root)
     gid = grp.getgrnam(group).gr_gid
-    errors, unreadable = [], []
+    errors, unreadable, candidates = [], [], []
     if gid not in {*os.getgroups(), os.getgid(), os.getegid()}:
         errors.append("Current user is not in " + group)
     owner_uid = root.stat().st_uid
@@ -36,14 +81,17 @@ def storage_checks(root=SHARED_ROOT, group="delta_bgun"):
         for name in OWNER_AREAS + GROUP_AREAS
     ]:
         try:
-            metadata = path.lstat()
+            metadata = os.stat(path, follow_symlinks=False)
             if not stat.S_ISDIR(metadata.st_mode) or stat.S_ISLNK(metadata.st_mode):
                 raise ValueError("Expected a real shared directory")
             if metadata.st_gid != gid or metadata.st_uid != owner_uid or stat.S_IMODE(metadata.st_mode) != mode:
                 errors.append("Unexpected owner/group/mode: " + str(path))
-            entries = acl(path)
+            entries = reader.read(path, metadata, defaults=True)
             for field in ("group:", "mask:", "default:group:", "default:mask:"):
-                if entries.get(field) != permissions:
+                # Minimal POSIX ACLs have no mask entry; their owning-group
+                # entry already carries the effective permissions.
+                fallback = entries.get(field.replace("mask:", "group:")) if field.endswith("mask:") else None
+                if entries.get(field, fallback) != permissions:
                     errors.append(f"ACL {field} on {path}: expected {permissions}, got {entries.get(field)}")
         except (OSError, ValueError, subprocess.SubprocessError) as error:
             errors.append(str(path) + ": " + str(error))
@@ -60,26 +108,34 @@ def storage_checks(root=SHARED_ROOT, group="delta_bgun"):
         for name in directories + files:
             path = Path(parent) / name
             try:
-                metadata = path.lstat()
+                metadata = os.stat(path, follow_symlinks=False)
+                scanned += 1
                 if stat.S_ISLNK(metadata.st_mode):
                     errors.append("Shared tree contains an uninspected symlink: " + str(path))
                     continue
                 if metadata.st_gid != gid:
                     errors.append("Wrong group: " + str(path))
                 if stat.S_ISREG(metadata.st_mode):
-                    effective = acl(path)
-                    if "r" not in effective.get("group:", "") or "r" not in effective.get("mask:", "rwx"):
+                    if not metadata.st_mode & stat.S_IRGRP:
+                        unreadable.append(str(path))
+                    elif not _group_has(reader.read(path, metadata), gid, "r"):
                         unreadable.append(str(path))
                 elif stat.S_ISDIR(metadata.st_mode):
-                    effective = acl(path)
-                    if not all(c in effective.get("group:", "") and c in effective.get("mask:", "rwx") for c in "rx"):
+                    if path.name.startswith(".candidate-") and root / "references" in path.parents:
+                        candidates.append(str(path))
+                    if metadata.st_mode & (stat.S_IRGRP | stat.S_IXGRP) != stat.S_IRGRP | stat.S_IXGRP:
+                        errors.append("Group cannot read/search directory: " + str(path))
+                    elif not _group_has(reader.read(path, metadata), gid, "rx"):
                         errors.append("Group cannot read/search directory: " + str(path))
             except (OSError, ValueError, subprocess.SubprocessError) as error:
                 errors.append(str(path) + ": " + str(error))
     if unreadable:
         errors.append("Shared files are not group-readable")
-    return {"status": "fail" if errors else "pass", "root": str(root), "group": group,
-            "errors": errors, "group_unreadable_files": sorted(unreadable)}
+    return {"status": "fail" if errors else "warn" if candidates else "pass", "root": str(root), "group": group,
+            "errors": errors, "group_unreadable_files": sorted(unreadable),
+            "unfinished_reference_candidates": sorted(candidates),
+            "scan_duration_seconds": time.perf_counter() - started,
+            "scanned_entries": scanned, "acl_subprocesses": reader.subprocesses}
 
 
 def doctor(repo, root=SHARED_ROOT, group="delta_bgun"):

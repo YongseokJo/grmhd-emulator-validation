@@ -1,0 +1,181 @@
+{
+  "$defs": {
+    "fields_nmae_model_nmae_persist": {
+      "additionalProperties": false,
+      "properties": {
+        "nmae_model": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "nmae_persist": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "nmae_model",
+        "nmae_persist"
+      ],
+      "type": "object"
+    },
+    "fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci": {
+      "additionalProperties": false,
+      "properties": {
+        "nmae_model": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "nmae_persist": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rel_l1": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "skill": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "skill_ci": {
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        }
+      },
+      "required": [
+        "nmae_model",
+        "nmae_persist",
+        "skill",
+        "skill_ci",
+        "rel_l1"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ci_method": {
+      "const": "chunk_block_bootstrap"
+    },
+    "fluid": {
+      "$ref": "#/$defs/fields_nmae_model_nmae_persist"
+    },
+    "magnetic": {
+      "$ref": "#/$defs/fields_nmae_model_nmae_persist"
+    },
+    "mean": {
+      "additionalProperties": false,
+      "properties": {
+        "nmae_model": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "nmae_persist": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rel_l1": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "skill": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "nmae_model",
+        "nmae_persist",
+        "skill",
+        "rel_l1"
+      ],
+      "type": "object"
+    },
+    "n_blocks": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "n_samples": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "per_channel": {
+      "additionalProperties": false,
+      "properties": {
+        "B1": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        },
+        "B2": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        },
+        "B3": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        },
+        "rho": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        },
+        "ug": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        },
+        "utilde1": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        },
+        "utilde2": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        },
+        "utilde3": {
+          "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+        }
+      },
+      "required": [
+        "rho",
+        "ug",
+        "utilde1",
+        "utilde2",
+        "utilde3",
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "n_samples",
+    "n_blocks",
+    "ci_method",
+    "per_channel",
+    "mean",
+    "fluid",
+    "magnetic"
+  ],
+  "type": "object"
+}

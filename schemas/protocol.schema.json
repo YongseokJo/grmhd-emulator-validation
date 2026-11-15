@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": ["protocol_id", "H_max", "max_steps", "report_steps", "n_starts_per_chunk", "bootstrap_block", "bootstrap_resamples", "seed", "gpu_tolerance", "tiers"],
+  "required": ["protocol_id", "H_max", "max_steps", "report_steps", "n_starts_per_chunk", "bootstrap_block", "bootstrap_resamples", "seed", "gpu_tolerance", "tiers", "constants"],
   "additionalProperties": false,
   "properties": {
     "protocol_id": {"type": "string"},
@@ -13,6 +13,22 @@
     "bootstrap_resamples": {"type": "integer", "minimum": 1},
     "seed": {"type": "integer"},
     "gpu_tolerance": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "constants": {
+      "type": "object", "additionalProperties": false,
+      "required": ["loss_space", "skill", "rel_l1", "growth_curve", "ci", "active_disk", "correlation_time", "attractor", "figures"],
+      "properties": {
+        "loss_space": {"type": "object", "required": ["floor_rho", "floor_ug", "transforms"], "additionalProperties": false, "properties": {"floor_rho": {"$ref": "#/$defs/positive"}, "floor_ug": {"$ref": "#/$defs/positive"}, "transforms": {"const": ["log10", "log10", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh", "arcsinh"]}}},
+        "skill": {"type": "object", "required": ["persistence_min", "epsilon"], "additionalProperties": false, "properties": {"persistence_min": {"$ref": "#/$defs/positive"}, "epsilon": {"$ref": "#/$defs/positive"}}},
+        "rel_l1": {"type": "object", "required": ["denominator_min"], "additionalProperties": false, "properties": {"denominator_min": {"$ref": "#/$defs/positive"}}},
+        "growth_curve": {"type": "object", "required": ["step1_min"], "additionalProperties": false, "properties": {"step1_min": {"$ref": "#/$defs/positive"}}},
+        "ci": {"type": "object", "required": ["percentiles", "rollout_resample_unit"], "additionalProperties": false, "properties": {"percentiles": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "minimum": 0, "maximum": 100}}, "rollout_resample_unit": {"const": "start"}}},
+        "active_disk": {"type": "object", "required": ["r_max", "theta_halfwidth"], "additionalProperties": false, "properties": {"r_max": {"$ref": "#/$defs/positive"}, "theta_halfwidth": {"$ref": "#/$defs/positive"}}},
+        "correlation_time": {"type": "object", "required": ["r1_clip", "r1_saturated", "r1_cap"], "additionalProperties": false, "properties": {"r1_clip": {"$ref": "#/$defs/correlation"}, "r1_saturated": {"$ref": "#/$defs/correlation"}, "r1_cap": {"$ref": "#/$defs/correlation"}}},
+        "attractor": {"type": "object", "required": ["sigma_dump_stride"], "additionalProperties": false, "properties": {"sigma_dump_stride": {"type": "integer", "minimum": 1}}},
+        "figures": {"type": "object", "required": ["backend", "dpi", "font", "font_size", "rollout_curve_figsize"], "additionalProperties": false, "properties": {"backend": {"const": "Agg"}, "dpi": {"type": "integer", "minimum": 1}, "font": {"type": "string", "minLength": 1}, "font_size": {"$ref": "#/$defs/positive"}, "rollout_curve_figsize": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/positive"}}}}
+      }
+    },
     "tiers": {"type": "object", "required": ["quick", "full"], "additionalProperties": false, "properties": {"quick": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "full": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}}}
-  }
+  },
+  "$defs": {"positive": {"type": "number", "exclusiveMinimum": 0}, "correlation": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1}}
 }

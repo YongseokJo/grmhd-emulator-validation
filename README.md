@@ -5,10 +5,12 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestone 1 foundations under review.** Package/CLI setup, frozen split
-reading, protocol configuration, doctor, owner checksum jobs, permission helpers,
-and environment-recording scripts are implemented. Evaluation and adapters begin
-only after milestone 1 is approved. See [milestone 1 usage](docs/milestone_1.md).
+**Status: milestone 2 ready for owner review.** Milestone 1 is
+merged. The adapter API, persistence, quick analyses, recorded runner, owner
+goldens, conformance and verification are implemented. Full-tier analyses and
+learned-model examples remain in later milestones. See [milestone 2 usage](docs/milestone_2.md),
+[metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md). Locked DeltaAI references and real-data
+conformance for both datasets pass; see the [validation receipt](docs/milestone_2_real_validation.md).
 
 | Path | Contents |
 |---|---|
@@ -18,6 +20,14 @@ only after milestone 1 is approved. See [milestone 1 usage](docs/milestone_1.md)
 | `docs/specs/movies.md` | Spec for the data movies and timeline. |
 
 Shared results folder (Delta and DeltaAI, group `delta_bgun`): `/work/nvme/bgun/share/validation`.
+
+## Planned prediction mode (milestone 5)
+
+Prediction mode is agent-driven and requires all 12 protocol rollout starts;
+agents cannot select a smaller subset. Eden's three methods will be wrapped as
+adapters and use the common split, inference, metric and artifact contracts.
+This is milestone 5 scope; its detailed planner spec and implementation remain
+pending. Milestone 2 is ready for review and no later milestone has started.
 
 ## Split rules (every model, every agent)
 
