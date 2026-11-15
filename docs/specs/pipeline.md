@@ -347,10 +347,26 @@ runs/<split_id>/<model>/<run_id>/
   COMPLETE          written last, only if everything succeeded
 ```
 
-- The runner writes into `staging/<user>/<run_id>/`. On success it writes `COMPLETE`, makes the tree
-  read-only (`chmod -R a-w`), then moves it into `runs/<split_id>/<model>/` with `rename`, which is
-  atomic on the same filesystem. On failure the directory stays in staging with `FAILED` and the
-  traceback. It still counts as an attempt.
+- The runner writes into `staging/<user>/<run_id>/`. On success it publishes in this order:
+  1. Write every result and metadata file, then `checksums.json`, then `COMPLETE`.
+  2. **Freeze the contents.** Remove write permission from every file and subdirectory *inside* the
+     run root, working bottom-up. The run root itself stays writable. Linux needs write permission on
+     a directory to `rename` it into a different parent, because its `..` entry changes; a subdirectory
+     inside it doesn't need it.
+  3. **Publish.** `rename` the run root into `runs/<split_id>/<model>/<run_id>`. This is atomic on the
+     same filesystem and must not replace an existing target (check first; fail if it exists).
+  4. **Seal.** Remove write permission from the run root itself.
+
+  A run whose root is still writable after step 3, for example because of a crash between steps 3 and
+  4, is **unsealed**:
+  - `gval verify` reports it, and `gval report` lists it as unsealed and leaves it off the
+    leaderboard.
+  - The run's owner fixes it with `gval seal <run_dir>`. That command only removes write permission
+    from the root, and only if the caller owns the run, `COMPLETE` exists, every entry inside is
+    already read-only and `checksums.json` verifies. It is the one allowed exception to the rule
+    "chmod only what this invocation created".
+- On failure the directory stays in staging with `FAILED` and the traceback. It still counts as an
+  attempt.
 - `gval verify <run_dir>` re-checks the checksums, the schemas and the split/protocol hashes.
 
 ## 8. Shared folder and permissions (created; owner gkerex, group delta_bgun)
@@ -385,8 +401,9 @@ runs/<split_id>/<model>/<run_id>/
   | `doctor`, `verify`, `check-adapter`, `new-adapter` | nothing in the shared folder (`new-adapter` writes only to the user's target directory) |
 
 - `<user>` is the login name (`getpass.getuser()`).
-- Completed runs are made read-only (`chmod -R a-w`) before the rename.
-- `gval` never runs `chmod` on anything it didn't create in the same invocation.
+- Completed runs are frozen in the order of §7: freeze the contents, rename, then seal the root.
+- `gval` never runs `chmod` on anything it didn't create in the same invocation. The one exception is
+  `gval seal` (§7).
 - **Agents never copy files in by hand** (`cp`/`rsync` from a home directory keeps 600 permissions);
   only `gval` writes here.
 - `gval doctor` is read-only:
