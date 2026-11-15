@@ -201,6 +201,40 @@ schema, and make `read_protocol` validate it. Values are Kevin's unless marked.
     of the evaluated split.
   - every other analysis.
 
+### 3.4 Milestone-3 full-tier port configuration
+
+The original evaluator's non-quick defaults are recorded in constants.full in
+forecast_v1.json (source main@ebcc218); numerical guards and fixed plot/table
+conventions remain part of each credited computation. The core accepts explicit
+metric space and start selection for regression. The milestone-3 production
+start policy is single: the first common protocol rollout start, with original
+within-analysis pair/statistic sampling restricted to the frozen split. This is
+an intermediate port, not the milestone-4 final all-start aggregate/CIs. The all
+selection remains a callable core configuration, tested independently and enabled
+for final aggregates in milestone 4. No CLI setting may select a more favorable
+start or change the metric space.
+
+Outside the loss-space analyses enumerated in §4, production uses physical
+fields; legacy loss space is a regression option only. Physical relative errors
+and stability perturbations/response use the owner-generated training mean-abs or
+RMS channel scale (§4). This change is tested separately from legacy numerical
+regression. Do not alter the final milestone-2 single_step/rollout_curve semantics.
+
+Every remaining analysis writes metrics/<analysis>.json and tables/<analysis>.csv
+with a closed schema. Numeric arrays, counts and selection/space labels are
+result content; paths, times, versions and host information are not. Diagnostic
+figures keep fixed figNN_<analysis>.png names, the corresponding original panel
+sizes, Agg/150 dpi/DejaVu Sans 11 and no timestamp metadata. Cost parameter counts
+and measurement configuration are deterministic result content; measured wall
+latency, peak memory and runtime profiling live only in run.json/logs, and are
+excluded from fingerprints. Timing measurements cannot be golden numerical
+comparisons; their measurement arithmetic is tested using a controlled clock.
+
+Adding the full-tier settings changes the protocol file hash but must not change
+any quick result bytes. The normal owner reference path can regenerate identical
+quick content and refresh its metadata; an unequal quick fingerprint is an error,
+not a new golden to accept. No frozen split definitions change.
+
 ## 4. Metric spaces
 
 - **Loss space.** The fixed TRON normalization, identical to `Fall26/common/normalizer.py`: log10 for
@@ -247,7 +281,7 @@ schema, and make `read_protocol` validate it. Values are Kevin's unless marked.
    human-readable rendering of the JSON.
 2. **Regression against the original.** Where a method is unchanged, the port must reproduce Kevin's
    numbers. Golden test: persistence, plus one fixed TRON checkpoint, on a fixed dump range, run
-   through both the original script and the port; they agree within 1e-6 relative.
+   through both the original script and the port; they agree within 1e-5 relative (milestone-3 owner decision below).
    - Every intended change (items 3–9) gets its own test and an entry in `docs/metrics.md`.
 **Milestone-3 regression and milestone boundary (owner decision, 2026-11-15).**
 - Milestone 3 ports all analyses, applies §4 metric spaces and the resolved rc300
