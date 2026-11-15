@@ -2,7 +2,10 @@
 # Source from a job after cd to the repository. GVAL_VENV selects a personal venv.
 umask 007
 gval_bootstrap_python=${GVAL_BOOTSTRAP_PYTHON:-python3}
-gval_platform=${1:-$("$gval_bootstrap_python" -c 'from grmhd_validation.environment import platform_id; print(platform_id())')}
+gval_platform=${1:-auto}
+if [[ "$gval_platform" == auto ]]; then
+    gval_platform=$("$gval_bootstrap_python" -c 'from grmhd_validation.environment import platform_id; print(platform_id())')
+fi
 gval_supported=$("$gval_bootstrap_python" - "$gval_platform" <<'PY'
 import json,sys
 base=json.load(open('environment/platforms.json')).get(sys.argv[1])
