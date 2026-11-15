@@ -117,6 +117,7 @@ def compare(actual,expected,label,tolerance,counts):
 
 
 def run(fixture,kind,base,device):
+    overall_begin=time.perf_counter()
     start=fixture['start'];steps=fixture['max_steps']
     split=read_split(REPO/'splits'/(fixture['split_id']+'.json'))
     protocol,_=read_protocol(REPO/'protocols/forecast_v1.json')
@@ -228,7 +229,9 @@ def run(fixture,kind,base,device):
         traceback.print_exc();failures.append('correlation_times')
         report['correlation_times']={'status':'fail','error':str(error)}
     ctx.full.cleanup()
-    return {'kind':kind,'status':'fail' if failures else 'pass','failures':failures,'analyses':report}
+    return {'kind':kind,'status':'fail' if failures else 'pass','failures':failures,'analyses':report,
+            'elapsed_seconds':time.perf_counter()-overall_begin,
+            'numbers_compared':sum(item.get('numbers_compared',0) for item in report.values())}
 
 
 def main():
