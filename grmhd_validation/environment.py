@@ -7,10 +7,27 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 from .hashing import sha256
 
 CORE_PACKAGES = {"torch", "numpy", "scipy", "matplotlib"}
+
+
+def comparison_freeze(entries, repo):
+    """Ignore only this project's editable source; run.json records its commit."""
+    result = []
+    for entry in entries:
+        editable = entry.removeprefix("-e ").removeprefix("--editable ")
+        if editable != entry:
+            egg = parse_qs(urlsplit(editable).fragment).get("egg", [""])[0].split("[", 1)[0]
+            name = re.sub(r"[-_.]+", "-", egg).lower()
+            if name == "grmhd-emulator-validation":
+                continue
+            if not urlsplit(editable).scheme and Path(editable).expanduser().resolve() == Path(repo).resolve():
+                continue
+        result.append(entry)
+    return sorted(result)
 
 
 def satisfies_minimum(version, minimum):
@@ -128,10 +145,12 @@ def check_environment(repo, current=None):
             mismatches.append({"field": name, "expected": expected["packages"][name], "actual": current["packages"][name], "status": "fail"})
     if current.get("torch_error"):
         mismatches.append({"field": "torch_import", "status": "fail", "actual": current["torch_error"]})
-    if expected["pip_freeze"] != current["pip_freeze"]:
+    expected_freeze = comparison_freeze(expected["pip_freeze"], repo)
+    current_freeze = comparison_freeze(current["pip_freeze"], repo)
+    if expected_freeze != current_freeze:
         mismatches.append({"field": "other_packages", "status": "warn",
-                           "missing_or_changed": sorted(set(expected["pip_freeze"]) - set(current["pip_freeze"])),
-                           "added_or_changed": sorted(set(current["pip_freeze"]) - set(expected["pip_freeze"]))})
+                           "missing_or_changed": sorted(set(expected_freeze) - set(current_freeze)),
+                           "added_or_changed": sorted(set(current_freeze) - set(expected_freeze))})
     return {"status": "fail" if any(m["status"] == "fail" for m in mismatches) else "warn" if mismatches else "pass",
             "platform": platform_id(), "environment_locked": True, "lock_sha256": sha256(path), "mismatches": mismatches}
 
