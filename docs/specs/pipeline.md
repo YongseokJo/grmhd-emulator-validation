@@ -316,7 +316,7 @@ class Adapter(ModelAdapter):
   - With `True`, `null` is an error.
   - With no checkpoint: `run.json` has `checkpoint_sha256: null` and `checkpoint: null`; the run_id
     token is the literal `nockpt`; `ckpt_sha8` is shown as `nockpt` everywhere.
-  - Example: `persistence-v1__nockpt__validation__quick__a1`.
+  - Example: `persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1`.
   - The adapter source SHA256 is still recorded, so persistence runs remain identifiable.
 - Docs: `docs/plugging_in_a_model.md`, a step-by-step walkthrough with the TRON example.
 
@@ -326,9 +326,15 @@ class Adapter(ModelAdapter):
   - `gval evaluate --request run_request.json --split-id <id> --split validation|test --tier quick|full`.
   - Slurm wrappers: `scripts/evaluate_delta.sbatch` (A100) and `scripts/evaluate_deltaai.sbatch`
     (GH200).
-- **run_id** is decided by the code: `<model>-<version>__<ckpt_sha8>__<split>__<tier>__a<N>`. N is the
-  attempt number: 1 + the number of existing directories with the same prefix, in `runs/` and in
-  `staging/`, complete or not.
+- **run_id** is decided by the code:
+  `<model>-<version>__<ckpt_sha8>__<split_id>__<split>__<tier>__a<N>`, e.g.
+  `persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1`.
+  - The split_id is part of the name, so attempts on different datasets or split versions never share
+    a counter.
+  - N is the attempt number: 1 + the number of existing directories whose name has the same prefix
+    (everything before `a<N>`), complete or not.
+  - Count only in `runs/<split_id>/<model>/` (one level) and `staging/*/` (one level). Never walk into
+    run directories, so the cost doesn't grow with the number of files.
 - Every attempt keeps its directory, so repeated test runs are visible (test discipline = **record**).
 - Layout of one run (exact names):
 
@@ -467,11 +473,18 @@ runs/<split_id>/<model>/<run_id>/
       missing packages (e.g. jsonschema) individually.
     - `record_lock.sbatch` fails if any installed version is below the bounds above, or if pip would
       change a base-environment package.
-  - `environment/platforms.json`: per platform, how the base environment is loaded.
-    - `delta-x86_64`: `module reset; module load pytorch-conda/2.8`. Not 2.12, whose matplotlib can't
-      save PNGs (see Kevin's `Fall26/scripts/env_delta.sh`).
-    - `deltaai-aarch64`: there is no pytorch-conda module on DeltaAI. Leave it `null` until the owner
-      names the base environment.
+  - `environment/platforms.json`: per platform, how the base environment is loaded. **Owner decision
+    (2026-11-15): never use `pytorch-conda`.**
+    - `deltaai-aarch64` (the primary platform), following the owner's own DeltaAI job scripts:
+      - `module load python/anaconda3/2.15.0`. That is NCSA's Miniforge PyTorch 2.15.0, CUDA 13.2,
+        Python 3.12, scipy included. Always pin the full version, never the bare `python/anaconda3`.
+      - Then `source "$(conda info --base)/etc/profile.d/conda.sh"; conda activate base`.
+      - Don't `module purge` before loading it; its extensions need the default cudatoolkit module.
+      - On top of it, a venv created with `python -m venv --system-site-packages <venv>`. Into it go
+        only `pip install --no-deps -e <repo>` and any missing package, e.g. `jsonschema>=4.18`.
+      - `platforms.json` holds the module, the activation lines and the venv recipe. The venv path is
+        per user and is not stored in it.
+    - `delta-x86_64`: `null` (not supported) until the owner names a base environment.
   - `scripts/record_lock.sbatch <platform>`: run by the owner on a compute node of that machine. It
     loads the base environment, installs this package, and writes `environment/<platform>.lock`. The
     lock holds the Python version, torch version + CUDA version, and `pip freeze --all` sorted. The
