@@ -473,11 +473,18 @@ runs/<split_id>/<model>/<run_id>/
       missing packages (e.g. jsonschema) individually.
     - `record_lock.sbatch` fails if any installed version is below the bounds above, or if pip would
       change a base-environment package.
-  - `environment/platforms.json`: per platform, how the base environment is loaded.
-    - `delta-x86_64`: `module reset; module load pytorch-conda/2.8`. Not 2.12, whose matplotlib can't
-      save PNGs (see Kevin's `Fall26/scripts/env_delta.sh`).
-    - `deltaai-aarch64`: there is no pytorch-conda module on DeltaAI. Leave it `null` until the owner
-      names the base environment.
+  - `environment/platforms.json`: per platform, how the base environment is loaded. **Owner decision
+    (2026-11-15): never use `pytorch-conda`.**
+    - `deltaai-aarch64` (the primary platform), following the owner's own DeltaAI job scripts:
+      - `module load python/anaconda3/2.15.0`. That is NCSA's Miniforge PyTorch 2.15.0, CUDA 13.2,
+        Python 3.12, scipy included. Always pin the full version, never the bare `python/anaconda3`.
+      - Then `source "$(conda info --base)/etc/profile.d/conda.sh"; conda activate base`.
+      - Don't `module purge` before loading it; its extensions need the default cudatoolkit module.
+      - On top of it, a venv created with `python -m venv --system-site-packages <venv>`. Into it go
+        only `pip install --no-deps -e <repo>` and any missing package, e.g. `jsonschema>=4.18`.
+      - `platforms.json` holds the module, the activation lines and the venv recipe. The venv path is
+        per user and is not stored in it.
+    - `delta-x86_64`: `null` (not supported) until the owner names a base environment.
   - `scripts/record_lock.sbatch <platform>`: run by the owner on a compute node of that machine. It
     loads the base environment, installs this package, and writes `environment/<platform>.lock`. The
     lock holds the Python version, torch version + CUDA version, and `pip freeze --all` sorted. The
