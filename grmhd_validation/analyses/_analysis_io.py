@@ -215,7 +215,7 @@ def save_figure(figure, source_path):
     for artist in figure.findobj(Text):
         text=artist.get_text().replace('TRON','model')
         if state['space']=='physical':
-            text=text.replace('normalized-space','physical-space').replace('norm-space','physical-space').replace('nMAE','MAE (physical)')
+            text=text.replace('normalized-space','physical-space').replace('norm-space','physical-space').replace('normalized space','physical space').replace('nMAE','MAE (physical)').replace('(dex)','(code units)')
             if r'\Delta' in text:
                 text=text.replace(r'\log_{10}', '').replace(r'\mathrm{dex}',r'\mathrm{code\ units}')
         artist.set_text(text)

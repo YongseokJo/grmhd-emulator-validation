@@ -54,6 +54,9 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
     b2_lo, b2_hi = (float(np.percentile(b2_all, 1)), float(np.percentile(b2_all, 99.5)))
     b2_ticks = np.arange(0.0, 3.6, 0.5)
     panels = [('$\\log_{10}\\rho$ Truth', log_rho_t, rho_lo, rho_hi, None), ('$\\log_{10}\\rho$ Forecast', log_rho_p, rho_lo, rho_hi, None), ('$|\\Delta \\log_{10}\\rho|\\ [\\mathrm{dex}]$', log_rho_e, None, None, None), ('$\\log_{10} B^2$ Truth', b2_t, b2_lo, b2_hi, None), ('$\\log_{10} B^2$ Forecast', b2_p, b2_lo, b2_hi, None), ('$|\\Delta \\log_{10} B^2|\\ [\\mathrm{dex}]$', b2_e, 0.0, 3.5, b2_ticks)]
+    if current()['space']=='physical':
+        title,values,_,_,_=panels[-1]
+        panels[-1]=(title,values,0.,None,None)
 
     def _save_meridional(suffix, xlim=None, ylim=None):
         fig, axes = plt.subplots(2, 3, figsize=(15, 8.5), sharex=True, sharey=True, gridspec_kw={'wspace': 0.12, 'hspace': 0.3})
