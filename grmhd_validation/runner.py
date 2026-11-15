@@ -24,7 +24,7 @@ from .environment import check_environment, platform_id
 from .hashing import sha256
 from .permissions import SharedStorage
 from .protocol import read_protocol
-from .runstore import publish, reserve
+from .runstore import UnsealedRunError, publish, reserve
 from .slurm import require_compute
 from .splits import CHANNELS, identifier, read_split
 from .windows import select_starts
@@ -209,6 +209,9 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
         writer.json("run.json", info)
         bundle_checksums(writer)
         target = publish(storage, root, split_id, request["model"])
+    except UnsealedRunError as error:
+        return {"ok": False, "next": "gval seal " + str(error.target), "unsealed": True,
+                "run_id": run_id, "run_dir": str(error.target), "error": str(error)}
     except Exception as error:
         record_failure(writer, info, error)
         return {"ok": False, "next": "Inspect FAILED in the staging attempt; correct the request or adapter before retrying",

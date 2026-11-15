@@ -44,6 +44,8 @@ def main(argv=None):
     command = sub.add_parser("verify", help="Read-only bundle verification or numerical comparison")
     command.add_argument("--compare", action="store_true")
     command.add_argument("runs", nargs="+")
+    command = sub.add_parser("seal", help="Owner recovery of an unsealed COMPLETE run")
+    command.add_argument("run")
     command = sub.add_parser("new-adapter", help="Write a template and request in your directory")
     command.add_argument("directory")
     try:
@@ -72,6 +74,9 @@ def main(argv=None):
         elif args.command == "new-adapter":
             from .templates import new_adapter
             verdict = new_adapter(args.directory)
+        elif args.command == "seal":
+            from .verify import seal_run
+            verdict = seal_run(args.run)
     except Exception as error:
         verdict = {"ok": False, "next": "Resolve the reported error and rerun the command; consult docs/milestone_2.md", "error": str(error)}
     print(json.dumps(verdict, sort_keys=True, allow_nan=False))

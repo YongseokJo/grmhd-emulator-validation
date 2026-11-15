@@ -1,8 +1,6 @@
 # Milestone 2: adapter, quick evaluation and conformance
 
-Draft: publication currently fails on Linux under the spec's freeze-before-rename
-ordering. The planner must resolve this before milestone 2 can be approved.
-See the [validation receipt and pending questions](milestone_2_validation.md).
+See the [validation receipt](milestone_2_validation.md) for the Slurm test matrix.
 
 Milestone 1 is merged. This milestone adds the model-facing API, persistence,
 one common inference/metric path, recorded staging attempts, canonical result
@@ -76,21 +74,31 @@ lists simulation directories and never gives excluded/train/other-partition
 dumps to a model.
 
 Each evaluation reserves a numbered staging attempt, including failures. Success
-has exact artifact names, checksums and a COMPLETE marker, then is published by
-an atomic no-replace rename to `runs/<split_id>/<model>/<run_id>/`. Completed
-bundles are read-only. Failures retain FAILED, run metadata and a traceback in
+writes every result and metadata file, then checksums.json, then COMPLETE. It
+freezes files and subdirectories bottom-up while leaving the run root writable,
+uses an atomic no-replace rename to `runs/<split_id>/<model>/<run_id>/`, then
+seals the root through an already-open file descriptor. Completed bundles are
+read-only. Failures before publication retain FAILED, run metadata and a traceback in
 staging. Destination namespaces are created only during final publication.
 Existing shared permissions are never repaired, and only invocation-created
-inodes can be chmodded.
+inodes can be chmodded, except for the owner recovery command below.
 
 ```bash
 gval verify /work/nvme/bgun/share/validation/runs/<split_id>/<model>/<run_id>
 gval verify --compare /path/run_a /path/run_b
+# If publication was interrupted after rename, the owner recovers that run:
+gval seal /path/to/unsealed/run
 ```
 
 Verification checks coverage and file hashes, schemas, frozen identities,
-completion and result fingerprint. Comparison requires the same request and
-uses the protocol's 1e-4 relative tolerance. Metadata varies between attempts;
+completion, result fingerprint and read-only modes. A writable root is reported
+as `ok: false, unsealed: true` with `next: gval seal <path>`; comparison refuses
+it, and reporting must leave it off the leaderboard. `seal` requires ownership,
+COMPLETE, read-only contents and a verified bundle. It removes only the root
+write bits without changing any file, so recovery preserves checksums and the
+result fingerprint. A sealing failure after rename keeps the published COMPLETE
+bundle intact and gives the same recovery command. Comparison requires the same
+request and uses the protocol's 1e-4 relative tolerance. Metadata varies between attempts;
 result-content bytes are the CPU determinism contract.
 
 ## Adapter contract

@@ -25,7 +25,7 @@ from grmhd_validation.permissions import GROUP_AREAS, OWNER_AREAS, SharedStorage
 from grmhd_validation.protocol import read_protocol
 from grmhd_validation.runner import evaluate, persistence_request
 from grmhd_validation.splits import CHANNELS, SPLIT_NAMES, read_split
-from grmhd_validation.verify import compare_runs, verify_run
+from grmhd_validation.verify import compare_runs, seal_run, verify_run
 from grmhd_validation.windows import select_starts
 
 REPO = Path(__file__).resolve().parents[1]
@@ -261,6 +261,97 @@ class RunnerTests(RunnerFixture):
         self.assertTrue((root/'FAILED').is_file()); self.assertFalse((root/'COMPLETE').exists())
         self.assertEqual(stat.S_IMODE((self.shared/'staging').stat().st_mode),staging_mode)
         retry=self.run_eval(); self.assertTrue(retry['ok'],retry); self.assertTrue(retry['run_id'].endswith('__a2'))
+
+    def unsealed_run(self):
+        self.golden(); self.conform()
+        with patch.object(SharedStorage, 'seal_created_root', side_effect=OSError('interrupted after rename')):
+            result=self.run_eval()
+        self.assertFalse(result['ok']); self.assertTrue(result['unsealed'])
+        root=Path(result['run_dir'])
+        self.assertIn('/runs/',str(root)); self.assertTrue(root.is_dir())
+        self.assertEqual(result['next'],'gval seal '+str(root))
+        self.assertFalse((self.shared/'staging'/getpass.getuser()/root.name).exists())
+        self.assertTrue((root/'COMPLETE').is_file()); self.assertFalse((root/'FAILED').exists())
+        self.assertTrue(root.stat().st_mode & stat.S_IWUSR)
+        self.assertTrue(all(not p.stat().st_mode & 0o222 for p in root.rglob('*')))
+        return root
+
+    def test_unsealed_run_is_excluded_until_owner_recovers_with_cli_seal(self):
+        import contextlib
+        import io
+        from grmhd_validation.cli import main
+        root=self.unsealed_run()
+        verdict=verify_run(root,self.repo)
+        self.assertFalse(verdict['ok']); self.assertTrue(verdict['unsealed'])
+        with patch('grmhd_validation.verify.verify_run',side_effect=lambda path:verify_run(path,self.repo)), \
+                contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(main(['verify',str(root)]),1)
+        self.assertTrue(json.loads(output.getvalue().splitlines()[-1])['unsealed'])
+        with self.assertRaisesRegex(ValueError,'unsealed'):
+            compare_runs(root,root,self.repo)
+        before={p.relative_to(root).as_posix():(p.stat().st_ino,p.stat().st_mode,p.stat().st_mtime_ns,
+                sha256(p) if p.is_file() else None) for p in root.rglob('*')}
+        root_inode=root.stat().st_ino
+        with patch('grmhd_validation.verify.seal_run',side_effect=lambda path:seal_run(path,self.repo)), \
+                contextlib.redirect_stdout(io.StringIO()) as output:
+            self.assertEqual(main(['seal',str(root)]),0)
+        self.assertTrue(json.loads(output.getvalue().splitlines()[-1])['ok'])
+        self.assertEqual(root.stat().st_ino,root_inode)
+        self.assertEqual(root.stat().st_mode & 0o222,0)
+        after={p.relative_to(root).as_posix():(p.stat().st_ino,p.stat().st_mode,p.stat().st_mtime_ns,
+               sha256(p) if p.is_file() else None) for p in root.rglob('*')}
+        self.assertEqual(before,after)
+        self.assertTrue(verify_run(root,self.repo)['ok'])
+        with patch('grmhd_validation.verify.os.fchmod',side_effect=AssertionError('Already sealed')):
+            self.assertTrue(seal_run(root,self.repo)['ok'])
+
+    def test_seal_refuses_foreign_owner_mutable_contents_bad_hash_and_missing_complete(self):
+        root=self.unsealed_run()
+        with patch('grmhd_validation.verify.os.geteuid',return_value=os.geteuid()+1), \
+                patch('grmhd_validation.verify.os.fchmod',side_effect=AssertionError('Foreign chmod')):
+            with self.assertRaisesRegex(PermissionError,'owner'):
+                seal_run(root,self.repo)
+        metric=root/'metrics/single_step.json'
+        metric.chmod(0o640)
+        with self.assertRaisesRegex(ValueError,'not read-only'):
+            seal_run(root,self.repo)
+        metric.chmod(0o440)
+        metric.parent.chmod(0o3770)
+        with self.assertRaisesRegex(ValueError,'not read-only'):
+            seal_run(root,self.repo)
+        metric.parent.chmod(0o3550)
+        original=metric.read_bytes();metric.chmod(0o640);metric.write_bytes(original+b' ');metric.chmod(0o440)
+        with self.assertRaisesRegex(ValueError,'checksum mismatch'):
+            seal_run(root,self.repo)
+        metric.chmod(0o640);metric.write_bytes(original);metric.chmod(0o440)
+        marker=(root/'COMPLETE').read_bytes();(root/'COMPLETE').unlink()
+        with self.assertRaisesRegex(ValueError,'COMPLETE'):
+            seal_run(root,self.repo)
+        (root/'COMPLETE').write_bytes(marker);(root/'COMPLETE').chmod(0o440)
+        link=root.with_name('symlink-run');link.symlink_to(root,target_is_directory=True)
+        with self.assertRaises(OSError):
+            seal_run(link,self.repo)
+        link.unlink()
+        special=root/'unexpected-fifo';os.mkfifo(special,mode=0o440)
+        with self.assertRaisesRegex(ValueError,'special file'):
+            seal_run(root,self.repo)
+        special.unlink()
+        self.assertTrue(root.stat().st_mode & stat.S_IWUSR)
+        self.assertTrue(seal_run(root,self.repo)['ok'])
+
+    def test_publication_freezes_contents_before_rename_and_seals_root_afterward(self):
+        from grmhd_validation.runstore import no_replace_rename
+        self.golden();self.conform()
+        def rename(source,target):
+            self.assertTrue(source.stat().st_mode & stat.S_IWUSR)
+            self.assertTrue((source/'COMPLETE').is_file())
+            self.assertTrue(all(not p.stat().st_mode & 0o222 for p in source.rglob('*')))
+            no_replace_rename(source,target)
+            self.assertTrue(target.stat().st_mode & stat.S_IWUSR)
+        with patch('grmhd_validation.runstore.no_replace_rename',side_effect=rename):
+            result=self.run_eval()
+        self.assertTrue(result['ok'],result)
+        self.assertEqual(Path(result['run_dir']).stat().st_mode & 0o222,0)
 
     def test_geometry_hash_and_adapter_declarations(self):
         geometry=load_geometry(self.split,'cpu')

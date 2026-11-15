@@ -8,6 +8,12 @@ from pathlib import Path
 import re
 
 
+class UnsealedRunError(RuntimeError):
+    def __init__(self, target, error):
+        self.target = target
+        super().__init__(f"Run published but unsealed: {target}: {error}")
+
+
 @contextmanager
 def reservation_lock(storage):
     fd = os.open(storage.root / "staging", os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
@@ -72,6 +78,16 @@ def publish(storage, root, split_id, model):
         target = parent / root.name
         if target.exists() or target.is_symlink():
             raise FileExistsError("Run destination already exists")
-        storage.make_readonly(root)
-        no_replace_rename(root, target)
+        fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        try:
+            storage.make_readonly(root, include_root=False)
+            no_replace_rename(root, target)
+            try:
+                storage.seal_created_root(root, fd)
+            except Exception as error:
+                # Do not rewrite metadata/checksums or thaw a published tree.
+                # The owner can recover exactly this completed run with seal.
+                raise UnsealedRunError(target, error) from error
+        finally:
+            os.close(fd)
     return target

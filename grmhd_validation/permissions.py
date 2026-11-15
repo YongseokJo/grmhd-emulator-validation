@@ -92,7 +92,7 @@ class SharedStorage:
         finally:
             os.close(fd)
 
-    def make_readonly(self, tree):
+    def make_readonly(self, tree, include_root=True):
         """Freeze only a wholly invocation-created tree, checking identity first."""
         tree = Path(tree).absolute()
         entries = [tree]
@@ -102,7 +102,9 @@ class SharedStorage:
             metadata = path.lstat()
             if stat.S_ISLNK(metadata.st_mode) or self.created.get(path) != (metadata.st_dev, metadata.st_ino):
                 raise PermissionError("Refusing to chmod an entry not created in this invocation: " + str(path))
-        for path in reversed(entries):
+        for path in sorted(entries, key=lambda path: len(path.parts), reverse=True):
+            if path == tree and not include_root:
+                continue
             fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
             try:
                 metadata = os.fstat(fd)
@@ -111,6 +113,13 @@ class SharedStorage:
                 os.fchmod(fd, stat.S_IMODE(metadata.st_mode) & ~0o222)
             finally:
                 os.close(fd)
+
+    def seal_created_root(self, tree, fd):
+        """Seal the invocation-created inode through its FD after publication."""
+        metadata = os.fstat(fd)
+        if self.created.get(Path(tree).absolute()) != (metadata.st_dev, metadata.st_ino):
+            raise PermissionError("Cannot seal a root not created in this invocation")
+        os.fchmod(fd, stat.S_IMODE(metadata.st_mode) & ~0o222)
 
     def exclusive_folder(self, area, *parts):
         if not parts:
