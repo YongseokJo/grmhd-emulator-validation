@@ -316,7 +316,7 @@ class Adapter(ModelAdapter):
   - With `True`, `null` is an error.
   - With no checkpoint: `run.json` has `checkpoint_sha256: null` and `checkpoint: null`; the run_id
     token is the literal `nockpt`; `ckpt_sha8` is shown as `nockpt` everywhere.
-  - Example: `persistence-v1__nockpt__validation__quick__a1`.
+  - Example: `persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1`.
   - The adapter source SHA256 is still recorded, so persistence runs remain identifiable.
 - Docs: `docs/plugging_in_a_model.md`, a step-by-step walkthrough with the TRON example.
 
@@ -326,9 +326,15 @@ class Adapter(ModelAdapter):
   - `gval evaluate --request run_request.json --split-id <id> --split validation|test --tier quick|full`.
   - Slurm wrappers: `scripts/evaluate_delta.sbatch` (A100) and `scripts/evaluate_deltaai.sbatch`
     (GH200).
-- **run_id** is decided by the code: `<model>-<version>__<ckpt_sha8>__<split>__<tier>__a<N>`. N is the
-  attempt number: 1 + the number of existing directories with the same prefix, in `runs/` and in
-  `staging/`, complete or not.
+- **run_id** is decided by the code:
+  `<model>-<version>__<ckpt_sha8>__<split_id>__<split>__<tier>__a<N>`, e.g.
+  `persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1`.
+  - The split_id is part of the name, so attempts on different datasets or split versions never share
+    a counter.
+  - N is the attempt number: 1 + the number of existing directories whose name has the same prefix
+    (everything before `a<N>`), complete or not.
+  - Count only in `runs/<split_id>/<model>/` (one level) and `staging/*/` (one level). Never walk into
+    run directories, so the cost doesn't grow with the number of files.
 - Every attempt keeps its directory, so repeated test runs are visible (test discipline = **record**).
 - Layout of one run (exact names):
 
