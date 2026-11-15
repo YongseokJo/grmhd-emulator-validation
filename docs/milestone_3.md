@@ -60,6 +60,6 @@ benchmark runs, references or leaderboard scores. The checkpoint's old training
 split overlaps benchmark validation, which makes it unsuitable as a fair
 benchmark submission.
 
-Validation results and timings are recorded in the milestone receipt when the
-checks finish. The owner reviews and merges the PR; milestone 4 does not start
+Validation results and timings are recorded in the [milestone receipt](milestone_3_validation.md).
+The owner reviews and merges the PR; milestone 4 does not start
 until approval.
