@@ -36,6 +36,9 @@ The full reference builds a missing verified truth cache in the same evaluation.
 wall times in an ignored local receipt. `--split-id <id>` validates one dataset
 and appends to that receipt when datasets need separate Slurm allocations. The
 overall receipt is successful only after both datasets' three operations pass.
+`--operation reference-full`, `--operation reference-quick` and `--operation
+conformance` can split that chain at completed-operation boundaries when an
+interactive partition's wall limit is shorter than the whole validation chain.
 For a separate cache (including test truth), the owner runs
 `gval reference truth --split-id <id> --split validation|test`. Cache entries are
 read-only to readers and pinned by hashes, including training scales. Full

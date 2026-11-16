@@ -18,13 +18,14 @@ expected={'rc300_reduced_v1':'6d8ecd5d35dcd85c89796e25fddb53bffcc55611f26f833c21
           '5000run_v1':'cd9598fd3f8380f9ebc862db46eb42d070fcfc7f43e532e7bd0f9fc7c51cf648'}
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--split-id',choices=list(expected),help='Validate one dataset and append to the existing receipt')
+parser.add_argument('--operation',action='append',choices=('reference-full','reference-quick','conformance'),help='Run selected existing operations in order; repeat to select several')
 args=parser.parse_args()
 receipt_path=Path('gval-m4-real-receipt.log');protocol_sha=sha256('protocols/forecast_v1.json')
 receipt=json.loads(receipt_path.read_text()) if receipt_path.exists() else {'protocol_sha256':protocol_sha,'steps':[]}
 if receipt['protocol_sha256']!=protocol_sha:raise RuntimeError('Existing receipt has a different protocol hash')
 receipt.pop('ok',None)
 for split in ([args.split_id] if args.split_id else expected):
-    for operation in ('reference-full','reference-quick','conformance'):
+    for operation in (args.operation or ('reference-full','reference-quick','conformance')):
         args=['reference','persistence','--split-id',split,'--tier',operation.split('-')[1]] if operation.startswith('reference') else ['conformance','--split-id',split,'--tier','all']
         print(json.dumps({'starting':operation,'split_id':split}),flush=True)
         start=time.monotonic()
