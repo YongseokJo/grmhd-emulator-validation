@@ -26,10 +26,10 @@ if receipt['protocol_sha256']!=protocol_sha:raise RuntimeError('Existing receipt
 receipt.pop('ok',None)
 for split in ([args.split_id] if args.split_id else expected):
     for operation in (args.operation or ('reference-full','reference-quick','conformance')):
-        args=['reference','persistence','--split-id',split,'--tier',operation.split('-')[1]] if operation.startswith('reference') else ['conformance','--split-id',split,'--tier','all']
+        command=['reference','persistence','--split-id',split,'--tier',operation.split('-')[1]] if operation.startswith('reference') else ['conformance','--split-id',split,'--tier','all']
         print(json.dumps({'starting':operation,'split_id':split}),flush=True)
         start=time.monotonic()
-        result=subprocess.run([sys.executable,'-m','grmhd_validation',*args],text=True,capture_output=True)
+        result=subprocess.run([sys.executable,'-m','grmhd_validation',*command],text=True,capture_output=True)
         try:verdict=json.loads(result.stdout.splitlines()[-1])
         except (ValueError,IndexError):verdict={'ok':False,'stdout':result.stdout,'stderr':result.stderr}
         entry={'operation':operation,'split_id':split,'seconds':time.monotonic()-start,'verdict':verdict}
