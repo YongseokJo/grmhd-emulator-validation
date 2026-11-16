@@ -421,6 +421,17 @@ reject missing/corrupt/mismatched caches. run.json records the cache hash; cache
 metadata is excluded from result fingerprints. Only the owner on a compute node
 may create a missing cache, and an existing verified cache is reused.
 
+Memory is bounded independently of the number of forecast starts: reduce one
+start at a time, release its volume fields before the next, and retain only
+reduced profiles, spectra, maps and scalars in per-start result rows. Store
+prediction states as float32; materialize float64 only for the reduction that
+needs it. Build disk caches incrementally. Sequential scratch/data I/O must not
+retain a run-sized file cache in the Slurm memory cgroup. Record per-analysis
+process RSS and allocation memory outside deterministic result content. The
+5000run full reference and conformance must each stay within 48 GB, verified
+with sacct MaxRSS under the existing 64 GB allocation. These implementation
+changes must preserve existing result fingerprints and the protocol hash.
+
 The final owner persistence reference supports --tier quick|full. Golden/cache
 selection includes the protocol SHA256 directory, so previous hash cohorts are
 not overwritten. Before finalization, the unchanged milestone-3 quick reference
