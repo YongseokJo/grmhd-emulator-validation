@@ -415,7 +415,8 @@ partition identity. The cache contains correlation times, truth spectra/shell
 profiles, fixed bin edges and persistence baseline errors. It contains no learned
 model predictions. Its manifest pins the frozen split/geometry/checksum-manifest
 hashes, partition, protocol hash, cache schema, entry hashes and cache-file hash.
-Entries use pickle-free NumPy serialization. Readers are strictly read-only and
+The manifest also binds the training channel-scales SHA256 used by physical
+persistence baselines. Entries use pickle-free NumPy serialization. Readers are strictly read-only and
 reject missing/corrupt/mismatched caches. run.json records the cache hash; cache
 metadata is excluded from result fingerprints. Only the owner on a compute node
 may create a missing cache, and an existing verified cache is reused.
@@ -455,6 +456,13 @@ Report horizon and first-resolved-shell quantities. For rc300 the horizon
 record is flagged coarse_ring and the headline selects the first wholly
 resolved shell at r>=6.11. Preserve Kevin's original rest-mass-inclusive P_jet
 and eta=P_jet/|Mdot| only in the explicit legacy regression path.
+
+The final protocol records these fixed conventions in constants.full.transport,
+coarse_ring_r_min=6.11 and jet_density_floor_multiple=100. The existing
+milestone3_start_policy becomes all; production_ready becomes true only at the
+last implementation step. constants.figures.full_figsizes maps each analysis to
+the original figure sizes in fixed output order (including each zoom/variant).
+These additions are applied together, changing the protocol-file hash once.
 
 ## 6. Plugging in a model (adapter contract)
 
