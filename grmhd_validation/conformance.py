@@ -73,6 +73,8 @@ def numeric_difference(left, right):
 def compare_results(actual, expected, tolerance=None):
     ours, theirs = result_files(actual), result_files(expected)
     differing = sorted(path for path in set(ours) | set(theirs) if ours.get(path) != theirs.get(path))
+    if not differing:
+        return {'ok':True,'differing_files':[],'largest_relative_difference':0.}
     largest, structural = 0., set(ours) == set(theirs)
     for name in sorted(set(ours) & set(theirs)):
         if name.endswith(".json"):

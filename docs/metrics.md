@@ -244,7 +244,10 @@ rejection. Test data is never
 used for the training channel scales.
 
 Both reference tiers and conformance use the exact protocol-hash cohort. The
-full tier requires a shared cache and passing full conformance after the gate
+comparison accepts identical content-file hashes directly; it traverses numbers
+only when content differs, preserving tolerance/failure diagnostics without
+reparsing large, already identical tables and maps.
+The full tier requires a shared cache and passing full conformance after the gate
 is lifted; historical previews stay in staging. Fixed PNG names follow the port
 manifest; original figure sizes are protocol settings, with Agg, 150 dpi,
 DejaVu Sans 11 and no timestamp metadata. All figures use aggregate content.
