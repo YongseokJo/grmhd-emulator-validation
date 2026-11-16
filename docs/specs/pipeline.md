@@ -428,6 +428,34 @@ supports either tier, and the CLI defaults to checking both tiers once the
 protocol is final (quick only while gated). A production full evaluation requires
 passing full-tier conformance for its platform/lock/split/protocol hash.
 
+### 5.11 Production transport signs and efficiencies (owner option 4)
+
+Use geometry dx[1]*dx[2] as the angular coordinate area element, including
+sqrt(-g) in every shell integral. All accretion fluxes are positive inward:
+Mdot = -integral rho*u^r*sqrt(-g) dA;
+Edot = +integral T^r_t*sqrt(-g) dA (total energy, including rest mass);
+Ldot = -integral T^r_phi*sqrt(-g) dA.
+The total efficiency is eta = (Mdot-Edot)/Mdot on the same shell and step.
+P_jet = -integral_funnel (T^r_t+rho*u^r)*sqrt(-g) dA removes rest-mass flux;
+eta_jet = P_jet/Mdot on that same shell/step. Efficiencies are undefined for
+Mdot <= 0: emit null and nonpositive_mass_inflow as the reason, never |Mdot|.
+Across starts, preserve per-start reasons and report finite-sample counts along
+with nanmean/CIs; an entirely undefined quantity has null mean and CI.
+
+Use Kevin's funnel mask (magnetization, polar cut, outflow/energy-flux condition,
+and density guard), but use the rest-mass-subtracted production jet power.
+Compute u^t from the normalization with the metric, reconstruct coordinate u^r,
+u_t and u_phi, and form the ideal-MHD stress tensor with fluid-frame b^mu.
+Audit the normalization and flux components in a nonzero-shift synthetic metric.
+Cold marginally bound radial inflow with u_t=-1, u_phi=0, ug=B=0 must give
+Edot=Mdot, eta=0 and Ldot=0. A moving Minkowski flow also carries kinetic energy
+and is not that oracle.
+
+Report horizon and first-resolved-shell quantities. For rc300 the horizon
+record is flagged coarse_ring and the headline selects the first wholly
+resolved shell at r>=6.11. Preserve Kevin's original rest-mass-inclusive P_jet
+and eta=P_jet/|Mdot| only in the explicit legacy regression path.
+
 ## 6. Plugging in a model (adapter contract)
 
 A user keeps their model code in their own repository. They add one adapter file and never touch this
