@@ -240,6 +240,32 @@ any quick result bytes. The normal owner reference path can regenerate identical
 quick content and refresh its metadata; an unequal quick fingerprint is an error,
 not a new golden to accept. No frozen split definitions change.
 
+### 3.5 Milestone-4 publication gate and finalization (owner decision)
+
+Until milestone 4 is complete, full-tier evaluations are previews. The runner
+must keep their completed bundles in staging/<user>/<run_id>/, write PREVIEW,
+set run.json status to preview with preview_reason, and never write COMPLETE or
+create a runs/ destination for them. The CLI returns preview: true and the
+staging path; a completed preview is not a leaderboard submission. Quick-tier
+publication is unchanged. Failed previews retain the normal FAILED record.
+verify identifies previews, and report excludes them even if files are otherwise
+valid. Preview attempts still count toward attempt numbering.
+
+The gate is closed unless constants.full.production_ready is explicitly true;
+its absence in the milestone-3 protocol means false. During implementation the
+committed forecast_v1.json stays unchanged. Final settings, all-start/CIs,
+transport/coarse-ring handling, verified owner truth caches and fixed artifacts
+are validated before the last milestone-4 implementation step. That last step
+updates forecast_v1.json once to the final semantics and production_ready: true,
+lifting the gate and changing its SHA256 once. It does not promote any existing
+preview or rewrite historical results. Regenerate quick and full persistence
+references under the final protocol hash, then rerun both splits' conformance.
+
+The comparison identity is (split_id, protocol_id, protocol_sha256, tier).
+Leaderboard/report grouping, verification comparisons and reference/cache
+selection must use the protocol SHA256, not protocol_id alone. Results with
+different hashes are separate comparison groups, even when both say forecast_v1.
+
 ## 4. Metric spaces
 
 - **Loss space.** The fixed TRON normalization, identical to `Fall26/common/normalizer.py`: log10 for
@@ -344,6 +370,14 @@ run.json. This truth-only owner command creates only references/<split_id>/.
 9. **Truth-only quantities cached per split.** Correlation times, truth spectra, truth shell profiles
    and persistence baselines are computed once by the owner into `references/<split_id>/<protocol_id>/`,
    then reused. Every model is then compared against identical truth statistics.
+
+**Mass-shell normalization (owner decision, milestone 4).** Production fig 5
+(shell_profiles) and Table 2 (physics_table) divide bare mass shells by the
+physical Ntheta*Nphi from the state shape, as energy/angular momentum and the
+training loss already do. Keep gdet.shape[-2]*gdet.shape[-1] only for the explicit
+legacy regression configuration. A singleton geometry phi axis must not change
+the production mass profile or its signed-log error. Document/test this fix and
+write an owner-facing note identifying Kevin's affected outputs.
 
 ## 6. Plugging in a model (adapter contract)
 
@@ -764,7 +798,7 @@ runs/<split_id>/<model>/<run_id>/
   - training provenance.
 
   Rows are sorted by model, then run_id. Numbers have fixed formatting.
-- Only compare rows with the same `split_id`, `protocol_id` and tier. The report states this rule.
+- Only compare rows with the same `split_id`, `protocol_id`, `protocol_sha256` and tier. The report states this rule.
 - **GitHub.**
   - The owner commits `reports/<split_id>/leaderboard.md`, the comparison figures and each run's
     `summary.json` + `run.json` (under `results/<split_id>/<model>/<run_id>/`) through a PR.
