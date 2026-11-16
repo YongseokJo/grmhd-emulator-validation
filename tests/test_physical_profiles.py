@@ -27,6 +27,7 @@ class PhysicalProfileTests(FullFixture):
             return value
         with patch.object(ctx.reader,'numpy',side_effect=frame):
             result=azimuthal_spectra.compute(ctx,space='physical',starts=[start])['per_start'][0]['values']
+        self.assertEqual(result['steps'],ctx.protocol['report_steps'])
         for values in result['ratio'].values():self.assertAlmostEqual(values['0'][1],.25,places=6)
 
     def test_mean_profiles_keep_physical_values_before_display_logs(self):

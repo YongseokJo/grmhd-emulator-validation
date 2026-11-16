@@ -28,6 +28,7 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         raise ValueError('Analysis has insufficient valid data: azimuthal_spectra')
     cand_horizons = [10, 25, 50, args.max_steps]
     horizons = sorted(list({h for h in cand_horizons if 1 <= h <= args.max_steps}))
+    if current()['space']=='physical':horizons=list(ctx.protocol['report_steps'])
     horizons = [h for h in horizons if load_dump(data_dir, args.start + h) is not None]
     if not horizons:
         raise ValueError('Analysis has insufficient valid data: azimuthal_spectra')
