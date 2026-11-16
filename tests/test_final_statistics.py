@@ -28,6 +28,11 @@ class StatisticsTests(unittest.TestCase):
         self.assertEqual(result['mean']['value'],values.mean())
         np.testing.assert_array_equal([result['lower']['value'],result['upper']['value']],np.percentile(expected,[2.5,97.5]))
         np.testing.assert_array_equal(result['mean']['r'],[2.,3.])
+        coordinates=[{'start':s,'values':{'centers':np.array([.1,.2]),'widths':np.array([.01,.01])}} for s in self.starts]
+        grid=aggregate(coordinates,self.groups,self.protocol)
+        for bound in ('mean','lower','upper'):
+            np.testing.assert_array_equal(grid[bound]['centers'],[.1,.2])
+            np.testing.assert_array_equal(grid[bound]['widths'],[.01,.01])
         self.assertEqual(result['bootstrap']['n_blocks'],3)
 
     def test_nonlinear_statistic_is_recomputed_in_each_draw(self):
@@ -47,6 +52,8 @@ class StatisticsTests(unittest.TestCase):
         np.testing.assert_array_equal(result['valid_counts']['eta'],[1,0])
         self.assertIn('per-start',result['mean']['eta_reason'][0])
         self.assertEqual(result['mean']['eta_reason'][1],'nonpositive_mass_inflow')
+        finite=[{'start':s,'values':{'eta':np.array([value])}} for s,value in [(0,1.),(100,2.)]]
+        np.testing.assert_array_equal(aggregate(finite,self.groups,self.protocol)['valid_counts']['eta'],[2])
 
     def test_duplicate_or_outside_starts_and_changed_axes_fail(self):
         with self.assertRaises(ValueError):blocks_for_starts([0,0],self.groups,2)

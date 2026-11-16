@@ -170,10 +170,10 @@ The explicit loss-space/single-start regression configuration remains available.
 | mean_profiles | Every rollout start; original within-start time mean, physical Omega, unnormalized vertical rho, median physical beta/sigma. Average physical profiles before plotting log10, instead of averaging per-start display logs or peak-normalized densities. |
 | statistical_props | Every rollout start; histogram edges from pooled truth at the fixed analysis horizon, independent of predictions. Per-start PDF/JS and equal-start means/CIs use those same edges. |
 | spectrum | Every rollout start; truth radial power cached. A common transfer-support mask comes from mean truth power over all starts, so every start has the same wavenumber coordinates. |
-| azimuthal_spectra | Every rollout start; physical m-power curves and intervals; truth spectra cached per dump. |
+| azimuthal_spectra | Every rollout start; physical m-power and transfer curves with intervals; truth spectra cached per dump. Transfers retain all mode coordinates, with nulls below each truth spectrum's 10th percentile and at m=0. |
 | coherence | Every rollout start/step; mean per-start physical coherence and pointwise map intervals. Cross spectra remain model-dependent. |
 | temporal_spectrum | Every rollout start; retain the mean of cellwise Hann periodograms, never the power of a regional mean. Cached truth masks and spectra; frequency uses geometry dt_dump. |
-| turbulence_stats | Every rollout start; physical structure exponents, fit quality and signed third moment, with truth quantities cached and pointwise CIs. |
+| turbulence_stats | Every rollout start; physical structure exponents, fit quality, signed third moment, raw S2(lag) and the original S2/S2(1) curves, with truth quantities cached and pointwise CIs. Zero first-lag power makes the normalized curve undefined. |
 | bias_analysis | Every rollout start at h=1; mean signed phi-mean errors and sqrt(mean(error^2)), recomputing RMS in each resample instead of averaging per-start absolute errors. |
 | spatial_error | Every rollout start/report horizon; training-scale physical errors in disk/jet radial bins with curve intervals. |
 | meridional_slice | Every rollout start at the fixed horizon; average raw rho and B-squared maps before log10 display at all three fixed zooms. Physical error maps and their intervals remain in JSON/CSV. |

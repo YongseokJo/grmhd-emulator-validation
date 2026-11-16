@@ -14,7 +14,7 @@ AXES={'r','theta','X','Y','radius','frequencies','modes','rho_modes','B1_modes',
       'channel','step','steps','n_steps','horizon_index','r10_index','resolved_index',
       'index','radius_rg','coarse_ring','resolved_mask','n_dumps','n_pairs','n_cells',
       'parameters','warmup_steps','timed_steps','edges','starts','tau_c','tau_c_rg_c','r1','saturated',
-      'rho_ratio_mask','B1_ratio_mask','report_steps','r_outer','omega_keplerian'}
+      'rho_ratio_mask','B1_ratio_mask','report_steps','r_outer','omega_keplerian','centers','widths','lags'}
 
 
 def blocks_for_starts(starts,groups,length):
@@ -118,7 +118,8 @@ def aggregate(rows,groups,protocol,reducers=None):
                 put(point,path,copy.deepcopy(first));put(lower,path,copy.deepcopy(first));put(upper,path,copy.deepcopy(first))
                 continue
             counts=np.isfinite(stack).sum(axis=0)
-            if np.any(counts<len(rows)):valid_counts['.'.join(map(str,path))]=counts
+            if path[-1] in {'eta','eta_jet','phi_normalized'} or np.any(counts<len(rows)):
+                valid_counts['.'.join(map(str,path))]=counts
             transforms=reducers.get(path,(None,None))
             estimate,lo,hi=mean_bounds(stack,draws,protocol['constants']['ci']['percentiles'],*transforms)
             put(point,path,estimate);put(lower,path,lo);put(upper,path,hi)

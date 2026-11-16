@@ -1306,13 +1306,17 @@
     },
     "steps": {
      "$ref": "#/$defs/azimuthal_spectra__value"
+    },
+    "ratio": {
+     "$ref": "#/$defs/azimuthal_spectra__value"
     }
    },
    "required": [
     "modes",
     "truth",
     "pred",
-    "steps"
+    "steps",
+    "ratio"
    ],
    "additionalProperties": false
   },
@@ -1465,6 +1469,21 @@
        },
        "s3_truth": {
         "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "lags": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_pred": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_truth": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_normalized_pred": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_normalized_truth": {
+        "$ref": "#/$defs/turbulence_stats__value"
        }
       },
       "required": [
@@ -1474,7 +1493,12 @@
        "fit_r2_pred",
        "fit_r2_truth",
        "s3_pred",
-       "s3_truth"
+       "s3_truth",
+       "lags",
+       "s2_pred",
+       "s2_truth",
+       "s2_normalized_pred",
+       "s2_normalized_truth"
       ],
       "additionalProperties": false
      }

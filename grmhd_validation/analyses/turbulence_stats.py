@@ -73,7 +73,18 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         str_z2_p = f'{zp[0]:.3f} ({r2p[0]:.2f})'
         str_z2_t = f'{zt[0]:.3f} ({r2t[0]:.2f})'
         str_s3 = f'{s3p:+.2e}/{s3t:+.2e}'
-        _records.append(sample(channel=c, exponents_pred=zp, exponents_truth=zt, fit_r2_pred=r2p, fit_r2_truth=r2t, s3_pred=s3p, s3_truth=s3t))
+        record=sample(channel=c, exponents_pred=zp, exponents_truth=zt, fit_r2_pred=r2p, fit_r2_truth=r2t, s3_pred=s3p, s3_truth=s3t)
+        if current()['space']=='physical':
+            def s2_curve(x):
+                max_lag=max(setting('structure_min_max_lag'),x.shape[0]//setting('structure_lag_divisor'))
+                lags=np.arange(1,max_lag)
+                values=np.asarray([np.mean((x[lag:]-x[:-lag])**2,dtype=np.float64) for lag in lags])
+                normalized=values/values[0] if values[0]>setting('epsilon') else np.full_like(values,np.nan)
+                return lags,values,normalized
+            lags,s2p,np_=s2_curve(xc_p)
+            _,s2t,nt=truth_value(ctx,'structure_s2',{'dump':int(args.start+n_steps),'channel':c},lambda:s2_curve(xc_t))
+            record.update(lags=lags,s2_pred=s2p,s2_truth=s2t,s2_normalized_pred=np_,s2_normalized_truth=nt)
+        _records.append(record)
     return sample(**{'samples': _records, 'step': n_steps})
 
 def compute(ctx, *, space="physical", starts=None):

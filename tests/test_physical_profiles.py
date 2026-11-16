@@ -5,6 +5,30 @@ from test_full_analyses import FullFixture
 
 
 class PhysicalProfileTests(FullFixture):
+    def test_structure_curves_retain_the_linear_field_squared_lag_oracle(self):
+        from grmhd_validation.analyses import turbulence_stats
+        ctx=self.context();start=ctx.starts[0].rollout[0];ctx.suppress_figures=True
+        value=np.ones(ctx.split.shape,dtype=np.float32);radial=np.indices(ctx.split.shape[1:])[0]+1.
+        for channel in (0,4,5):value[channel]=radial
+        with patch.object(ctx.reader,'numpy',side_effect=lambda _:value.copy()):
+            samples=turbulence_stats.compute(ctx,space='physical',starts=[start])['per_start'][0]['values']['samples']
+        for sample in samples:
+            for side in ('pred','truth'):
+                np.testing.assert_allclose(sample['s2_'+side],sample['lags']**2,rtol=1e-13)
+                np.testing.assert_allclose(sample['s2_normalized_'+side],sample['lags']**2,rtol=1e-13)
+
+    def test_azimuthal_transfer_of_a_doubled_cosine_is_one_quarter(self):
+        from grmhd_validation.analyses import azimuthal_spectra
+        ctx=self.context();start=ctx.starts[0].rollout[0];ctx.suppress_figures=True
+        phi=ctx.geometry.phi.numpy()
+        def frame(index):
+            value=np.ones(ctx.split.shape,dtype=np.float32)
+            value[0]=3.+(2. if index>start else 1.)*np.cos(phi)
+            return value
+        with patch.object(ctx.reader,'numpy',side_effect=frame):
+            result=azimuthal_spectra.compute(ctx,space='physical',starts=[start])['per_start'][0]['values']
+        for values in result['ratio'].values():self.assertAlmostEqual(values['0'][1],.25,places=6)
+
     def test_mean_profiles_keep_physical_values_before_display_logs(self):
         from grmhd_validation.analyses._profiles import mean_profiles
         ctx=self.context();start=ctx.starts[0].rollout[0]

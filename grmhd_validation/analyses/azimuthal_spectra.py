@@ -104,7 +104,17 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
             parts = [f'm={m} {ratio[m]:.3f}' if not np.isnan(ratio[m]) else f'm={m} n/a' for m in modes_to_report if m < len(ratio)]
             p_high = float(np.sum(pred_specs[h][c][high_m_mask])) / (float(np.sum(pred_specs[h][c])) + 1e-30)
             t_high = float(np.sum(truth_specs[h][c][high_m_mask])) / (float(np.sum(truth_specs[h][c])) + 1e-30)
-    return sample(**{'modes': m_axis, 'truth': truth_specs, 'pred': pred_specs, 'steps': horizons})
+    result=sample(**{'modes': m_axis, 'truth': truth_specs, 'pred': pred_specs, 'steps': horizons})
+    if current()['space']=='physical':
+        ratio={}
+        for h in horizons:
+            ratio[h]={}
+            for channel in channels:
+                target=truth_specs[h][channel];predicted=pred_specs[h][channel]
+                mask=target>=np.percentile(target[1:],setting('spectrum_truth_percentile'));mask[0]=False
+                ratio[h][channel]=np.where(mask,predicted/(target+setting('epsilon')),np.nan)
+        result['ratio']=sample(ratio=ratio)['ratio']
+    return result
 
 def compute(ctx, *, space='physical', starts=None):
     """Numerical core: explicit space and one/all starts for source regression."""

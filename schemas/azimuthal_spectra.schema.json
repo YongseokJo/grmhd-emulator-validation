@@ -181,13 +181,17 @@
     },
     "steps": {
      "$ref": "#/$defs/value"
+    },
+    "ratio": {
+     "$ref": "#/$defs/value"
     }
    },
    "required": [
     "modes",
     "truth",
     "pred",
-    "steps"
+    "steps",
+    "ratio"
    ],
    "additionalProperties": false
   }

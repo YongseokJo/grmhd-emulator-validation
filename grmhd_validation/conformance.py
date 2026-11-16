@@ -151,6 +151,11 @@ def reference(split_id, tier="quick", partition="validation", device="cpu", stor
               "environment_locked": info["environment_locked"], "lock_sha256": info["environment_lock_sha256"],
               "repo_commit": info["repo_commit"], "provisional": not info["environment_locked"]}
     writer.json("golden.json", record)
+    if tier=='quick' and full_tier_ready(protocol):
+        legacy=storage.root/'references'/split_id/protocol['protocol_id']/'persistence_quick'/platform
+        if (legacy/'golden.json').is_file() and load_golden(legacy)['result_fingerprint']!=record['result_fingerprint']:
+            _remove_candidate(storage,candidate)
+            raise ValueError('Quick result bytes changed across protocol finalization; refusing a new golden')
     if target.exists():
         existing = load_golden(target)
         if existing["result_fingerprint"] != record["result_fingerprint"]:

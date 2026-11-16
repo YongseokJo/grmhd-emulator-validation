@@ -196,6 +196,21 @@
        },
        "s3_truth": {
         "$ref": "#/$defs/value"
+       },
+       "lags": {
+        "$ref": "#/$defs/value"
+       },
+       "s2_pred": {
+        "$ref": "#/$defs/value"
+       },
+       "s2_truth": {
+        "$ref": "#/$defs/value"
+       },
+       "s2_normalized_pred": {
+        "$ref": "#/$defs/value"
+       },
+       "s2_normalized_truth": {
+        "$ref": "#/$defs/value"
        }
       },
       "required": [
@@ -205,7 +220,12 @@
        "fit_r2_pred",
        "fit_r2_truth",
        "s3_pred",
-       "s3_truth"
+       "s3_truth",
+       "lags",
+       "s2_pred",
+       "s2_truth",
+       "s2_normalized_pred",
+       "s2_normalized_truth"
       ],
       "additionalProperties": false
      }

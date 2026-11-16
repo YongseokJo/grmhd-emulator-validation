@@ -61,12 +61,15 @@ def render(ctx,name,stats):
                 panels=[([('samples',i,side) for i in range(len(mean['samples'])) for side in ('pred','truth')],mean['r'],None,None),
                         ([('samples',i,'relative_error') for i in range(len(mean['samples']))],None,None,None)];layout=(2,1)
             elif name=='accretion_diagnostics':
-                for fields in (('mdot','edot','ldot'),('p_jet',),('eta','eta_jet')):
-                    panels.append(([('headline_'+side,field) for field in fields for side in ('pred','truth')],mean['report_steps'],None,None))
+                for field in ('magnetic_flux','p_jet'):
+                    panels.append(([('profiles_'+side,field) for side in ('pred','truth')],mean['r'],None,None))
+                panels.append(([('headline_'+side,'phi_normalized') for side in ('pred','truth')],mean['report_steps'],None,None))
                 layout=(1,3)
             elif name=='mean_profiles':
                 for field in (['omega','rho_theta','beta','sigma'] if variant==0 else ['omega','beta','sigma']):
-                    panels.append(([(field+'_'+side,) for side in ('pred','truth')],mean['theta'] if field=='rho_theta' else mean['r'],None,log if field in {'beta','sigma'} else None))
+                    paths=[(field+'_'+side,) for side in ('pred','truth')]
+                    if field=='omega':paths.append(('omega_keplerian',))
+                    panels.append((paths,mean['theta'] if field=='rho_theta' else mean['r'],None,log if field in {'beta','sigma'} else None))
                 layout=(2,2) if variant==0 else (1,3)
             elif name=='temporal_consistency':
                 for field in ('mass','energy','angular'):
@@ -74,13 +77,16 @@ def render(ctx,name,stats):
                 layout=(2,2)
             elif name in {'statistical_props','spectrum','turbulence_stats'}:
                 for index,item in enumerate(mean['samples']):
-                    fields={'statistical_props':('pdf_pred','pdf_truth'),'spectrum':('power_pred','power_truth'),'turbulence_stats':('exponents_pred','exponents_truth')}[name]
-                    x=item.get('centers',item.get('modes',np.array([2,3,4])))
+                    fields={'statistical_props':('pdf_pred','pdf_truth'),'spectrum':('power_pred','power_truth'),'turbulence_stats':('s2_normalized_pred','s2_normalized_truth')}[name]
+                    x=item.get('centers',item.get('modes',item.get('lags')))
                     panels.append(([('samples',index,field) for field in fields],x,None,None))
+                if name=='spectrum':panels.append(([('rho_ratio',),('B1_ratio',)],mean['rho_modes'],None,None))
                 layout=(2,4) if name=='statistical_props' else (1,3)
             elif name=='azimuthal_spectra':
                 for channel in ('0','4','5'):
                     panels.append(([(side,step,channel) for side in ('pred','truth') for step in mean[side]],mean['modes'],None,None))
+                for channel in ('0','4','5'):
+                    panels.append(([('ratio',step,channel) for step in mean['ratio']],mean['modes'],None,None))
                 layout=(2,3)
             elif name=='coherence':
                 maps=[(np.asarray(mean['coherence'][channel]).T,f'coherence {ctx.channels[int(channel)]}',None,None) for channel in ('0','5')];layout=(1,2)

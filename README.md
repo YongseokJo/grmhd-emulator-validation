@@ -8,9 +8,11 @@ compare them.
 **Status: milestones 1–3 merged; milestone 4 in progress.** The adapter API,
 persistence, recorded runner, owner goldens, conformance and verification are
 implemented. Milestone 4 adds final all-start aggregates/CIs, audited transport,
-resolved-shell headlines and shared truth caches. Full evaluations remain
-staging previews until the final protocol gate is lifted; learned-model examples
-and prediction mode are milestone 5. See [milestone 4 usage](docs/milestone_4.md).
+resolved-shell headlines and shared truth caches. The finalized protocol enables
+full publication with a verified truth cache and passing full conformance;
+historical previews stay in staging. Real reference validation is in progress.
+Learned-model examples and prediction mode are milestone 5.
+See [milestone 4 usage](docs/milestone_4.md).
 See [milestone 3 usage and validation](docs/milestone_3.md), [milestone 2 usage](docs/milestone_2.md),
 [metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md). Locked DeltaAI references and real-data
 conformance for both datasets pass; see the [validation receipt](docs/milestone_2_real_validation.md).
