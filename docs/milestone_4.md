@@ -32,6 +32,10 @@ gval conformance --split-id 5000run_v1 --tier all
 ```
 
 The full reference builds a missing verified truth cache in the same evaluation.
+`scripts/validate_milestone4.py` records the command verdicts, fingerprints and
+wall times in an ignored local receipt. `--split-id <id>` validates one dataset
+and appends to that receipt when datasets need separate Slurm allocations. The
+overall receipt is successful only after both datasets' three operations pass.
 For a separate cache (including test truth), the owner runs
 `gval reference truth --split-id <id> --split validation|test`. Cache entries are
 read-only to readers and pinned by hashes, including training scales. Full
