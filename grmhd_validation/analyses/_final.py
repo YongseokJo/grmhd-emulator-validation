@@ -18,6 +18,7 @@ def pair_rows(ctx,name,starts):
         edges=conditional_edges(ctx) if name=='conditional_error' else None
         for start in starts:
             initial=ctx.reader.numpy(start).astype(np.float64);truth=ctx.reader.numpy(start+1).astype(np.float64)
+            ctx.reader.tag(initial,start);ctx.reader.tag(truth,start+1)
             predicted=forecast_one_step(model,norm,to_device(initial,device),device).cpu().numpy()[0]
             predicted=predicted.astype(np.float64)
             if name=='error_correlation':

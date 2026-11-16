@@ -56,6 +56,9 @@ class FullStore:
         return value
 
     def ensure_rollout(self, start, count):
+        if all(('rollout',int(start),step) in self.paths for step in range(1,count+1)):
+            # Replay verified predictions without rebuilding an unused history.
+            return {step:self.load('rollout',start,step) for step in range(1,count+1)}
         history=self.ctx.reader.history(start,self.ctx.adapter.history_length,self.ctx.device)
         for step in range(1,count+1):
             key=('rollout',int(start),step)

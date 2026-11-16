@@ -76,6 +76,30 @@ class FullFixture(RunnerFixture):
 
 
 class FullAnalysisTests(FullFixture):
+    def test_physical_pair_analyses_keep_each_starts_entire_model_history(self):
+        from grmhd_validation.analyses._final import pair_rows
+        ctx=self.context();seen=[]
+        class HistoryAdapter:
+            name='history-test';version='v1';history_length=3;max_batch=1
+            def step(self,history):seen.append(history.clone());return history[:,-1].clone()
+        ctx.adapter=HistoryAdapter();starts=[s for group in ctx.starts for s in group.every]
+        for name in ('error_correlation','conditional_error'):
+            rows=pair_rows(ctx,name,starts)
+            self.assertEqual([row['start'] for row in rows],starts)
+            self.assertEqual(len(seen),len(starts))
+            for start,history in zip(starts,seen):torch.testing.assert_close(history,ctx.reader.history(start,3,'cpu'))
+            seen.clear();ctx.full.cleanup();ctx.full=FullStore(ctx)
+
+    def test_complete_prediction_cache_replays_without_history_or_inference(self):
+        ctx=self.context();start=ctx.starts[0].rollout[0]
+        first=ctx.full.ensure_rollout(start,8)
+        with patch.object(ctx.reader,'history',side_effect=AssertionError('Replayed cache must not rebuild history')),patch.object(ctx,'step',side_effect=AssertionError('Replayed cache must not infer')):
+            second=ctx.full.ensure_rollout(start,8)
+        for step in first:np.testing.assert_array_equal(first[step],second[step])
+        path=ctx.full.paths[('rollout',start,1)];changed=first[1].copy();changed[0,0,0,0]+=1.
+        np.save(path,changed)
+        with self.assertRaisesRegex(ValueError,'cache changed'):ctx.full.ensure_rollout(start,8)
+
     def test_every_full_analysis_emits_schema_valid_json_and_csv(self):
         ctx=self.context()
         for name in [*ANALYSES,'correlation_times']:

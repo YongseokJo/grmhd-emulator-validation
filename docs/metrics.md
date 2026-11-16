@@ -152,6 +152,10 @@ percentiles. Thus four rollout starts and block length ten give one block per
 chunk, not four independent samples. All calculations use float64 NumPy on CPU.
 Bootstrap memory is bounded by processing spatial fields in feature blocks.
 The explicit loss-space/single-start regression configuration remains available.
+Physical single-step pair analyses retain the registered truth dump identity
+through float64 conversion, so each call uses that start's entire model history
+and can reuse its verified private prediction. A three-frame adapter test checks
+both pair analyses across chunks; no earlier start substitutes its history.
 
 | Analysis | Final sampling and estimator; change from the intermediate port |
 |---|---|
@@ -232,7 +236,11 @@ The manifest binds split, geometry, checksum manifest, training scales, partitio
 per-entry/file hashes. SQLite contains pickle-free NumPy payloads; readers open
 it read-only, reject corrupt/missing/mismatched entries, and record cache hashes
 only in run metadata. Only registered truth dump identities can enter the kernel
-cache; untagged adapter predictions are computed privately. Test data is never
+cache; untagged adapter predictions are computed privately. Complete private
+rollouts replay their verified predictions without rebuilding an unused history;
+this skips repeated I/O/inference-buffer work and leaves the arrays unchanged.
+The replay test checks exact arrays, no adapter/history calls and corruption
+rejection. Test data is never
 used for the training channel scales.
 
 Both reference tiers and conformance use the exact protocol-hash cohort. The
