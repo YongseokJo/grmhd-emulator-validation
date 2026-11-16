@@ -379,6 +379,55 @@ legacy regression configuration. A singleton geometry phi axis must not change
 the production mass profile or its signed-log error. Document/test this fix and
 write an owner-facing note identifying Kevin's affected outputs.
 
+### 5.10 Final all-start statistics and truth-cache contract
+
+Full-tier rollout diagnostics use every common rollout start from §3.1. Preserve
+per-start values and report equal-weight start means with pointwise 95% CIs.
+Resample bootstrap_block consecutive selected starts within each chunk, retaining
+the last short block, and draw the original number of pooled blocks with
+replacement. With four rollout starts per chunk and block length ten, each
+chunk contributes one short block. The existing seed/resample count/percentiles
+apply. Quick-tier statistics retain §3.3 exactly.
+
+Nonlinear statistics are recomputed on each resample: error-correlation matrices
+use the sampled single-step error vectors; conditional-bin errors use summed
+absolute errors divided by summed bin counts; bias RMS uses the square root of
+the mean squared phi-mean errors; predictability horizons use skill from the
+start-mean model/persistence errors. Correlation-time truth estimates remain a
+fixed shared reference during the forecast-start bootstrap. Coordinates, channel
+IDs, step axes and model parameter counts are invariant/degenerate intervals,
+not noisy measurements. Timing CIs belong only in run metadata.
+
+Each full analysis retains data.per_start and adds data.aggregate with mean,
+lower, upper, n_starts and bootstrap (method, block length, block count, resample
+count and seed). Conditional error and error correlation use every common
+single-step start; the other diagnostics use all common rollout starts. Figures
+show these aggregate values and curve CIs; map CIs remain in JSON/CSV. Physical
+states/profiles are averaged before any display logarithm. Histogram edges are
+fixed from the pooled truth at the analysis horizon, and conditional-bin edges
+use the original seeded truth-only sampling rule. No model prediction sets the
+shared bins. A source regression continues to use the original sampling/bins.
+
+Owner command `gval reference truth --split-id <id> --split validation|test`
+builds the verified truth/persistence cache. It writes only under
+references/<split_id>/<protocol_id>/<protocol_sha256>/, mode 2750, with separate
+partition identity. The cache contains correlation times, truth spectra/shell
+profiles, fixed bin edges and persistence baseline errors. It contains no learned
+model predictions. Its manifest pins the frozen split/geometry/checksum-manifest
+hashes, partition, protocol hash, cache schema, entry hashes and cache-file hash.
+Entries use pickle-free NumPy serialization. Readers are strictly read-only and
+reject missing/corrupt/mismatched caches. run.json records the cache hash; cache
+metadata is excluded from result fingerprints. Only the owner on a compute node
+may create a missing cache, and an existing verified cache is reused.
+
+The final owner persistence reference supports --tier quick|full. Golden/cache
+selection includes the protocol SHA256 directory, so previous hash cohorts are
+not overwritten. Before finalization, the unchanged milestone-3 quick reference
+location remains readable only when its recorded hash matches. Conformance
+supports either tier, and the CLI defaults to checking both tiers once the
+protocol is final (quick only while gated). A production full evaluation requires
+passing full-tier conformance for its platform/lock/split/protocol hash.
+
 ## 6. Plugging in a model (adapter contract)
 
 A user keeps their model code in their own repository. They add one adapter file and never touch this
