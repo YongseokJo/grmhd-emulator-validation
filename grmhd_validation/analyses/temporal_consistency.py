@@ -101,5 +101,5 @@ def compute(ctx, *, space='physical', starts=None):
     return execute_core(ctx, 'temporal_consistency', _compute, space, starts, native_multi=False)
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'temporal_consistency', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'temporal_consistency',compute)

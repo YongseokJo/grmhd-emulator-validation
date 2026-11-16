@@ -89,8 +89,10 @@ def compute(ctx, *, space='loss', starts=None, legacy=False):
     selected=production_starts(ctx) if starts is None else list(starts)
     ids=getattr(ctx,'regression_ids',None) if legacy else None
     resolved=not legacy and ctx.split.split_id.startswith('rc300')
-    truth=decorrelation(ctx.reader,ctx.geometry,ctx.constants,space=space,ids=ids,
+    from ..truth_cache import truth_value
+    calculate_truth=lambda:decorrelation(ctx.reader,ctx.geometry,ctx.constants,space=space,ids=ids,
                          resolved=resolved,max_dumps=200 if legacy else None,legacy=legacy)
+    truth=calculate_truth() if legacy else truth_value(ctx,'correlation_time',{'space':space,'resolved':resolved},calculate_truth)
     model=[];persistence=[]
     for start in selected:
         states=ctx.full.ensure_rollout(start,ctx.protocol['max_steps']);initial=ctx.reader.numpy(start)
@@ -105,13 +107,17 @@ def compute(ctx, *, space='loss', starts=None, legacy=False):
             predicted=transform(states[step],ctx.constants,space)
             held=transform(initial,ctx.constants,space)
             errors.append(np.mean(np.abs(predicted-true).reshape(8,-1),axis=1))
-            baseline.append(np.mean(np.abs(held-true).reshape(8,-1),axis=1))
+            calculate_baseline=lambda:np.mean(np.abs(held-true).reshape(8,-1),axis=1)
+            baseline.append(truth_value(ctx,'persistence_rollout',{'start':int(start),'step':step},calculate_baseline)
+                            if space=='loss' else calculate_baseline())
         model.append(errors);persistence.append(baseline)
     result={**truth,**horizon(np.asarray(model,dtype=np.float64),np.asarray(persistence,dtype=np.float64),truth['tau_c'],ctx.split.dt_dump,ctx.constants),
             'resolved_mask':resolved,'starts':selected}
+    result['nmae_model']=np.asarray(model,dtype=np.float64).mean(axis=0)
+    result['nmae_persistence']=np.asarray(persistence,dtype=np.float64).mean(axis=0)
     return {'per_start':[{'start':int(selected[0]),'values':result}]}
 
 
 def run(ctx):
-    starts=production_starts(ctx)
-    return emit(ctx,'correlation_times',compute(ctx,space='loss',starts=starts),'loss',starts)
+    from ._final import run as final_run
+    return final_run(ctx,'correlation_times',compute)

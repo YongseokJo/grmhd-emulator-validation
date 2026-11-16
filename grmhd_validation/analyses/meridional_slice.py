@@ -82,7 +82,12 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
     _save_meridional('', xlim=None, ylim=None)
     _save_meridional('_r100', xlim=(0, 100), ylim=(-100, 100))
     _save_meridional('_r250', xlim=(0, 250), ylim=(-250, 250))
-    return sample(**{'X': X, 'Y': Y, 'rho_pred': pm[0], 'rho_truth': tm[0], 'rho_error': log_rho_e, 'B2_pred_log10': b2_p, 'B2_truth_log10': b2_t, 'B2_error': b2_e, 'step': target_step})
+    result=sample(**{'X': X, 'Y': Y, 'rho_pred': pm[0], 'rho_truth': tm[0], 'rho_error': log_rho_e, 'B2_pred_log10': b2_p, 'B2_truth_log10': b2_t, 'B2_error': b2_e, 'step': target_step})
+    if current()['space']=='physical':
+        del result['B2_pred_log10'];del result['B2_truth_log10']
+        result['B2_pred']=b2_magnitude(pred,geo_raw)[:,:,pred.shape[3]//2]
+        result['B2_truth']=b2_magnitude(target,geo_raw)[:,:,target.shape[3]//2]
+    return result
 
 def compute(ctx, *, space="physical", starts=None):
     """Numerical core: explicit space and one/all starts for source regression."""
@@ -90,5 +95,5 @@ def compute(ctx, *, space="physical", starts=None):
 
 
 def run(ctx):
-    starts=production_starts(ctx)
-    return emit(ctx,'meridional_slice',compute(ctx,space="physical",starts=starts),"physical",starts)
+    from ._final import run as final_run
+    return final_run(ctx,'meridional_slice',compute)

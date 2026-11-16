@@ -82,8 +82,19 @@ class FullAnalysisTests(FullFixture):
             with self.subTest(analysis=name):
                 result=importlib.import_module('grmhd_validation.analyses.'+name).run(ctx)
                 self.assertEqual(result['analysis'],name)
+                expected=[s for group in ctx.starts for s in (group.every if name in {'conditional_error','error_correlation'} else group.rollout)]
+                self.assertEqual(result['starts'],expected)
+                self.assertEqual(result['data']['aggregate']['n_starts'],len(expected))
+                np.testing.assert_allclose(result['data']['time']['rg_c'],np.arange(1,9)*25.)
                 self.assertTrue((ctx.writer.root/'metrics'/(name+'.json')).is_file())
                 self.assertTrue((ctx.writer.root/'tables'/(name+'.csv')).is_file())
+                from grmhd_validation.analyses._port_manifest import FIGURES
+                from grmhd_validation.analyses._figures import SIZES
+                import struct
+                for index,filename in enumerate(FIGURES.get(name,{}).values()):
+                    content=(ctx.writer.root/'figures'/filename).read_bytes()
+                    dimensions=struct.unpack('>II',content[16:24])
+                    self.assertEqual(dimensions,tuple(int(x*ctx.constants['figures']['dpi']) for x in SIZES[name][index]))
                 if name=='azimuthal_spectra':
                     spectra=result['data']['per_start'][0]['values']['truth']
                     self.assertTrue(np.isfinite(next(iter(next(iter(spectra.values())).values()))).all())
@@ -94,6 +105,10 @@ class FullAnalysisTests(FullFixture):
 
     def test_full_runner_publishes_and_repeat_content_is_identical(self):
         self.golden();self.conform()
+        from grmhd_validation.conformance import reference,conformance
+        reference('synthetic_v1',tier='full',storage=self.storage(),repo=self.repo)
+        verdict=conformance('synthetic_v1',tier='full',storage=self.storage(),repo=self.repo)
+        self.assertTrue(verdict['ok'],verdict)
         # Publication lifecycle remains tested while unfinished production is gated.
         with patch('grmhd_validation.runner.full_tier_ready',return_value=True):
             first=self.run_eval(tier='full');self.assertTrue(first['ok'],first)

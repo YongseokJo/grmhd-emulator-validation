@@ -67,7 +67,9 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         xc_t = target_n[c][r_disk][:, eq_disk]
         xc_p = pred_n[c][r_disk][:, eq_disk]
         zp, r2p, s3p = structure_function_exponents(xc_p)
-        zt, r2t, s3t = structure_function_exponents(xc_t)
+        from ..truth_cache import truth_value
+        calculate=lambda:structure_function_exponents(xc_t)
+        zt,r2t,s3t = truth_value(ctx,'structure_functions',{'dump':int(args.start+n_steps),'channel':c},calculate) if current()['space']=='physical' else calculate()
         str_z2_p = f'{zp[0]:.3f} ({r2p[0]:.2f})'
         str_z2_t = f'{zt[0]:.3f} ({r2t[0]:.2f})'
         str_s3 = f'{s3p:+.2e}/{s3t:+.2e}'
@@ -80,5 +82,5 @@ def compute(ctx, *, space="physical", starts=None):
 
 
 def run(ctx):
-    starts=production_starts(ctx)
-    return emit(ctx,'turbulence_stats',compute(ctx,space="physical",starts=starts),"physical",starts)
+    from ._final import run as final_run
+    return final_run(ctx,'turbulence_stats',compute)

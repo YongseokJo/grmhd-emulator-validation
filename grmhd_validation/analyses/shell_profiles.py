@@ -152,5 +152,5 @@ def compute(ctx, *, space='physical', starts=None):
     return execute_core(ctx, 'shell_profiles', _compute, space, starts, native_multi=False)
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'shell_profiles', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'shell_profiles',compute)

@@ -1,0 +1,77 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+  "schema_version": {
+   "const": 1
+  },
+  "data_verified": {
+   "const": true
+  },
+  "split_id": {
+   "type": "string"
+  },
+  "partition": {
+   "enum": [
+    "validation",
+    "test"
+   ]
+  },
+  "protocol_id": {
+   "type": "string"
+  },
+  "source_commit": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "entries": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "string",
+    "pattern": "^[0-9a-f]{64}$"
+   }
+  },
+  "split_file_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "geometry_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "protocol_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "data_manifest_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "cache_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "channel_scales_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  }
+ },
+ "required": [
+  "schema_version",
+  "data_verified",
+  "split_id",
+  "partition",
+  "protocol_id",
+  "source_commit",
+  "entries",
+  "split_file_sha256",
+  "geometry_sha256",
+  "protocol_sha256",
+  "data_manifest_sha256",
+  "cache_sha256",
+  "channel_scales_sha256"
+ ],
+ "additionalProperties": false
+}

@@ -62,5 +62,5 @@ def compute(ctx, *, space="physical", starts=None):
 
 
 def run(ctx):
-    starts=production_starts(ctx)
-    return emit(ctx,'error_correlation',compute(ctx,space="physical",starts=starts),"physical",starts)
+    from ._final import run as final_run
+    return final_run(ctx,'error_correlation',compute)

@@ -80,6 +80,7 @@ class Context:
     full: object = None
     channel_scales: object = None
     run_info: object = None
+    truth_cache: object = None
 
     @property
     def constants(self):
@@ -109,7 +110,7 @@ def metadata(request, split, protocol, protocol_sha, checkpoint_sha, device, env
             "result_fingerprint": None, "runner_autocast": False}
 
 
-def execute(request, split, protocol, protocol_sha, partition, writer, device, verify_data, repo=REPO, run_info=None, tier='quick'):
+def execute(request, split, protocol, protocol_sha, partition, writer, device, verify_data, repo=REPO, run_info=None, tier='quick',truth_cache=None):
     """Shared by evaluate, reference and conformance; callers own output placement."""
     environment = check_environment(repo)
     if environment["status"] == "fail":
@@ -139,6 +140,11 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
             info["rollout_starts"] = {entry.chunk: list(entry.rollout) for entry in starts}
             ctx = Context(adapter, geometry, reader, starts, protocol, split, partition, device, writer)
             ctx.run_info = info
+            from .truth_cache import open_cache
+            ctx.truth_cache=truth_cache if truth_cache is not None else open_cache(writer.storage,split,partition,protocol,protocol_sha,required=tier=='full' and full_tier_ready(protocol))
+            if ctx.truth_cache is not None and ctx.truth_cache.manifest is not None:
+                info['truth_cache_sha256']=ctx.truth_cache.manifest['cache_sha256']
+                info['truth_cache_manifest_sha256']=sha256(ctx.truth_cache.path/'manifest.json')
             from .analyses import single_step, rollout_curve
             analyses = {"single_step": single_step, "rollout_curve": rollout_curve}
             if tier=='full':
@@ -156,6 +162,7 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
                 print('analysis:',name,flush=True)
                 summary[name] = analyses[name].run(ctx)
             if ctx.full is not None:ctx.full.cleanup()
+            if truth_cache is None and ctx.truth_cache is not None:ctx.truth_cache.close()
             schema_validate(summary, "summary.schema.json")
             writer.json("summary.json", summary)
             for name in summary:
@@ -218,7 +225,7 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
         info = {**metadata(request, split, protocol, protocol_sha, checkpoint_sha, device, environment, repo),
                 "run_id": run_id, "attempt": attempt, "split": partition, "tier": tier, "status": "running"}
         from .conformance import last_conformance
-        info["conformance"] = last_conformance(storage, split_id, protocol_sha, environment)
+        info["conformance"] = last_conformance(storage, split_id, protocol_sha, environment,tier='full' if tier=='full' and full_tier_ready(protocol) else 'quick')
         info["no_verify_data"] = no_verify_data
         execute(request, split, protocol, protocol_sha, partition, writer, device, not no_verify_data, repo, info,tier)
         if tier=='full' and not full_tier_ready(protocol):

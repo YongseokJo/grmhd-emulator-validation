@@ -1,125 +1,215 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "analysis": {
-      "const": "meridional_slice"
-    },
-    "space": {
-      "enum": [
-        "loss",
-        "physical"
-      ]
-    },
-    "starts": {
-      "type": "array",
-      "items": {
-        "type": "integer"
-      },
-      "minItems": 1,
-      "uniqueItems": true
-    },
-    "data": {
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+  "analysis": {
+   "const": "meridional_slice"
+  },
+  "space": {
+   "enum": [
+    "loss",
+    "physical"
+   ]
+  },
+  "starts": {
+   "type": "array",
+   "items": {
+    "type": "integer"
+   },
+   "minItems": 1,
+   "uniqueItems": true
+  },
+  "data": {
+   "type": "object",
+   "properties": {
+    "per_start": {
+     "type": "array",
+     "items": {
       "type": "object",
       "properties": {
-        "per_start": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "start": {
-                "type": "integer"
-              },
-              "values": {
-                "type": "object",
-                "properties": {
-                  "X": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "Y": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "rho_pred": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "rho_truth": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "rho_error": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "B2_pred_log10": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "B2_truth_log10": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "B2_error": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "step": {
-                    "$ref": "#/$defs/value"
-                  }
-                },
-                "required": [
-                  "X",
-                  "Y",
-                  "rho_pred",
-                  "rho_truth",
-                  "rho_error",
-                  "B2_pred_log10",
-                  "B2_truth_log10",
-                  "B2_error",
-                  "step"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "required": [
-              "start",
-              "values"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 1
-        }
+       "start": {
+        "type": "integer"
+       },
+       "values": {
+        "$ref": "#/$defs/values"
+       }
       },
       "required": [
-        "per_start"
+       "start",
+       "values"
       ],
       "additionalProperties": false
-    }
-  },
-  "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-  ],
-  "additionalProperties": false,
-  "$defs": {
-    "value": {
-      "anyOf": [
-        {
-          "type": [
-            "number",
-            "boolean",
-            "null"
-          ]
+     },
+     "minItems": 1
+    },
+    "aggregate": {
+     "type": "object",
+     "properties": {
+      "mean": {
+       "$ref": "#/$defs/values"
+      },
+      "lower": {
+       "$ref": "#/$defs/values"
+      },
+      "upper": {
+       "$ref": "#/$defs/values"
+      },
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "bootstrap": {
+       "type": "object",
+       "properties": {
+        "method": {
+         "const": "chunk_block_bootstrap"
         },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/value"
-          }
+        "block_length": {
+         "type": "integer",
+         "minimum": 1
         },
-        {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/value"
-          }
+        "n_blocks": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "resamples": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "seed": {
+         "type": "integer"
         }
-      ]
+       },
+       "required": [
+        "method",
+        "block_length",
+        "n_blocks",
+        "resamples",
+        "seed"
+       ],
+       "additionalProperties": false
+      },
+      "valid_counts": {
+       "type": "object",
+       "additionalProperties": {
+        "$ref": "#/$defs/value"
+       }
+      }
+     },
+     "required": [
+      "mean",
+      "lower",
+      "upper",
+      "n_starts",
+      "bootstrap",
+      "valid_counts"
+     ],
+     "additionalProperties": false
+    },
+    "time": {
+     "type": "object",
+     "properties": {
+      "steps": {
+       "$ref": "#/$defs/value"
+      },
+      "rg_c": {
+       "$ref": "#/$defs/value"
+      },
+      "tau_c": {
+       "$ref": "#/$defs/value"
+      }
+     },
+     "required": [
+      "steps",
+      "rg_c",
+      "tau_c"
+     ],
+     "additionalProperties": false
     }
+   },
+   "required": [
+    "per_start",
+    "aggregate",
+    "time"
+   ],
+   "additionalProperties": false
   }
+ },
+ "required": [
+  "analysis",
+  "space",
+  "starts",
+  "data"
+ ],
+ "additionalProperties": false,
+ "$defs": {
+  "value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/value"
+     }
+    }
+   ]
+  },
+  "values": {
+   "type": "object",
+   "properties": {
+    "X": {
+     "$ref": "#/$defs/value"
+    },
+    "Y": {
+     "$ref": "#/$defs/value"
+    },
+    "rho_pred": {
+     "$ref": "#/$defs/value"
+    },
+    "rho_truth": {
+     "$ref": "#/$defs/value"
+    },
+    "rho_error": {
+     "$ref": "#/$defs/value"
+    },
+    "B2_error": {
+     "$ref": "#/$defs/value"
+    },
+    "step": {
+     "$ref": "#/$defs/value"
+    },
+    "B2_pred": {
+     "$ref": "#/$defs/value"
+    },
+    "B2_truth": {
+     "$ref": "#/$defs/value"
+    }
+   },
+   "required": [
+    "X",
+    "Y",
+    "rho_pred",
+    "rho_truth",
+    "rho_error",
+    "B2_error",
+    "step",
+    "B2_pred",
+    "B2_truth"
+   ],
+   "additionalProperties": false
+  }
+ }
 }

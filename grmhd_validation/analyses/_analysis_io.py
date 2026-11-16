@@ -122,6 +122,7 @@ def load_dump(reader, index):
     if index not in reader.allowed or index not in set(dump_ids(reader)):return None
     value=reader.numpy(index)
     if state['space']=='physical':value=value.astype(np.float64)
+    state['ctx'].reader.tag(value,index)
     state['arrays'][id(value)]=(weakref.ref(value),index)
     return value
 
@@ -143,7 +144,8 @@ def to_device(raw, device):
     result=torch.as_tensor(np.array(raw,copy=True),device=device,dtype=dtype)
     if result.ndim==4:result=result[None]
     record=current()['arrays'].get(id(raw))
-    if record is not None and record[0]() is raw:result._gval_dump_id=record[1]
+    index=record[1] if record is not None and record[0]() is raw else current()['ctx'].reader.lookup(raw)
+    if index is not None:result._gval_dump_id=index
     return result
 
 
@@ -209,6 +211,7 @@ def sample(**values):
 
 def save_figure(figure, source_path):
     state=current();ctx=state['ctx'];name=state['analysis']
+    if getattr(ctx,'suppress_figures',False):return
     from ._port_manifest import FIGURES
     filename=FIGURES[name][Path(source_path).name]
     from matplotlib.text import Text

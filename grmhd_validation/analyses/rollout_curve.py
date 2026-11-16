@@ -27,7 +27,7 @@ def start_skill_ci(model, persistence, protocol):
     return ci(bootstraps, protocol["constants"])
 
 
-def truth_sigma(ctx):
+def _truth_sigma(ctx):
     values = []
     stride = ctx.constants["attractor"]["sigma_dump_stride"]
     for chunk in ctx.split.chunks(ctx.partition):
@@ -35,6 +35,11 @@ def truth_sigma(ctx):
             transformed = loss_space(ctx.reader.numpy(index), ctx.constants)
             values.append(transformed.reshape(8, -1).std(axis=1, ddof=0))
     return np.ascontiguousarray(values).mean(axis=0)
+
+
+def truth_sigma(ctx):
+    from ..truth_cache import truth_value
+    return truth_value(ctx,'attractor_sigma',{},lambda:_truth_sigma(ctx))
 
 
 def plot(ctx, mean, std, baseline, per_channel):
@@ -86,7 +91,8 @@ def run(ctx):
                 if getattr(ctx,'full',None) is not None:ctx.full.save('rollout',start,step,output[0].cpu().numpy())
                 truth = ctx.reader.numpy(start + step)
                 model_curve.append(nmae(output[0].cpu().numpy(), truth, ctx.constants))
-                baseline_curve.append(nmae(initial, truth, ctx.constants))
+                from ..truth_cache import truth_value
+                baseline_curve.append(truth_value(ctx,'persistence_rollout',{'start':int(start),'step':step},lambda:nmae(initial,truth,ctx.constants)))
                 import torch
                 history = torch.cat((history[:, 1:], output.unsqueeze(1)), dim=1)
             models.append(model_curve); persistence.append(baseline_curve)

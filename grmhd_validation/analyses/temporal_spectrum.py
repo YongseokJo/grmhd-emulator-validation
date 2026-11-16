@@ -20,6 +20,9 @@ E_YMAX_CAP = 100000.0
 L_YMAX_CAP = 1000000.0
 
 def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
+    if current()['space']=='physical':
+        from ._profiles import temporal_spectrum as physical_profiles
+        return physical_profiles(ctx,args.start)
     geo, geo_raw = geometry_views(ctx.geometry)
     _records = []
     'Temporal Fourier power spectrum P(f) = |rfft(x*w)|^2 / (fs * sum(w^2)) pred vs truth,\n    evaluated separately in the turbulent disk core and the polar jet funnel.\n    Diagnoses temporal dynamical fidelity: catches artificial laminar freezing\n    (premature high-f decay) and numerical flicker/instability (high-f surge).'
@@ -112,5 +115,5 @@ def compute(ctx, *, space='physical', starts=None):
     return execute_core(ctx, 'temporal_spectrum', _compute, space, starts, native_multi=False)
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'temporal_spectrum', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'temporal_spectrum',compute)

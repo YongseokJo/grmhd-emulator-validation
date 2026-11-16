@@ -78,7 +78,9 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         axes[2, j].set_xlabel('$r\\sin\\theta\\;[R_g]$')
         if j == 0:
             axes[2, j].set_ylabel('$r\\cos\\theta\\;[R_g]$')
-        _records.append(sample(step=hh, truth=Z_t, pred=Z_f, error=Z_err))
+        if current()['space']=='physical':
+            _records.append(sample(step=hh,truth=t[0,:,:,phi_idx_t],pred=f[0,:,:,phi_idx_f],error=Z_err))
+        else:_records.append(sample(step=hh, truth=Z_t, pred=Z_f, error=Z_err))
     fig.suptitle(f'Meridional log10 rho rollout evolution (start {args.start}, r <= {disk_limit():.0f} Rg)', fontsize=13)
     plt.tight_layout()
     path = os.path.join(args.save_dir, 'fig16_rollout_evolution.png')
@@ -92,5 +94,5 @@ def compute(ctx, *, space="physical", starts=None):
 
 
 def run(ctx):
-    starts=production_starts(ctx)
-    return emit(ctx,'rollout_evolution',compute(ctx,space="physical",starts=starts),"physical",starts)
+    from ._final import run as final_run
+    return final_run(ctx,'rollout_evolution',compute)

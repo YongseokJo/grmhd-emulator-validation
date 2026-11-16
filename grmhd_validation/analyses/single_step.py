@@ -41,7 +41,8 @@ def run(ctx):
             if getattr(ctx,'full',None) is not None:ctx.full.save('single',start,1,prediction)
             truth = ctx.reader.numpy(start + 1)
             models.append(nmae(prediction, truth, ctx.constants))
-            persistence.append(nmae(initial, truth, ctx.constants))
+            from ..truth_cache import truth_value
+            persistence.append(truth_value(ctx,'persistence_single',{'start':int(start)},lambda:nmae(initial,truth,ctx.constants)))
             relatives.append(relative_l1(prediction, truth, ctx.constants))
         print(f"single_step {selected.chunk}: {len(selected.every)}/{len(selected.every)} starts", flush=True)
     models, persistence = np.ascontiguousarray(models), np.ascontiguousarray(persistence)

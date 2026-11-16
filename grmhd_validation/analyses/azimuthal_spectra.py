@@ -53,7 +53,9 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         p_dump = states[h]
         t_norm = norm_cpu(to_tensor_cpu(t_dump))[0].numpy()
         p_norm = norm_cpu(to_tensor_cpu(p_dump))[0].numpy()
-        truth_specs[h] = {c: m_spec(t_norm, c).mean(axis=(0, 1)) for c in channels}
+        from ..truth_cache import truth_value
+        calculate=lambda: {c:m_spec(t_norm,c).mean(axis=(0,1)) for c in channels}
+        truth_specs[h] = truth_value(ctx,'azimuthal_spectra',{'dump':int(args.start+h)},calculate) if current()['space']=='physical' else calculate()
         pred_specs[h] = {c: m_spec(p_norm, c).mean(axis=(0, 1)) for c in channels}
     m_axis = np.arange(len(truth_specs[horizons[0]][channels[0]]))
     m_nyq = len(m_axis) - 1
@@ -109,5 +111,5 @@ def compute(ctx, *, space='physical', starts=None):
     return execute_core(ctx, 'azimuthal_spectra', _compute, space, starts, native_multi=False)
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'azimuthal_spectra', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'azimuthal_spectra',compute)
