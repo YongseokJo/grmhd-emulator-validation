@@ -94,8 +94,10 @@ class FullAnalysisTests(FullFixture):
 
     def test_full_runner_publishes_and_repeat_content_is_identical(self):
         self.golden();self.conform()
-        first=self.run_eval(tier='full');self.assertTrue(first['ok'],first)
-        second=self.run_eval(tier='full');self.assertTrue(second['ok'],second)
+        # Publication lifecycle remains tested while unfinished production is gated.
+        with patch('grmhd_validation.runner.full_tier_ready',return_value=True):
+            first=self.run_eval(tier='full');self.assertTrue(first['ok'],first)
+            second=self.run_eval(tier='full');self.assertTrue(second['ok'],second)
         self.assertEqual(result_files(first['run_dir']),result_files(second['run_dir']))
         info=json.loads((Path(first['run_dir'])/'run.json').read_text())
         self.assertIn('cost',info['analysis_runtime'])

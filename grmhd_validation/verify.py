@@ -60,6 +60,11 @@ def _verify_bundle(path, repo=None):
 
 def verify_run(path, repo=None):
     """An unsealed COMPLETE run is not eligible for comparison or reporting."""
+    path=Path(path)
+    if (path/'PREVIEW').is_file() and not (path/'FAILED').exists():
+        info=json.loads((path/'run.json').read_text())
+        return {'ok':False,'preview':True,'run_dir':str(path),'reason':info.get('preview_reason'),
+                'next':'Preview is excluded from publication and leaderboard comparison'}
     return _verify_bundle(path, repo)
 
 
@@ -90,6 +95,9 @@ def compare_runs(left, right, repo=None):
         if not verify_run(path, repo)["ok"]:
             raise ValueError("Comparison excludes unsealed runs; run gval seal first")
     a, b = (json.loads((Path(root) / "run.json").read_text()) for root in (left, right))
+    from .comparison import comparison_key
+    if comparison_key(a)!=comparison_key(b):
+        raise ValueError('Comparison requires the same split, protocol ID, protocol SHA256 and tier')
     for key in ("request", "split_file_sha256", "protocol_sha256", "split", "tier", "checkpoint_sha256"):
         if a[key] != b[key]:
             raise ValueError("Comparison requires the same request, checkpoint, split, protocol, and tier")

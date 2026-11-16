@@ -4,6 +4,11 @@ from pathlib import Path
 from .hashing import sha256
 
 
+def full_tier_ready(protocol):
+    """Only the final owner-reviewed protocol can authorize full publication."""
+    return protocol['constants']['full'].get('production_ready') is True
+
+
 def read_protocol(path):
     path = Path(path)
     data = json.loads(path.read_text())

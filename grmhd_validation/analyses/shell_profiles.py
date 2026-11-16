@@ -62,7 +62,7 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
             E_t, L_t = conserved_shells(target, crit, norm)
             E_p, E_t = (E_p[0, 0].cpu().numpy(), E_t[0, 0].cpu().numpy())
             L_p, L_t = (L_p[0, 0].cpu().numpy(), L_t[0, 0].cpu().numpy())
-        n_ang = float(crit.gdet.shape[-2] * crit.gdet.shape[-1])
+        n_ang = mass_angular_count(pred_np,crit)
         M_p = M_p / n_ang
         M_t = M_t / n_ang
         r0 = r_mid[mask_M]

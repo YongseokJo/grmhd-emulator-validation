@@ -229,7 +229,8 @@
       "enum": [
         "running",
         "complete",
-        "failed"
+        "failed",
+        "preview"
       ]
     },
     "tier": {
@@ -282,6 +283,10 @@
     "channel_scales_sha256": {
       "type": "string",
       "pattern": "^[0-9a-f]{64}$"
+    },
+    "preview_reason": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "required": [
@@ -314,5 +319,24 @@
     "result_fingerprint",
     "runner_autocast"
   ],
-  "type": "object"
+  "type": "object",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "preview"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "required": [
+          "preview_reason"
+        ]
+      }
+    }
+  ]
 }

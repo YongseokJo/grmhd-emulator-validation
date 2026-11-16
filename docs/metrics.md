@@ -119,11 +119,16 @@ normalized-divergence magnetic denominator. Spectra/structure/conditional errors
 in physical space can rank models differently from normalized-space diagnostics;
 this is the intended §4 change and should be reviewed as such.
 
-The milestone-3 mass shell plots/table retain the original normalization by
+The milestone-3 mass shell plots/table retained the original normalization by
 `gdet.shape[-2]*gdet.shape[-1]`. When geometry stores a singleton phi axis, this
-is not the number of physical angular cells. Energy/angular profiles use the
-physical array's angular count. This source convention is exposed for review
-and is not silently repaired in the legacy port. Full all-start/ring/transport
+is not the number of physical angular cells. Milestone 4 corrects production
+fig 5 and Table 2 to divide by the physical Ntheta*Nphi, as energy/angular
+profiles already do. The original expression remains only for `space="loss"`
+legacy regression. For rho=1/2 at rest, production mass profiles are 1/2 and
+the signed-log error is log(3)-log(2), independent of geometry's phi storage;
+legacy profiles are multiplied by Nphi. A synthetic singleton-phi test checks
+both profiles and the changed Table-2 error. See the [owner's note for Kevin](notes/mass_shell_normalization_for_kevin.md).
+Full all-start/ring/transport
 improvements remain deferred as above. Temporal-spectrum frequency labels use
 `c/R_g` instead of the original unsupported mathtext `text` command, so the
 declared Matplotlib 3.7 minimum can render every full-tier figure.

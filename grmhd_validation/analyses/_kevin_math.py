@@ -67,6 +67,12 @@ def mass_shells(raw_t, crit, norm):
     u0 = norm.u0_of(x[:, 2:5])
     return torch.sum(rho * u0 * crit.gdet, dim=(3, 4))
 
+
+def mass_angular_count(raw,crit):
+    """Physical cells in production; original geometry-buffer count in legacy."""
+    if current()['space']=='loss':return float(crit.gdet.shape[-2]*crit.gdet.shape[-1])
+    return float(raw.shape[-2]*raw.shape[-1])
+
 def conserved_shells(raw_t, crit, norm):
     """Per-shell angular-mean conserved densities:
     E(r) = rest-mass-subtracted binding-energy density: (1/N_ang) sum_{theta,phi} sqrt(-g) (T^t_0 + rho u^0)

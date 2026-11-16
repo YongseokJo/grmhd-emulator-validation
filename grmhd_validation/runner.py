@@ -23,7 +23,7 @@ from .data import FrameReader, load_geometry
 from .environment import check_environment, platform_id
 from .hashing import sha256
 from .permissions import SharedStorage
-from .protocol import read_protocol
+from .protocol import read_protocol,full_tier_ready
 from .runstore import UnsealedRunError, publish, reserve
 from .slurm import require_compute
 from .splits import CHANNELS, identifier, read_split
@@ -172,10 +172,10 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
     return info
 
 
-def bundle_checksums(writer):
+def bundle_checksums(writer, complete=True):
     files = {p.relative_to(writer.root).as_posix(): sha256(p) for p in sorted(writer.root.rglob("*")) if p.is_file() and p.name not in {"checksums.json", "COMPLETE"}}
     writer.json("checksums.json", files)
-    writer.write("COMPLETE", (fingerprint(result_files(writer.root)) + "\n").encode())
+    if complete:writer.write("COMPLETE", (fingerprint(result_files(writer.root)) + "\n").encode())
 
 
 def record_failure(writer, info, error):
@@ -221,6 +221,16 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
         info["conformance"] = last_conformance(storage, split_id, protocol_sha, environment)
         info["no_verify_data"] = no_verify_data
         execute(request, split, protocol, protocol_sha, partition, writer, device, not no_verify_data, repo, info,tier)
+        if tier=='full' and not full_tier_ready(protocol):
+            reason='Milestone 4 final full-tier semantics are not approved: all-start CIs, transport/coarse-ring handling and truth cache are required'
+            info.update(status='preview',preview_reason=reason)
+            writer.json('run.json',info)
+            schema_validate(info,'run.schema.json')
+            writer.write('PREVIEW',(reason+'\n').encode())
+            bundle_checksums(writer,complete=False)
+            storage.make_readonly(root)
+            return {'ok':True,'preview':True,'next':'Review this staging preview; await final full-tier protocol',
+                    'run_id':run_id,'run_dir':str(root),'reason':reason,'result_fingerprint':info['result_fingerprint']}
         info["status"] = "complete"
         writer.json("run.json", info)
         bundle_checksums(writer)

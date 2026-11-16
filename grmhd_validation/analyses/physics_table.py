@@ -44,7 +44,7 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         prev_pred = states_torch[h - 1]
         curr_pred = states_torch[h]
         with torch.no_grad():
-            n_ang = float(crit.gdet.shape[-2] * crit.gdet.shape[-1])
+            n_ang = mass_angular_count(pred_np,crit)
             M_p = mass_shells(pred_np, crit, norm)[0, 0] / n_ang
             M_t = mass_shells(target, crit, norm)[0, 0] / n_ang
             (E_p, L_p), (E_t, L_t) = (conserved_shells(pred_np, crit, norm), conserved_shells(target, crit, norm))
