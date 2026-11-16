@@ -99,7 +99,7 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
     if current()['space']=='physical':
         rho_full=np.full(len(m_rho),np.nan);rho_full[m_rho]=ratio_rho;ratio_rho=rho_full
         b_full=np.full(len(m_br),np.nan);b_full[m_br]=ratio_br;ratio_br=b_full
-    return sample(**{'samples': _records, 'rho_modes': k0t, 'rho_ratio': ratio_rho, 'rho_ratio_mask': m_rho, 'B1_modes': kt2, 'B1_ratio': ratio_br, 'B1_ratio_mask': m_br, 'step': n_steps})
+    return sample(**{'samples': _records, 'rho_modes': k0t[1:] if current()['space']=='physical' else k0t, 'rho_ratio': ratio_rho, 'rho_ratio_mask': m_rho, 'B1_modes': kt2[1:] if current()['space']=='physical' else kt2, 'B1_ratio': ratio_br, 'B1_ratio_mask': m_br, 'step': n_steps})
 
 def compute(ctx, *, space="physical", starts=None):
     """Numerical core: explicit space and one/all starts for source regression."""

@@ -98,6 +98,12 @@ class FullAnalysisTests(FullFixture):
                 if name=='azimuthal_spectra':
                     spectra=result['data']['per_start'][0]['values']['truth']
                     self.assertTrue(np.isfinite(next(iter(next(iter(spectra.values())).values()))).all())
+                if name=='spectrum':
+                    for row in result['data']['per_start']:
+                        for channel in ('rho','B1'):
+                            values=row['values']
+                            self.assertEqual(len(values[channel+'_modes']),len(values[channel+'_ratio']))
+                            self.assertEqual(len(values[channel+'_ratio_mask']),len(values[channel+'_ratio']))
                 if name=='mean_profiles':
                     self.assertTrue(np.isfinite(result['data']['per_start'][0]['values']['omega_truth']).all())
         ctx.full.cleanup()
