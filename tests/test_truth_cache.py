@@ -1,5 +1,7 @@
 """Owner build/read conformance and corruption guards for shared truth caches."""
 import json
+import sqlite3
+import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,6 +15,16 @@ from grmhd_validation.truth_cache import TruthCache,cache_path,identity,encode,d
 
 
 class TruthCacheTests(FullFixture):
+    def test_build_flushes_each_entry_before_the_next_calculation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cache=TruthCache(directory,building=True)
+            try:
+                expected=np.arange(100,dtype=np.float32)
+                np.testing.assert_array_equal(cache.value('incremental',{},lambda:expected),expected)
+                self.assertFalse(cache.connection.in_transaction)
+                with sqlite3.connect(Path(directory)/'quantities.sqlite3') as independent:
+                    self.assertEqual(independent.execute('SELECT count(*) FROM quantities').fetchone()[0],1)
+            finally:cache.close()
     def test_full_reference_cache_is_read_only_and_reproduces_result_bytes(self):
         result=reference('synthetic_v1',tier='full',storage=self.storage(),repo=self.repo)
         self.assertTrue(result['ok'],result)

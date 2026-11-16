@@ -32,7 +32,7 @@ for split in ([args.split_id] if args.split_id else expected):
         result=subprocess.run([sys.executable,'-m','grmhd_validation',*command],text=True,capture_output=True)
         try:verdict=json.loads(result.stdout.splitlines()[-1])
         except (ValueError,IndexError):verdict={'ok':False,'stdout':result.stdout,'stderr':result.stderr}
-        entry={'operation':operation,'split_id':split,'seconds':time.monotonic()-start,'verdict':verdict}
+        entry={'operation':operation,'split_id':split,'seconds':time.monotonic()-start,'returncode':result.returncode,'verdict':verdict}
         receipt['steps'].append(entry)
         Path('gval-m4-real-receipt.log').write_text(json.dumps(receipt,indent=1,sort_keys=True)+'\n')
         print(json.dumps(entry,sort_keys=True),flush=True)

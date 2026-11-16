@@ -256,6 +256,26 @@ tests/test_truth_cache.py checks build/read fingerprint identity, corruption,
 strict misses and failed-candidate cleanup. The full synthetic acceptance test
 checks every analysis's complete starts, time units, schema and fixed outputs.
 
+### Bounded evaluation memory
+
+Rollout replay is a disk-backed mapping of float32 states. An analysis reads only
+the frame it reduces, with float64 conversion at that access when required by
+the existing physical computation. Per-start rows retain reduced values; the
+runner collects reference cycles between starts and analyses. Truth-cache
+entries commit individually with a bounded SQLite page cache. Exact pooled
+histogram percentiles use a disk-backed pool and the same NumPy interpolation.
+Completed scratch writes are synchronized, and sequential data/prediction reads
+release clean file-cache pages with POSIX_FADV_DONTNEED. This matters because
+Slurm's cgroup memory charge includes file cache as well as anonymous memory.
+
+No metric definition, summation order, state values or protocol setting changes.
+`tests/test_memory.py` exercises a large grid over one versus eight starts,
+checks float32 storage, and rejects eager full-rollout materialization.
+`logs/memory.json` records per-analysis RSS and cgroup peaks outside result
+content. `scripts/profile_memory.py` profiles three shortened 5000run windows
+in private staging, including truth/persistence cache entries; it never creates
+a reference or benchmark submission.
+
 ## Regression-only checkpoint
 
 `tests/fixtures/tron_legacy_regression.json` pins the owner-approved checkpoint

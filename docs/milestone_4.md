@@ -39,6 +39,11 @@ overall receipt is successful only after both datasets' three operations pass.
 `--operation reference-full`, `--operation reference-quick` and `--operation
 conformance` can split that chain at completed-operation boundaries when an
 interactive partition's wall limit is shorter than the whole validation chain.
+Each completed analysis records process RSS and Slurm cgroup memory in
+`logs/memory.json`. A diagnostic-only short memory profile can be run in the
+same compute environment with
+`python scripts/profile_memory.py --starts 3 --output gval-memory-profile.log`.
+Its shortened windows are never benchmark results or shared references.
 For a separate cache (including test truth), the owner runs
 `gval reference truth --split-id <id> --split validation|test`. Cache entries are
 read-only to readers and pinned by hashes, including training scales. Full

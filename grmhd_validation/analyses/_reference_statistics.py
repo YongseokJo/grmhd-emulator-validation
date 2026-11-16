@@ -17,13 +17,23 @@ def rollout_starts(ctx):
 def histogram_edges(ctx,channel):
     step=max(1,ctx.protocol['max_steps']//ctx.constants['full']['distribution_step_divisor'])
     def calculate():
-        values=np.concatenate([ctx.reader.numpy(start+step)[channel].astype(np.float64).ravel()
-                               for start in rollout_starts(ctx)])
         settings=ctx.constants['full'];logarithmic=channel in (0,1)
-        if logarithmic:
-            values=np.maximum(np.abs(values),settings['epsilon'])
-            low,high=np.percentile(values,settings['histogram_log_percentiles'])
-        else:low,high=np.percentile(values,settings['histogram_linear_percentiles'])
+        starts=rollout_starts(ctx);cells=int(np.prod(ctx.split.shape[1:]))
+        # Exact pooled percentiles, with the pool and in-place partition on disk.
+        # This preserves NumPy's percentile arithmetic without retaining one
+        # volume per start or making percentile's default whole-pool copy.
+        with ctx.writer.open(f'.scratch/histogram-{channel}.bin') as stream:
+            stream.truncate(len(starts)*cells*8)
+        path=ctx.writer.root/f'.scratch/histogram-{channel}.bin'
+        values=np.memmap(path,mode='r+',dtype=np.float64,shape=(len(starts)*cells,))
+        try:
+            for index,start in enumerate(starts):
+                field=ctx.reader.numpy(start+step)[channel].astype(np.float64).ravel()
+                if logarithmic:field=np.maximum(np.abs(field),settings['epsilon'])
+                values[index*cells:(index+1)*cells]=field
+            percentiles=settings['histogram_log_percentiles' if logarithmic else 'histogram_linear_percentiles']
+            low,high=np.percentile(values,percentiles,overwrite_input=True)
+        finally:values._mmap.close()
         if high<=low:
             # An exactly constant truth distribution still has a valid shared bin.
             width=max(abs(low),1.)*np.finfo(np.float64).eps*settings['histogram_bins']

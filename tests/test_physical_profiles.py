@@ -64,4 +64,4 @@ class PhysicalProfileTests(FullFixture):
         low,high=np.percentile(np.maximum(np.abs(values),ctx.constants['full']['epsilon']),ctx.constants['full']['histogram_log_percentiles'])
         with patch.object(ctx.adapter,'step',side_effect=AssertionError('Truth bins cannot call a model')):
             edges=histogram_edges(ctx,channel)
-        np.testing.assert_allclose(edges,np.geomspace(low,high,ctx.constants['full']['histogram_bins']+1),rtol=1e-14)
+        np.testing.assert_array_equal(edges,np.geomspace(low,high,ctx.constants['full']['histogram_bins']+1))

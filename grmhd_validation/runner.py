@@ -158,9 +158,15 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
                 for name in protocol['tiers']['full']:
                     if name not in analyses:analyses[name]=importlib.import_module('.analyses.'+name,__package__)
             summary = {}
+            memory={}
             for name in protocol["tiers"][tier]:
                 print('analysis:',name,flush=True)
-                summary[name] = analyses[name].run(ctx)
+                from .memory import measure
+                with measure(memory,name):
+                    summary[name] = analyses[name].run(ctx)
+                writer.json('logs/memory.json',memory)
+                import gc
+                gc.collect()
             if ctx.full is not None:ctx.full.cleanup()
             if truth_cache is None and ctx.truth_cache is not None:ctx.truth_cache.close()
             schema_validate(summary, "summary.schema.json")

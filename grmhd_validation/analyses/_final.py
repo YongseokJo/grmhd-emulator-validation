@@ -3,6 +3,7 @@
 Pair kernels are adapted from Kevin Fortune/Sachin Venkatesh, main@ebcc218,
 Fall26/eval/evaluate_forecast_ds.py (conditional_error/error_correlation).
 """
+import gc
 import numpy as np
 
 from ._aggregate import aggregate,nanmean
@@ -56,6 +57,9 @@ def run(ctx,name,compute):
             for start in starts:
                 rows.extend(compute(ctx,space=space,starts=[start])['per_start'])
                 if name=='cost':timings.append(ctx.run_info['analysis_runtime']['cost']['milliseconds_per_step'])
+                # Matplotlib and recursive helpers can own reference cycles. Only
+                # reduced result rows may survive into the next start.
+                gc.collect()
     finally:ctx.suppress_figures=previous
     reducers={}
     if name=='conditional_error':

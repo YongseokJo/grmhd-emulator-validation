@@ -4,6 +4,7 @@ Inference/window selection remain owned by the benchmark. Legacy scalar/tensor
 formulas live in the per-analysis modules and _kevin_math, not an imported script.
 """
 from contextlib import contextmanager
+from collections.abc import MutableMapping
 from pathlib import Path
 from types import SimpleNamespace
 import os
@@ -19,6 +20,25 @@ from ._analysis_state import CURRENT, current
 from ._geometry_physics import GeometryCriterion, MetricNormalizer
 
 
+class DiskFrames(MutableMapping):
+    """A rollout index, not a container of materialized volume fields."""
+    def __init__(self,store,start,count,dtype=None):
+        self.store,self.start,self.count,self.dtype=store,int(start),count,dtype
+        self.extra={}
+    def __iter__(self):return iter((*range(1,self.count+1),*self.extra))
+    def __len__(self):return self.count+len(self.extra)
+    def __contains__(self,step):return step in range(1,self.count+1) or step in self.extra
+    def __getitem__(self,step):
+        if step in self.extra:return self.extra[step]
+        if step not in range(1,self.count+1):raise KeyError(step)
+        value=self.store.load('rollout',self.start,step)
+        return value if self.dtype is None else value.astype(self.dtype,copy=False)
+    def __setitem__(self,step,value):
+        if step in range(1,self.count+1):raise ValueError('Cached rollout frames are immutable')
+        self.extra[step]=value
+    def __delitem__(self,step):del self.extra[step]
+
+
 class FullStore:
     """Invocation-owned temporary physical predictions, shared by all analyses."""
     def __init__(self, ctx):
@@ -31,8 +51,13 @@ class FullStore:
         relative=f'.scratch/{kind}/{start}/{step}.npy'
         with self.ctx.writer.open(relative) as stream:
             np.save(stream,np.asarray(value,dtype=np.float32),allow_pickle=False)
+            # Dirty scratch pages cannot be evicted. Make them clean before
+            # advising the kernel that this completed frame need not stay in RAM.
+            stream.flush();os.fdatasync(stream.fileno())
         path=self.ctx.writer.root/relative
         self.paths[key]=path;self.hashes[key]=sha256(path);self.identities[key]=self.identity(path)
+        from ..memory import discard_file_cache
+        discard_file_cache(path)
         diagnostic=getattr(self.ctx.adapter,'lorentz_clamp_count',None)
         measured=int(diagnostic(reset=True)) if diagnostic is not None else None
         if kind=='rollout':
@@ -53,12 +78,20 @@ class FullStore:
         if value.dtype!=np.float32 or value.shape!=self.ctx.split.shape or not np.isfinite(value).all():
             raise ValueError('Invalid cached physical prediction')
         if self.identity(path)!=before:raise ValueError('Prediction cache changed while reading')
+        from ..memory import discard_file_cache
+        discard_file_cache(path)
         return value
 
     def ensure_rollout(self, start, count):
         if all(('rollout',int(start),step) in self.paths for step in range(1,count+1)):
-            # Replay verified predictions without rebuilding an unused history.
-            return {step:self.load('rollout',start,step) for step in range(1,count+1)}
+            # Validate the entire replay without loading its volume fields.
+            for step in range(1,count+1):
+                key=('rollout',int(start),step);path=self.paths[key];before=self.identity(path)
+                if before!=self.identities[key]:
+                    if sha256(path)!=self.hashes[key]:raise ValueError('Private prediction cache changed')
+                    if self.identity(path)!=before:raise ValueError('Prediction cache changed while reading')
+                    self.identities[key]=before
+            return DiskFrames(self,start,count)
         history=self.ctx.reader.history(start,self.ctx.adapter.history_length,self.ctx.device)
         for step in range(1,count+1):
             key=('rollout',int(start),step)
@@ -68,7 +101,7 @@ class FullStore:
                 output=self.ctx.step(history)
                 self.save('rollout',start,step,output[0].cpu().numpy())
             history=torch.cat((history[:,1:],output[:,None]),dim=1)
-        return {step:self.load('rollout',start,step) for step in range(1,count+1)}
+        return DiskFrames(self,start,count)
 
     def cleanup(self):
         storage=self.ctx.writer.storage
@@ -180,6 +213,9 @@ def rollout_predictions(model,norm,init,n_steps,device,dump_id=None):
     state=current();ctx=state['ctx']
     if n_steps>ctx.protocol['max_steps']:raise ValueError('Analysis requested an out-of-protocol horizon')
     values=ctx.full.ensure_rollout(state['start'] if dump_id is None else dump_id,n_steps)
+    if isinstance(values,DiskFrames):
+        values.dtype=np.float64 if state['space']=='physical' else None
+        return values
     return {step:value.astype(np.float64) if state['space']=='physical' else value for step,value in values.items()}
 
 

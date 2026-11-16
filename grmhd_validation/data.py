@@ -64,9 +64,14 @@ class FrameReader:
             verify_file(path, dump.file, self.hashes)
             self.verified[index] = before
         raw = np.load(path, mmap_mode="r", allow_pickle=False)
-        if raw.dtype != np.float32 or tuple(raw.shape) != self.split.shape:
-            raise ValueError("Dump shape/dtype differs from split contract")
-        result = np.array(raw, copy=True, order="C")
+        try:
+            if raw.dtype != np.float32 or tuple(raw.shape) != self.split.shape:
+                raise ValueError("Dump shape/dtype differs from split contract")
+            result = np.array(raw, copy=True, order="C")
+        finally:
+            raw._mmap.close()
+            from .memory import discard_file_cache
+            discard_file_cache(path)
         if _identity(path) != before:
             raise ValueError("Data changed while being read")
         if not np.isfinite(result).all():

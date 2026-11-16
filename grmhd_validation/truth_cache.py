@@ -24,9 +24,13 @@ def encode(value):
         if array.dtype.hasobject:raise ValueError('Object arrays are forbidden in truth caches')
         key='a'+str(len(arrays));arrays[key]=np.ascontiguousarray(array) if array.ndim else array
         return {'array':key,'tensor':tensor,'scalar':not tensor and not isinstance(item,np.ndarray)}
-    tree=pack(value);arrays['__tree__']=np.frombuffer(json_bytes(tree),dtype=np.uint8)
-    stream=io.BytesIO();np.savez_compressed(stream,**arrays)
-    return stream.getvalue()
+    try:
+        tree=pack(value);arrays['__tree__']=np.frombuffer(json_bytes(tree),dtype=np.uint8)
+        stream=io.BytesIO();np.savez_compressed(stream,**arrays)
+        return stream.getvalue()
+    finally:
+        # The recursive closure otherwise keeps its captured arrays alive until GC.
+        arrays.clear()
 
 
 def decode(payload):
@@ -62,7 +66,10 @@ class TruthCache:
         if building:
             self.connection=sqlite3.connect(database)
             self.connection.execute('PRAGMA journal_mode=OFF')
+            self.connection.execute('PRAGMA cache_size=-8192')
+            self.connection.execute('PRAGMA temp_store=FILE')
             self.connection.execute('CREATE TABLE quantities (key TEXT PRIMARY KEY, sha256 TEXT NOT NULL, payload BLOB NOT NULL)')
+            self.connection.commit()
         else:
             record=json.loads((self.path/'manifest.json').read_text())
             schema_validate(record,'truth_cache.schema.json')
@@ -83,6 +90,8 @@ class TruthCache:
                 raise ValueError('Required verified truth-cache entry is missing: '+encoded)
             payload=encode(calculate());digest=hashlib.sha256(payload).hexdigest()
             self.connection.execute('INSERT INTO quantities VALUES (?,?,?)',(encoded,digest,payload))
+            # Flush each reduced entry; no run-sized dirty-page transaction.
+            self.connection.commit()
             self.entries[encoded]=digest
         else:
             digest,payload=row
