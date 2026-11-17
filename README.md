@@ -5,7 +5,7 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestones 1–4 merged; error-map presentation follow-up in progress.** The adapter API,
+**Status: milestones 1–4 merged; error-map presentation follow-up ready for review.** The adapter API,
 persistence, recorded runner, owner goldens, conformance and verification are
 implemented. Milestone 4 adds final all-start aggregates/CIs, audited transport,
 resolved-shell headlines and shared truth caches. The finalized protocol enables
@@ -13,6 +13,8 @@ full publication with a verified truth cache and passing full conformance;
 historical previews stay in staging. Both datasets pass final quick/full
 conformance; the [milestone 4 receipt and figure contact sheet](docs/milestone_4_validation.md)
 record fingerprints, memory measurements and presentation checks.
+The [error-map review receipt and crops](docs/error_map_scales_review.md) cover
+the subsequent logarithmic colour-scale fix. Milestone 5 awaits that review.
 Learned-model examples and prediction mode are milestone 5.
 See [milestone 4 usage](docs/milestone_4.md).
 See [milestone 3 usage and validation](docs/milestone_3.md), [milestone 2 usage](docs/milestone_2.md),
