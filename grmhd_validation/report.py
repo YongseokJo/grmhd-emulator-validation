@@ -1,6 +1,7 @@
 """Verified owner snapshots and deterministic, storage-independent report replay."""
 from contextlib import contextmanager
 import fcntl
+import hashlib
 import io
 import json
 import os
@@ -54,7 +55,9 @@ def protocol_blob(repo,protocol_id,digest):
 
 def valid_record(info,summary,repo):
     schema_validate(info,'run.schema.json')
-    if not isinstance(summary,ReportSummary):schema_validate(summary,'summary.schema.json')
+    if not isinstance(summary,ReportSummary):
+        from .summary import validate as validate_summary
+        validate_summary(summary,legacy=True)
     if info.get('status')!='complete' or info.get('not_evaluated'):
         raise ValueError('Only complete evaluated runs are report records')
     if sha256(Path(repo)/'splits'/(info['split_id']+'.json'))!=info['split_file_sha256']:
@@ -63,6 +66,12 @@ def valid_record(info,summary,repo):
     for name in ([] if isinstance(summary,ReportSummary) else protocol['tiers'][info['tier']]):
         if name not in summary or summary[name].get('status')=='not evaluated':
             raise ValueError('Completed report record lacks an evaluated analysis: '+name)
+    if not isinstance(summary,ReportSummary) and summary.get('schema_version')==2:
+        names=protocol['tiers'][info['tier']]
+        if set(summary['metric_sha256'])!=set(names):raise ValueError('Summary metric-hash coverage differs from protocol')
+        hashes=info.get('result_content_sha256',{})
+        if fingerprint(hashes)!=info['result_fingerprint'] or any(summary['metric_sha256'][n]!=hashes.get('metrics/'+n+'.json') for n in names):
+            raise ValueError('Run fingerprint/metric hashes do not bind the compact summary')
     return protocol
 
 
@@ -157,7 +166,8 @@ def record_row(info,summary,ledger,protocol):
     values=summary.get('physics_table',{}).get('data',{}).get('aggregate',{}).get('mean',{})
     samples=values.get('samples',[])
     final=next((s for s in samples if int(s['step'])==step),{})
-    physics.update({name:final.get(name+'_error') for name in physics})
+    compact=summary.get('physics_table',{}).get('headlines',{})
+    physics.update({name:compact.get('step_'+str(step)+'_'+name+'_error',final.get(name+'_error')) for name in physics})
     return {**{key:info[key] for key in GROUP_FIELDS},'model':info['model'],'version':info['version'],'run_id':info['run_id'],
             'checkpoint_sha256':info['checkpoint_sha256'],'report_step':step,'skill':headline['skill'],'nmae':headline['mean_nmae'],
             'single_step_skill':single['mean']['skill'],'single_step_nmae':single['mean']['nmae_model'],
@@ -209,8 +219,8 @@ def markdown(report):
         lines+=['','Final-step physics errors (undefined for quick):','', '| Run | Mass | Energy | Angular momentum |','|---|---:|---:|---:|']
         for row in group['rows']:lines+=['| '+cell(row['run_id'])+' | '+' | '.join(fmt(row['physics_errors'][c]) for c in ('mass','energy','angular'))+' |']
         prefix=group['protocol_sha256']+'/'+group['split']+'/'+group['tier']+'/'
-        lines+=['','![Rollout comparison]('+prefix+'rollout_comparison.png)',
-                '![Skill comparison]('+prefix+'skill_comparison.png)','']
+        lines+=['','Comparison figures (shared reports or local replay; not stored in Git):',
+                '`'+prefix+'rollout_comparison.png` and `'+prefix+'skill_comparison.png`.','']
     lines+=['## Excluded attempts','']
     if not report['excluded_attempts']:lines+=['None.','']
     else:
@@ -260,7 +270,7 @@ def figures(group,protocol):
 
 def artifacts(report,repo,render=True):
     result={'leaderboard.json':json_bytes(report),'leaderboard.md':markdown(report)}
-    rows=[]
+    rows=[];presentation=[]
     for group in report['groups']:
         for row in group['rows']:
             flat={key:value for key,value in row.items() if key not in {'physical_rel_l1','physics_errors','rollout','unattributed_test_attempts','flags'}}
@@ -269,10 +279,34 @@ def artifacts(report,repo,render=True):
             flat['flags']='; '.join(row['flags']);rows.append(flat)
         prefix=group['protocol_sha256']+'/'+group['split']+'/'+group['tier']+'/'
         if not render:continue
-        result.update({prefix+name:value for name,value in figures(group,protocol_blob(repo,group['protocol_id'],group['protocol_sha256'])).items()})
+        images={prefix+name:value for name,value in figures(group,protocol_blob(repo,group['protocol_id'],group['protocol_sha256'])).items()}
+        result.update(images)
+        presentation.append({'group':{k:group[k] for k in GROUP_FIELDS},'data_sha256':hashlib.sha256(json_bytes(group)).hexdigest(),
+                             'files':{name:hashlib.sha256(value).hexdigest() for name,value in images.items()}})
     fields=list(rows[0]) if rows else ['split_id','protocol_id','protocol_sha256','split','tier','model','run_id','skill','nmae','test_attempts']
     result['leaderboard.csv']=csv_bytes(rows,fields)
+    if render:result['figures.json']=json_bytes({'schema_version':1,'groups':presentation})
     return result
+
+
+def check_figures(root,payload):
+    manifest=read(safe(root,'figures.json'));schema_validate(manifest,'report-figures.schema.json')
+    expected={tuple(g[k] for k in GROUP_FIELDS):g for g in payload['groups']}
+    found=set()
+    for entry in manifest['groups']:
+        key=tuple(entry['group'][k] for k in GROUP_FIELDS)
+        if key not in expected or key in found:raise ValueError('Comparison figure group mismatch')
+        found.add(key);group=expected[key]
+        if entry['data_sha256']!=hashlib.sha256(json_bytes(group)).hexdigest():raise ValueError('Comparison figures are stale for report rows')
+        prefix=group['protocol_sha256']+'/'+group['split']+'/'+group['tier']+'/'
+        if set(entry['files'])!={prefix+'rollout_comparison.png',prefix+'skill_comparison.png'}:raise ValueError('Comparison figure filenames mismatch')
+        for name,digest in entry['files'].items():
+            path=safe(root,name)
+            if sha256(path)!=digest:raise ValueError('Committed comparison figure checksum mismatch: '+name)
+            with path.open('rb') as stream:header=stream.read(24)
+            if header[:8]!=b'\x89PNG\r\n\x1a\n' or header[12:16]!=b'IHDR' or not all(int.from_bytes(header[i:i+4],'big')>0 for i in (16,20)):
+                raise ValueError('Invalid comparison PNG header')
+    if found!=set(expected):raise ValueError('Missing comparison figure group')
 
 
 def local_write(root,files,check=False):
@@ -313,7 +347,8 @@ def report(split_id,from_results=False,export_results=None,check=False,repo=REPO
         require_compute();storage=storage or SharedStorage();storage.require_owner()
         records,ledger=scan(storage,split_id,repo)
     payload=make_report(records,ledger,repo);files=artifacts(payload,repo,render=not check)
-    if from_results:local_write(repo/'reports'/split_id,files,check)
+    if from_results:
+        local_write(repo/'reports'/split_id,files,check)
     else:shared_write(storage,split_id,files)
     if export_results:
         if from_results:raise ValueError('Export requires fully verified shared runs')
@@ -325,26 +360,18 @@ def report(split_id,from_results=False,export_results=None,check=False,repo=REPO
 
 
 def export_snapshot(records,ledger,root):
-    """Export exact originals from verified immutable bundles; no ad-hoc copies."""
-    split_id=ledger['split_id'];destination=Path(root)/'results'/split_id
+    """Export only original summary/run JSON; metrics and PNGs stay off Git."""
+    destination=Path(root)/'results'/ledger['split_id']
     for info,summary,source in records:
+        if (source/'summary.json').stat().st_size>1_000_000:
+            raise ValueError('Legacy oversized summary cannot be exported; completed runs stay immutable and need a new-format evaluation')
         directory=safe(destination,info['model']+'/'+info['run_id']);directory.mkdir(parents=True,exist_ok=True)
-        hashes={}
         for name in ('run.json','summary.json'):
             content=(source/name).read_bytes();target=safe(directory,name)
             if target.exists():
                 if target.read_bytes()!=content:raise FileExistsError('Conflicting exported result: '+str(target))
             else:
                 with target.open('xb') as stream:stream.write(content)
-            hashes[name]=sha256(target)
-        from .artifacts import result_files
-        files=result_files(source)
-        manifest={'schema_version':1,'split_id':split_id,'model':info['model'],'run_id':info['run_id'],
-                  'run_sha256':hashes['run.json'],'summary_sha256':hashes['summary.json'],
-                  'summary_filename':'summary.json','result_files':files,'result_fingerprint':info['result_fingerprint']}
-        target=directory/'export.json';content=json_bytes(manifest)
-        if target.exists() and target.read_bytes()!=content:raise FileExistsError('Conflicting export manifest')
-        if not target.exists():target.write_bytes(content)
         discard_run_cache(source)
     local_write(destination,{'attempts.json':json_bytes(ledger)})
 
@@ -363,15 +390,11 @@ def read_results(repo,split_id):
     records=[];found=set()
     for model in names(directory):
         for path in names(model):
-            manifest=read(path/'export.json');schema_validate(manifest,'result-export.schema.json')
-            if manifest['summary_filename']!='summary.json':raise ValueError('Unsupported exported summary encoding')
-            if sha256(safe(path,'run.json'))!=manifest['run_sha256'] or sha256(safe(path,'summary.json'))!=manifest['summary_sha256']:
-                raise ValueError('Exported result file checksum mismatch')
-            info=read(path/'run.json');summary=read(path/'summary.json');valid_record(info,summary,repo)
+            info=read(safe(path,'run.json'));summary=read(safe(path,'summary.json'));valid_record(info,summary,repo)
             if (info['split_id'],info['model'],info['run_id'])!=(split_id,model.name,path.name):raise ValueError('Export path identity mismatch')
-            if any(manifest[k]!=info[k] for k in ('split_id','model','run_id','result_fingerprint')):raise ValueError('Export identity differs from original run')
-            if manifest['result_files'].get('summary.json')!=manifest['summary_sha256'] or fingerprint(manifest['result_files'])!=info['result_fingerprint']:
-                raise ValueError('Export result fingerprint is not bound to original summary')
+            if info.get('summary_format_version')==2:
+                if info['result_content_sha256'].get('summary.json')!=sha256(path/'summary.json'):
+                    raise ValueError('Exported compact summary checksum mismatch')
             a=eligible.get(info['run_id'])
             if a is None or (a['model'],a['checkpoint_sha256'],a['split'],a['tier'],a['location'],a['status'])!=(info['model'],info['checkpoint_sha256'],info['split'],info['tier'],'runs','complete'):
                 raise ValueError('Result ledger eligibility or identity mismatch')

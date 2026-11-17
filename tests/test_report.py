@@ -105,3 +105,25 @@ class ReportTests(RunnerFixture):
         self.run_eval();self.run_report(export_results=self.export)
         (self.export/'results/synthetic_v1/other-model').symlink_to(self.data)
         with self.assertRaisesRegex(ValueError,'symlink'):report('synthetic_v1',from_results=True,repo=self.export,check=True)
+
+    def test_comparison_png_changes_are_rejected_without_pixel_rerendering(self):
+        self.run_eval();self.run_report(export_results=self.export)
+        directory=self.export/'reports/synthetic_v1'
+        manifest=json.loads((directory/'figures.json').read_text());name=next(iter(manifest['groups'][0]['files']))
+        path=directory/name;path.write_bytes(path.read_bytes()+b'hand edit')
+        from grmhd_validation.report import check_figures
+        payload=json.loads((directory/'leaderboard.json').read_text())
+        with self.assertRaisesRegex(ValueError,'figure checksum'):check_figures(directory,payload)
+
+    def test_historical_protocol_is_resolved_without_changing_current_checkout(self):
+        import subprocess
+        result=self.run_eval()
+        subprocess.run(['git','init','-q',str(self.repo)],check=True)
+        subprocess.run(['git','-C',str(self.repo),'add','protocols/forecast_v1.json'],check=True)
+        subprocess.run(['git','-C',str(self.repo),'-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','Original protocol'],check=True)
+        protocol=copy.deepcopy(self.protocol);protocol['seed']=43
+        current=self.repo/'protocols/forecast_v1.json';current.write_bytes(json_bytes(protocol));before=current.read_bytes()
+        self.run_report(export_results=self.export)
+        self.assertEqual(current.read_bytes(),before)
+        payload=json.loads((self.shared/'reports/synthetic_v1/leaderboard.json').read_text())
+        self.assertEqual(payload['groups'][0]['protocol_sha256'],json.loads((Path(result['run_dir'])/'run.json').read_text())['protocol_sha256'])

@@ -144,6 +144,15 @@ class FullAnalysisTests(FullFixture):
             first=self.run_eval(tier='full');self.assertTrue(first['ok'],first)
             second=self.run_eval(tier='full');self.assertTrue(second['ok'],second)
         self.assertEqual(result_files(first['run_dir']),result_files(second['run_dir']))
+        summary_path=Path(first['run_dir'])/'summary.json'
+        self.assertLess(summary_path.stat().st_size,1_000_000)
+        compact=json.loads(summary_path.read_text())
+        self.assertEqual(compact['schema_version'],2)
+        for name in [*ANALYSES,'correlation_times']:
+            self.assertIn('headlines',compact[name])
+            self.assertNotIn('data',compact[name])
+            self.assertNotIn('per_start',compact[name])
+
         info=json.loads((Path(first['run_dir'])/'run.json').read_text())
         self.assertIn('cost',info['analysis_runtime'])
         content=(Path(first['run_dir'])/'metrics/cost.json').read_text()

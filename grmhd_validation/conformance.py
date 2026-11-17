@@ -36,12 +36,19 @@ def reference_path(storage, split_id, protocol, platform,tier='quick',protocol_s
 
 
 def load_golden(path):
+    if (Path(path)/'.summary-format-v2.json').exists():raise ValueError('Reference summary correction is incomplete; owner must resume --rebuild-summary')
     from .runner import schema_validate
     record = json.loads((path / "golden.json").read_text())
     schema_validate(record, "golden.schema.json")
     files = result_files(path)
     if files != record["files"] or fingerprint(files) != record["result_fingerprint"]:
         raise ValueError("Golden result files do not match golden.json")
+    summary=json.loads((Path(path)/'summary.json').read_text())
+    if summary.get('schema_version')==2:
+        from .summary import validate
+        validate(summary)
+        if any(files.get('metrics/'+name+'.json')!=digest for name,digest in summary['metric_sha256'].items()):
+            raise ValueError('Golden compact-summary metric hashes differ')
     return record
 
 
@@ -184,11 +191,11 @@ def reference(split_id, tier="quick", partition="validation", device="cpu", stor
     files = result_files(candidate)
     record = {"result_fingerprint": fingerprint(files), "files": files, "platform": platform,
               "environment_locked": info["environment_locked"], "lock_sha256": info["environment_lock_sha256"],
-              "repo_commit": info["repo_commit"], "provisional": not info["environment_locked"]}
+              "repo_commit": info["repo_commit"], "provisional": not info["environment_locked"], "summary_format_version":2}
     writer.json("golden.json", record)
     if tier=='quick' and full_tier_ready(protocol):
         legacy=storage.root/'references'/split_id/protocol['protocol_id']/'persistence_quick'/platform
-        if (legacy/'golden.json').is_file() and load_golden(legacy)['result_fingerprint']!=record['result_fingerprint']:
+        if (legacy/'golden.json').is_file() and {k:v for k,v in load_golden(legacy)['files'].items() if k!='summary.json'}!={k:v for k,v in record['files'].items() if k!='summary.json'}:
             _remove_candidate(storage,candidate)
             raise ValueError('Quick result bytes changed across protocol finalization; refusing a new golden')
     if target.exists():

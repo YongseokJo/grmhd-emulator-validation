@@ -50,7 +50,8 @@ def _verify_bundle(path, repo=None, allow_historical_protocol=False):
         from .report import protocol_blob
         protocol=protocol_blob(repo,info['protocol_id'],info['protocol_sha256'])
     else:protocol,_=read_protocol(protocol_file)
-    schema_validate(json.loads((path / "summary.json").read_text()), "summary.schema.json")
+    from .summary import validate as validate_summary
+    validate_summary(json.loads((path / "summary.json").read_text()),legacy=True)
     for name in protocol["tiers"][info["tier"]]:
         schema_validate(json.loads((path / "metrics" / (name + ".json")).read_text()), name + ".schema.json")
     result = fingerprint(result_files(path))

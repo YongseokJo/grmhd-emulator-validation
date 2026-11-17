@@ -1,0 +1,6133 @@
+{
+ "$defs": {
+  "fields_flag_nmae_at_max_steps_sigma": {
+   "additionalProperties": false,
+   "properties": {
+    "flag": {
+     "enum": [
+      "ok",
+      "exceeds"
+     ]
+    },
+    "nmae_at_max_steps": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "sigma": {
+     "type": [
+      "number",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "sigma",
+    "nmae_at_max_steps",
+    "flag"
+   ],
+   "type": "object"
+  },
+  "fields_nmae_model_nmae_persist": {
+   "additionalProperties": false,
+   "properties": {
+    "nmae_model": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "nmae_persist": {
+     "type": [
+      "number",
+      "null"
+     ]
+    }
+   },
+   "required": [
+    "nmae_model",
+    "nmae_persist"
+   ],
+   "type": "object"
+  },
+  "fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci": {
+   "additionalProperties": false,
+   "properties": {
+    "nmae_model": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "nmae_persist": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "rel_l1": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "skill": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "skill_ci": {
+     "items": {
+      "type": [
+       "number",
+       "null"
+      ]
+     },
+     "maxItems": 2,
+     "minItems": 2,
+     "type": "array"
+    }
+   },
+   "required": [
+    "nmae_model",
+    "nmae_persist",
+    "skill",
+    "skill_ci",
+    "rel_l1"
+   ],
+   "type": "object"
+  },
+  "error_correlation__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/error_correlation__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/error_correlation__value"
+     }
+    }
+   ]
+  },
+  "error_correlation__values": {
+   "type": "object",
+   "properties": {
+    "model": {
+     "$ref": "#/$defs/error_correlation__value"
+    },
+    "persistence": {
+     "$ref": "#/$defs/error_correlation__value"
+    },
+    "model_errors": {
+     "$ref": "#/$defs/error_correlation__value"
+    },
+    "persistence_errors": {
+     "$ref": "#/$defs/error_correlation__value"
+    }
+   },
+   "required": [
+    "model",
+    "persistence",
+    "model_errors",
+    "persistence_errors"
+   ],
+   "additionalProperties": false
+  },
+  "stability__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/stability__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/stability__value"
+     }
+    }
+   ]
+  },
+  "stability__values": {
+   "type": "object",
+   "properties": {
+    "draws": {
+     "$ref": "#/$defs/stability__value"
+    },
+    "mean": {
+     "$ref": "#/$defs/stability__value"
+    },
+    "std": {
+     "$ref": "#/$defs/stability__value"
+    },
+    "skipped_draws": {
+     "$ref": "#/$defs/stability__value"
+    }
+   },
+   "required": [
+    "draws",
+    "mean",
+    "std",
+    "skipped_draws"
+   ],
+   "additionalProperties": false
+  },
+  "cost__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/cost__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/cost__value"
+     }
+    }
+   ]
+  },
+  "cost__values": {
+   "type": "object",
+   "properties": {
+    "parameters": {
+     "$ref": "#/$defs/cost__value"
+    },
+    "warmup_steps": {
+     "type": "integer",
+     "minimum": 1
+    },
+    "timed_steps": {
+     "type": "integer",
+     "minimum": 1
+    }
+   },
+   "required": [
+    "parameters",
+    "warmup_steps",
+    "timed_steps"
+   ],
+   "additionalProperties": false
+  },
+  "physics_table__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/physics_table__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/physics_table__value"
+     }
+    }
+   ]
+  },
+  "physics_table__values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "step": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "mass_error": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "energy_error": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "angular_error": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "divb_pred": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "divb_truth": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "normalized_divb_pred": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "normalized_divb_truth": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "flux_pred": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "flux_truth": {
+        "$ref": "#/$defs/physics_table__value"
+       },
+       "gamma_max": {
+        "$ref": "#/$defs/physics_table__value"
+       }
+      },
+      "required": [
+       "step",
+       "mass_error",
+       "energy_error",
+       "angular_error",
+       "divb_pred",
+       "divb_truth",
+       "normalized_divb_pred",
+       "normalized_divb_truth",
+       "flux_pred",
+       "flux_truth",
+       "gamma_max"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "initial_divb": {
+     "$ref": "#/$defs/physics_table__value"
+    },
+    "initial_normalized_divb": {
+     "$ref": "#/$defs/physics_table__value"
+    },
+    "initial_normalized_divb_global": {
+     "$ref": "#/$defs/physics_table__value"
+    }
+   },
+   "required": [
+    "samples",
+    "initial_divb",
+    "initial_normalized_divb",
+    "initial_normalized_divb_global"
+   ],
+   "additionalProperties": false
+  },
+  "shell_profiles__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/shell_profiles__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/shell_profiles__value"
+     }
+    }
+   ]
+  },
+  "shell_profiles__values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "step": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "mass_pred": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "mass_truth": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "energy_pred": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "energy_truth": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "angular_pred": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "angular_truth": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "mass_error": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "energy_error": {
+        "$ref": "#/$defs/shell_profiles__value"
+       },
+       "angular_error": {
+        "$ref": "#/$defs/shell_profiles__value"
+       }
+      },
+      "required": [
+       "step",
+       "mass_pred",
+       "mass_truth",
+       "energy_pred",
+       "energy_truth",
+       "angular_pred",
+       "angular_truth",
+       "mass_error",
+       "energy_error",
+       "angular_error"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "r": {
+     "$ref": "#/$defs/shell_profiles__value"
+    }
+   },
+   "required": [
+    "samples",
+    "r"
+   ],
+   "additionalProperties": false
+  },
+  "temporal_consistency__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/temporal_consistency__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/temporal_consistency__value"
+     }
+    }
+   ]
+  },
+  "temporal_consistency__values": {
+   "type": "object",
+   "properties": {
+    "steps": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "mass_pred": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "mass_truth": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "energy_pred": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "energy_truth": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "angular_pred": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "angular_truth": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "mass_scale": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "energy_scale": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "angular_scale": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "mass_drift_pred": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "mass_drift_truth": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "energy_drift_pred": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "energy_drift_truth": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "angular_drift_pred": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    },
+    "angular_drift_truth": {
+     "$ref": "#/$defs/temporal_consistency__value"
+    }
+   },
+   "required": [
+    "steps",
+    "mass_pred",
+    "mass_truth",
+    "energy_pred",
+    "energy_truth",
+    "angular_pred",
+    "angular_truth",
+    "mass_scale",
+    "energy_scale",
+    "angular_scale",
+    "mass_drift_pred",
+    "mass_drift_truth",
+    "energy_drift_pred",
+    "energy_drift_truth",
+    "angular_drift_pred",
+    "angular_drift_truth"
+   ],
+   "additionalProperties": false
+  },
+  "conservation_closure__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/conservation_closure__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/conservation_closure__value"
+     }
+    }
+   ]
+  },
+  "conservation_closure__values": {
+   "type": "object",
+   "properties": {
+    "steps": {
+     "$ref": "#/$defs/conservation_closure__value"
+    },
+    "shells": {
+     "$ref": "#/$defs/conservation_closure__value"
+    },
+    "r_outer": {
+     "$ref": "#/$defs/conservation_closure__value"
+    },
+    "horizon_pred": {
+     "$ref": "#/$defs/conservation_closure__value"
+    },
+    "horizon_truth": {
+     "$ref": "#/$defs/conservation_closure__value"
+    },
+    "headline_pred": {
+     "$ref": "#/$defs/conservation_closure__value"
+    },
+    "headline_truth": {
+     "$ref": "#/$defs/conservation_closure__value"
+    }
+   },
+   "required": [
+    "steps",
+    "shells",
+    "r_outer",
+    "horizon_pred",
+    "horizon_truth",
+    "headline_pred",
+    "headline_truth"
+   ],
+   "additionalProperties": false
+  },
+  "accretion_diagnostics__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/accretion_diagnostics__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/accretion_diagnostics__value"
+     }
+    }
+   ]
+  },
+  "accretion_diagnostics__values": {
+   "type": "object",
+   "properties": {
+    "r": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "report_steps": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "steps": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "shells": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "profiles_pred": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "profiles_truth": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "horizon_pred": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "horizon_truth": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "headline_pred": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "headline_truth": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "mdot_profiles_pred": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "mdot_profiles_truth": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "mdot_series_pred": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    },
+    "mdot_series_truth": {
+     "$ref": "#/$defs/accretion_diagnostics__value"
+    }
+   },
+   "required": [
+    "r",
+    "report_steps",
+    "steps",
+    "shells",
+    "profiles_pred",
+    "profiles_truth",
+    "horizon_pred",
+    "horizon_truth",
+    "headline_pred",
+    "headline_truth",
+    "mdot_profiles_pred",
+    "mdot_profiles_truth",
+    "mdot_series_pred",
+    "mdot_series_truth"
+   ],
+   "additionalProperties": false
+  },
+  "mdot__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/mdot__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/mdot__value"
+     }
+    }
+   ]
+  },
+  "mdot__values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "step": {
+        "$ref": "#/$defs/mdot__value"
+       },
+       "pred": {
+        "$ref": "#/$defs/mdot__value"
+       },
+       "truth": {
+        "$ref": "#/$defs/mdot__value"
+       },
+       "relative_error": {
+        "$ref": "#/$defs/mdot__value"
+       }
+      },
+      "required": [
+       "step",
+       "pred",
+       "truth",
+       "relative_error"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "r": {
+     "$ref": "#/$defs/mdot__value"
+    },
+    "shells": {
+     "$ref": "#/$defs/mdot__value"
+    },
+    "horizon_pred": {
+     "$ref": "#/$defs/mdot__value"
+    },
+    "horizon_truth": {
+     "$ref": "#/$defs/mdot__value"
+    },
+    "headline_pred": {
+     "$ref": "#/$defs/mdot__value"
+    },
+    "headline_truth": {
+     "$ref": "#/$defs/mdot__value"
+    }
+   },
+   "required": [
+    "samples",
+    "r",
+    "shells",
+    "horizon_pred",
+    "horizon_truth",
+    "headline_pred",
+    "headline_truth"
+   ],
+   "additionalProperties": false
+  },
+  "lorentz__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/lorentz__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/lorentz__value"
+     }
+    }
+   ]
+  },
+  "lorentz__values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "step": {
+        "$ref": "#/$defs/lorentz__value"
+       },
+       "gamma_max": {
+        "$ref": "#/$defs/lorentz__value"
+       },
+       "gamma_p999": {
+        "$ref": "#/$defs/lorentz__value"
+       }
+      },
+      "required": [
+       "step",
+       "gamma_max",
+       "gamma_p999"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "max": {
+     "$ref": "#/$defs/lorentz__value"
+    },
+    "max_step": {
+     "$ref": "#/$defs/lorentz__value"
+    },
+    "max_p999": {
+     "$ref": "#/$defs/lorentz__value"
+    },
+    "clamp_count": {
+     "$ref": "#/$defs/lorentz__value"
+    }
+   },
+   "required": [
+    "samples",
+    "max",
+    "max_step",
+    "max_p999",
+    "clamp_count"
+   ],
+   "additionalProperties": false
+  },
+  "mean_profiles__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/mean_profiles__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/mean_profiles__value"
+     }
+    }
+   ]
+  },
+  "mean_profiles__values": {
+   "type": "object",
+   "properties": {
+    "r": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "theta": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "omega_pred": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "omega_truth": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "omega_keplerian": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "rho_theta_pred": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "rho_theta_truth": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "n_steps": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "beta_pred": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "beta_truth": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "sigma_pred": {
+     "$ref": "#/$defs/mean_profiles__value"
+    },
+    "sigma_truth": {
+     "$ref": "#/$defs/mean_profiles__value"
+    }
+   },
+   "required": [
+    "r",
+    "theta",
+    "omega_pred",
+    "omega_truth",
+    "omega_keplerian",
+    "rho_theta_pred",
+    "rho_theta_truth",
+    "beta_pred",
+    "beta_truth",
+    "sigma_pred",
+    "sigma_truth",
+    "n_steps"
+   ],
+   "additionalProperties": false
+  },
+  "statistical_props__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/statistical_props__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/statistical_props__value"
+     }
+    }
+   ]
+  },
+  "statistical_props__values": {
+   "type": "object",
+   "properties": {
+    "channels": {
+     "type": "object",
+     "properties": {
+      "0": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      },
+      "1": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      },
+      "2": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      },
+      "3": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      },
+      "4": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      },
+      "5": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      },
+      "6": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      },
+      "7": {
+       "type": "object",
+       "properties": {
+        "js": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "pred_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "true_mean": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "js",
+        "pred_mean",
+        "true_mean"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+     ],
+     "additionalProperties": false
+    },
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "channel": {
+        "$ref": "#/$defs/statistical_props__value"
+       },
+       "centers": {
+        "$ref": "#/$defs/statistical_props__value"
+       },
+       "pdf_pred": {
+        "$ref": "#/$defs/statistical_props__value"
+       },
+       "pdf_truth": {
+        "$ref": "#/$defs/statistical_props__value"
+       },
+       "widths": {
+        "$ref": "#/$defs/statistical_props__value"
+       },
+       "js": {
+        "$ref": "#/$defs/statistical_props__value"
+       }
+      },
+      "required": [
+       "channel",
+       "centers",
+       "pdf_pred",
+       "pdf_truth",
+       "widths",
+       "js"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "step": {
+     "$ref": "#/$defs/statistical_props__value"
+    }
+   },
+   "required": [
+    "channels",
+    "samples",
+    "step"
+   ],
+   "additionalProperties": false
+  },
+  "spectrum__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/spectrum__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/spectrum__value"
+     }
+    }
+   ]
+  },
+  "spectrum__values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "channel": {
+        "$ref": "#/$defs/spectrum__value"
+       },
+       "modes": {
+        "$ref": "#/$defs/spectrum__value"
+       },
+       "power_pred": {
+        "$ref": "#/$defs/spectrum__value"
+       },
+       "power_truth": {
+        "$ref": "#/$defs/spectrum__value"
+       },
+       "slope_pred": {
+        "$ref": "#/$defs/spectrum__value"
+       },
+       "slope_truth": {
+        "$ref": "#/$defs/spectrum__value"
+       },
+       "fit_r2_pred": {
+        "$ref": "#/$defs/spectrum__value"
+       },
+       "fit_r2_truth": {
+        "$ref": "#/$defs/spectrum__value"
+       }
+      },
+      "required": [
+       "channel",
+       "modes",
+       "power_pred",
+       "power_truth",
+       "slope_pred",
+       "slope_truth",
+       "fit_r2_pred",
+       "fit_r2_truth"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "rho_modes": {
+     "$ref": "#/$defs/spectrum__value"
+    },
+    "rho_ratio": {
+     "$ref": "#/$defs/spectrum__value"
+    },
+    "rho_ratio_mask": {
+     "$ref": "#/$defs/spectrum__value"
+    },
+    "B1_modes": {
+     "$ref": "#/$defs/spectrum__value"
+    },
+    "B1_ratio": {
+     "$ref": "#/$defs/spectrum__value"
+    },
+    "B1_ratio_mask": {
+     "$ref": "#/$defs/spectrum__value"
+    },
+    "step": {
+     "$ref": "#/$defs/spectrum__value"
+    }
+   },
+   "required": [
+    "samples",
+    "rho_modes",
+    "rho_ratio",
+    "rho_ratio_mask",
+    "B1_modes",
+    "B1_ratio",
+    "B1_ratio_mask",
+    "step"
+   ],
+   "additionalProperties": false
+  },
+  "azimuthal_spectra__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/azimuthal_spectra__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/azimuthal_spectra__value"
+     }
+    }
+   ]
+  },
+  "azimuthal_spectra__values": {
+   "type": "object",
+   "properties": {
+    "modes": {
+     "$ref": "#/$defs/azimuthal_spectra__value"
+    },
+    "truth": {
+     "$ref": "#/$defs/azimuthal_spectra__value"
+    },
+    "pred": {
+     "$ref": "#/$defs/azimuthal_spectra__value"
+    },
+    "steps": {
+     "$ref": "#/$defs/azimuthal_spectra__value"
+    },
+    "ratio": {
+     "$ref": "#/$defs/azimuthal_spectra__value"
+    }
+   },
+   "required": [
+    "modes",
+    "truth",
+    "pred",
+    "steps",
+    "ratio"
+   ],
+   "additionalProperties": false
+  },
+  "coherence__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/coherence__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/coherence__value"
+     }
+    }
+   ]
+  },
+  "coherence__values": {
+   "type": "object",
+   "properties": {
+    "steps": {
+     "$ref": "#/$defs/coherence__value"
+    },
+    "coherence": {
+     "$ref": "#/$defs/coherence__value"
+    }
+   },
+   "required": [
+    "steps",
+    "coherence"
+   ],
+   "additionalProperties": false
+  },
+  "temporal_spectrum__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/temporal_spectrum__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/temporal_spectrum__value"
+     }
+    }
+   ]
+  },
+  "temporal_spectrum__values": {
+   "type": "object",
+   "properties": {
+    "frequencies": {
+     "$ref": "#/$defs/temporal_spectrum__value"
+    },
+    "pred_disk": {
+     "$ref": "#/$defs/temporal_spectrum__value"
+    },
+    "truth_disk": {
+     "$ref": "#/$defs/temporal_spectrum__value"
+    },
+    "pred_jet": {
+     "$ref": "#/$defs/temporal_spectrum__value"
+    },
+    "truth_jet": {
+     "$ref": "#/$defs/temporal_spectrum__value"
+    },
+    "n_steps": {
+     "$ref": "#/$defs/temporal_spectrum__value"
+    }
+   },
+   "required": [
+    "frequencies",
+    "pred_disk",
+    "truth_disk",
+    "pred_jet",
+    "truth_jet",
+    "n_steps"
+   ],
+   "additionalProperties": false
+  },
+  "turbulence_stats__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/turbulence_stats__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/turbulence_stats__value"
+     }
+    }
+   ]
+  },
+  "turbulence_stats__values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "channel": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "exponents_pred": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "exponents_truth": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "fit_r2_pred": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "fit_r2_truth": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s3_pred": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s3_truth": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "lags": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_pred": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_truth": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_normalized_pred": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       },
+       "s2_normalized_truth": {
+        "$ref": "#/$defs/turbulence_stats__value"
+       }
+      },
+      "required": [
+       "channel",
+       "exponents_pred",
+       "exponents_truth",
+       "fit_r2_pred",
+       "fit_r2_truth",
+       "s3_pred",
+       "s3_truth",
+       "lags",
+       "s2_pred",
+       "s2_truth",
+       "s2_normalized_pred",
+       "s2_normalized_truth"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "step": {
+     "$ref": "#/$defs/turbulence_stats__value"
+    }
+   },
+   "required": [
+    "samples",
+    "step"
+   ],
+   "additionalProperties": false
+  },
+  "conditional_error__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/conditional_error__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/conditional_error__value"
+     }
+    }
+   ]
+  },
+  "conditional_error__values": {
+   "type": "object",
+   "properties": {
+    "edges": {
+     "$ref": "#/$defs/conditional_error__value"
+    },
+    "model": {
+     "$ref": "#/$defs/conditional_error__value"
+    },
+    "persistence": {
+     "$ref": "#/$defs/conditional_error__value"
+    },
+    "counts": {
+     "$ref": "#/$defs/conditional_error__value"
+    },
+    "model_error_sum": {
+     "$ref": "#/$defs/conditional_error__value"
+    },
+    "persistence_error_sum": {
+     "$ref": "#/$defs/conditional_error__value"
+    }
+   },
+   "required": [
+    "edges",
+    "model",
+    "persistence",
+    "counts",
+    "model_error_sum",
+    "persistence_error_sum"
+   ],
+   "additionalProperties": false
+  },
+  "bias_analysis__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/bias_analysis__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/bias_analysis__value"
+     }
+    }
+   ]
+  },
+  "bias_analysis__values": {
+   "type": "object",
+   "properties": {
+    "bias": {
+     "$ref": "#/$defs/bias_analysis__value"
+    },
+    "rmse": {
+     "$ref": "#/$defs/bias_analysis__value"
+    },
+    "n_samples": {
+     "$ref": "#/$defs/bias_analysis__value"
+    }
+   },
+   "required": [
+    "bias",
+    "rmse",
+    "n_samples"
+   ],
+   "additionalProperties": false
+  },
+  "spatial_error__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/spatial_error__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/spatial_error__value"
+     }
+    }
+   ]
+  },
+  "spatial_error__values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "step": {
+        "$ref": "#/$defs/spatial_error__value"
+       },
+       "radius": {
+        "$ref": "#/$defs/spatial_error__value"
+       },
+       "disk": {
+        "$ref": "#/$defs/spatial_error__value"
+       },
+       "jet": {
+        "$ref": "#/$defs/spatial_error__value"
+       }
+      },
+      "required": [
+       "step",
+       "radius",
+       "disk",
+       "jet"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   "required": [
+    "samples"
+   ],
+   "additionalProperties": false
+  },
+  "meridional_slice__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/meridional_slice__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/meridional_slice__value"
+     }
+    }
+   ]
+  },
+  "meridional_slice__values": {
+   "type": "object",
+   "properties": {
+    "X": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "Y": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "rho_pred": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "rho_truth": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "rho_error": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "B2_error": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "step": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "B2_pred": {
+     "$ref": "#/$defs/meridional_slice__value"
+    },
+    "B2_truth": {
+     "$ref": "#/$defs/meridional_slice__value"
+    }
+   },
+   "required": [
+    "X",
+    "Y",
+    "rho_pred",
+    "rho_truth",
+    "rho_error",
+    "B2_error",
+    "step",
+    "B2_pred",
+    "B2_truth"
+   ],
+   "additionalProperties": false
+  },
+  "rollout_evolution__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/rollout_evolution__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/rollout_evolution__value"
+     }
+    }
+   ]
+  },
+  "rollout_evolution__values": {
+   "type": "object",
+   "properties": {
+    "X": {
+     "$ref": "#/$defs/rollout_evolution__value"
+    },
+    "Y": {
+     "$ref": "#/$defs/rollout_evolution__value"
+    },
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "step": {
+        "$ref": "#/$defs/rollout_evolution__value"
+       },
+       "truth": {
+        "$ref": "#/$defs/rollout_evolution__value"
+       },
+       "pred": {
+        "$ref": "#/$defs/rollout_evolution__value"
+       },
+       "error": {
+        "$ref": "#/$defs/rollout_evolution__value"
+       }
+      },
+      "required": [
+       "step",
+       "truth",
+       "pred",
+       "error"
+      ],
+      "additionalProperties": false
+     }
+    }
+   },
+   "required": [
+    "X",
+    "Y",
+    "samples"
+   ],
+   "additionalProperties": false
+  },
+  "correlation_times__value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/correlation_times__value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/correlation_times__value"
+     }
+    }
+   ]
+  },
+  "correlation_times__values": {
+   "type": "object",
+   "properties": {
+    "tau_c": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "r1": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "saturated": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "n_pairs": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "n_dumps": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "n_cells": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "steps": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "skill": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "crossing_steps": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "never_crossed": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "last_positive_steps": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "fraction_positive_after_first": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "mean_skill_25_50": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "horizon_rg_c": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "horizon_tau_c": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "tau_c_rg_c": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "resolved_mask": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "starts": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "nmae_model": {
+     "$ref": "#/$defs/correlation_times__value"
+    },
+    "nmae_persistence": {
+     "$ref": "#/$defs/correlation_times__value"
+    }
+   },
+   "required": [
+    "tau_c",
+    "r1",
+    "saturated",
+    "n_pairs",
+    "n_dumps",
+    "n_cells",
+    "steps",
+    "skill",
+    "crossing_steps",
+    "never_crossed",
+    "last_positive_steps",
+    "fraction_positive_after_first",
+    "mean_skill_25_50",
+    "horizon_rg_c",
+    "horizon_tau_c",
+    "tau_c_rg_c",
+    "resolved_mask",
+    "starts",
+    "nmae_model",
+    "nmae_persistence"
+   ],
+   "additionalProperties": false
+  }
+ },
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "rollout_curve": {
+   "additionalProperties": false,
+   "properties": {
+    "at_steps": {
+     "additionalProperties": {
+      "additionalProperties": false,
+      "properties": {
+       "mean_nmae": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "mean_persist": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "per_channel": {
+        "additionalProperties": false,
+        "properties": {
+         "B1": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "B2": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "B3": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "rho": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "ug": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "utilde1": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "utilde2": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "utilde3": {
+          "type": [
+           "number",
+           "null"
+          ]
+         }
+        },
+        "required": [
+         "rho",
+         "ug",
+         "utilde1",
+         "utilde2",
+         "utilde3",
+         "B1",
+         "B2",
+         "B3"
+        ],
+        "type": "object"
+       },
+       "skill": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "skill_ci": {
+        "items": {
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "maxItems": 2,
+        "minItems": 2,
+        "type": "array"
+       },
+       "std_nmae": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "time_rg_c": {
+        "type": [
+         "number",
+         "null"
+        ]
+       }
+      },
+      "required": [
+       "time_rg_c",
+       "mean_nmae",
+       "std_nmae",
+       "mean_persist",
+       "skill",
+       "skill_ci",
+       "per_channel"
+      ],
+      "type": "object"
+     },
+     "minProperties": 1,
+     "type": "object"
+    },
+    "attractor": {
+     "additionalProperties": false,
+     "properties": {
+      "B1": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "B2": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "B3": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "rho": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "ug": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "utilde1": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "utilde2": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "utilde3": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      }
+     },
+     "required": [
+      "rho",
+      "ug",
+      "utilde1",
+      "utilde2",
+      "utilde3",
+      "B1",
+      "B2",
+      "B3"
+     ],
+     "type": "object"
+    },
+    "n_starts": {
+     "minimum": 1,
+     "type": "integer"
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "type": "object",
+   "oneOf": [
+    {
+     "required": [
+      "n_starts",
+      "at_steps",
+      "attractor"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "single_step": {
+   "additionalProperties": false,
+   "properties": {
+    "ci_method": {
+     "const": "chunk_block_bootstrap"
+    },
+    "fluid": {
+     "$ref": "#/$defs/fields_nmae_model_nmae_persist"
+    },
+    "magnetic": {
+     "$ref": "#/$defs/fields_nmae_model_nmae_persist"
+    },
+    "mean": {
+     "additionalProperties": false,
+     "properties": {
+      "nmae_model": {
+       "type": [
+        "number",
+        "null"
+       ]
+      },
+      "nmae_persist": {
+       "type": [
+        "number",
+        "null"
+       ]
+      },
+      "rel_l1": {
+       "type": [
+        "number",
+        "null"
+       ]
+      },
+      "skill": {
+       "type": [
+        "number",
+        "null"
+       ]
+      }
+     },
+     "required": [
+      "nmae_model",
+      "nmae_persist",
+      "skill",
+      "rel_l1"
+     ],
+     "type": "object"
+    },
+    "n_blocks": {
+     "minimum": 1,
+     "type": "integer"
+    },
+    "n_samples": {
+     "minimum": 1,
+     "type": "integer"
+    },
+    "per_channel": {
+     "additionalProperties": false,
+     "properties": {
+      "B1": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      },
+      "B2": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      },
+      "B3": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      },
+      "rho": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      },
+      "ug": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      },
+      "utilde1": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      },
+      "utilde2": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      },
+      "utilde3": {
+       "$ref": "#/$defs/fields_nmae_model_nmae_persist_rel_l1_skill_skill_ci"
+      }
+     },
+     "required": [
+      "rho",
+      "ug",
+      "utilde1",
+      "utilde2",
+      "utilde3",
+      "B1",
+      "B2",
+      "B3"
+     ],
+     "type": "object"
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "type": "object",
+   "oneOf": [
+    {
+     "required": [
+      "n_samples",
+      "n_blocks",
+      "ci_method",
+      "per_channel",
+      "mean",
+      "fluid",
+      "magnetic"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "accretion_diagnostics": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "accretion_diagnostics"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/accretion_diagnostics__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/accretion_diagnostics__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/accretion_diagnostics__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/accretion_diagnostics__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/accretion_diagnostics__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/accretion_diagnostics__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/accretion_diagnostics__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/accretion_diagnostics__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "azimuthal_spectra": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "azimuthal_spectra"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/azimuthal_spectra__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/azimuthal_spectra__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/azimuthal_spectra__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/azimuthal_spectra__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/azimuthal_spectra__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/azimuthal_spectra__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/azimuthal_spectra__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/azimuthal_spectra__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "bias_analysis": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "bias_analysis"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/bias_analysis__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/bias_analysis__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/bias_analysis__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/bias_analysis__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/bias_analysis__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/bias_analysis__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/bias_analysis__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/bias_analysis__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "coherence": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "coherence"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/coherence__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/coherence__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/coherence__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/coherence__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/coherence__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/coherence__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/coherence__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/coherence__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "conditional_error": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "conditional_error"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/conditional_error__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/conditional_error__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/conditional_error__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/conditional_error__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/conditional_error__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/conditional_error__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/conditional_error__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/conditional_error__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "conservation_closure": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "conservation_closure"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/conservation_closure__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/conservation_closure__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/conservation_closure__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/conservation_closure__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/conservation_closure__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/conservation_closure__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/conservation_closure__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/conservation_closure__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "correlation_times": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "correlation_times"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/correlation_times__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/correlation_times__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/correlation_times__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/correlation_times__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/correlation_times__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/correlation_times__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/correlation_times__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/correlation_times__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "cost": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "cost"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/cost__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/cost__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/cost__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/cost__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/cost__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/cost__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/cost__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/cost__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "error_correlation": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "error_correlation"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/error_correlation__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/error_correlation__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/error_correlation__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/error_correlation__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/error_correlation__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/error_correlation__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/error_correlation__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/error_correlation__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "lorentz": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "lorentz"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/lorentz__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/lorentz__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/lorentz__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/lorentz__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/lorentz__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/lorentz__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/lorentz__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/lorentz__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "mdot": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "mdot"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/mdot__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/mdot__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/mdot__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/mdot__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/mdot__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/mdot__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/mdot__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/mdot__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "mean_profiles": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "mean_profiles"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/mean_profiles__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/mean_profiles__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/mean_profiles__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/mean_profiles__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/mean_profiles__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/mean_profiles__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/mean_profiles__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/mean_profiles__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "meridional_slice": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "meridional_slice"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/meridional_slice__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/meridional_slice__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/meridional_slice__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/meridional_slice__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/meridional_slice__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/meridional_slice__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/meridional_slice__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/meridional_slice__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "physics_table": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "physics_table"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/physics_table__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/physics_table__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/physics_table__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/physics_table__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/physics_table__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/physics_table__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/physics_table__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/physics_table__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "rollout_evolution": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "rollout_evolution"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/rollout_evolution__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/rollout_evolution__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/rollout_evolution__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/rollout_evolution__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/rollout_evolution__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/rollout_evolution__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/rollout_evolution__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/rollout_evolution__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "shell_profiles": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "shell_profiles"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/shell_profiles__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/shell_profiles__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/shell_profiles__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/shell_profiles__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/shell_profiles__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/shell_profiles__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/shell_profiles__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/shell_profiles__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "spatial_error": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "spatial_error"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/spatial_error__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/spatial_error__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/spatial_error__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/spatial_error__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/spatial_error__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/spatial_error__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/spatial_error__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/spatial_error__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "spectrum": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "spectrum"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/spectrum__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/spectrum__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/spectrum__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/spectrum__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/spectrum__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/spectrum__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/spectrum__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/spectrum__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "stability": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "stability"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/stability__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/stability__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/stability__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/stability__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/stability__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/stability__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/stability__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/stability__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "statistical_props": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "statistical_props"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/statistical_props__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/statistical_props__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/statistical_props__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/statistical_props__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/statistical_props__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/statistical_props__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/statistical_props__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "temporal_consistency": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "temporal_consistency"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/temporal_consistency__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/temporal_consistency__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/temporal_consistency__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/temporal_consistency__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/temporal_consistency__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/temporal_consistency__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/temporal_consistency__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/temporal_consistency__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "temporal_spectrum": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "temporal_spectrum"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/temporal_spectrum__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/temporal_spectrum__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/temporal_spectrum__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/temporal_spectrum__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/temporal_spectrum__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/temporal_spectrum__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/temporal_spectrum__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/temporal_spectrum__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  },
+  "turbulence_stats": {
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "type": "object",
+   "properties": {
+    "analysis": {
+     "const": "turbulence_stats"
+    },
+    "space": {
+     "enum": [
+      "loss",
+      "physical"
+     ]
+    },
+    "starts": {
+     "type": "array",
+     "items": {
+      "type": "integer"
+     },
+     "minItems": 1,
+     "uniqueItems": true
+    },
+    "data": {
+     "type": "object",
+     "properties": {
+      "per_start": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "properties": {
+         "start": {
+          "type": "integer"
+         },
+         "values": {
+          "$ref": "#/$defs/turbulence_stats__values"
+         }
+        },
+        "required": [
+         "start",
+         "values"
+        ],
+        "additionalProperties": false
+       },
+       "minItems": 1
+      },
+      "aggregate": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "$ref": "#/$defs/turbulence_stats__values"
+        },
+        "lower": {
+         "$ref": "#/$defs/turbulence_stats__values"
+        },
+        "upper": {
+         "$ref": "#/$defs/turbulence_stats__values"
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "$ref": "#/$defs/turbulence_stats__value"
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      },
+      "time": {
+       "type": "object",
+       "properties": {
+        "steps": {
+         "$ref": "#/$defs/turbulence_stats__value"
+        },
+        "rg_c": {
+         "$ref": "#/$defs/turbulence_stats__value"
+        },
+        "tau_c": {
+         "$ref": "#/$defs/turbulence_stats__value"
+        }
+       },
+       "required": [
+        "steps",
+        "rg_c",
+        "tau_c"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "per_start",
+      "aggregate",
+      "time"
+     ],
+     "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
+    }
+   },
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
+  }
+ },
+ "required": [
+  "single_step",
+  "rollout_curve"
+ ],
+ "type": "object"
+}
