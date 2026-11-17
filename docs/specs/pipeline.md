@@ -1073,7 +1073,10 @@ reports/<split_id>/leaderboard.{json,csv,md} and the same comparison figures.
 or rendering; CI fails on differences, missing artifacts, altered source records,
 ledger inconsistencies or schema errors. Figures are generated from the same rows
 and tested for labels/units; PNG bytes are presentation metadata (§11), so they
-are not compared across different FreeType/matplotlib builds. Even an empty result tree has an explicit empty
+are not compared across different FreeType/matplotlib builds. A generated
+`figures.json` manifest binds each comparison PNG hash to the SHA256 of its
+source report group; --check verifies those committed hashes, PNG headers and
+group identities without rerendering. Hand-changed or missing images fail CI. Even an empty result tree has an explicit empty
 report; no fabricated evaluation rows are committed to make CI pass.
 
 Report updates use an owner-only report-directory lock, new temporary files and
