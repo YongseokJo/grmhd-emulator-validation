@@ -14,6 +14,11 @@ gval = "grmhd_validation.cli:main"
 
 [project.entry-points."grmhd_validation.adapters"]
 persistence = "grmhd_validation.adapters.persistence:Persistence"
+tron = "grmhd_validation.adapters.learned:TRON"
+vit = "grmhd_validation.adapters.learned:ViT"
+eden-claude = "grmhd_validation.adapters.eden:Claude"
+eden-gpt = "grmhd_validation.adapters.eden:GPT"
+eden-gemini = "grmhd_validation.adapters.eden:Gemini"
 
 [tool.setuptools.packages.find]
 include = ["grmhd_validation*"]

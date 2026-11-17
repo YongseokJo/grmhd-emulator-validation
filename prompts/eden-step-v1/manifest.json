@@ -1,0 +1,24 @@
+{
+ "allowed_tools": [
+  "local Python",
+  "NumPy",
+  "SciPy"
+ ],
+ "authors": "Eden Growney; benchmark adaptation by validation implementer",
+ "input_schema_version": 1,
+ "network_access": "none",
+ "output_schema_version": 1,
+ "prompt_id": "eden-step-v1",
+ "protocol": "B",
+ "rendering_fields": [
+  "protocol",
+  "history_length",
+  "shape",
+  "dt_dump"
+ ],
+ "schema_version": 1,
+ "session_policy": "fresh_per_step",
+ "source_commit": "f8cd379a562e9b0fc6f96ee36d5f9855ddc1d27a",
+ "source_contract": "eden_rc300_pilot/benchmark_pilot/rc300_packets/primary_ar_onestep",
+ "template_sha256": "a226f750c6ea3fb71ccbb39b755ae571692614101312b1651edcb20f06567796"
+}

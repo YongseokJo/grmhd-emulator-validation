@@ -40,7 +40,8 @@ def step_color(step):
 
 
 def caption(ctx,count):
-    return f'{count} starts · {ctx.split.split_id} / {ctx.partition} · Bands: 95% CIs'
+    partial='PARTIAL inspection — ' if getattr(ctx,'partial_predictions',False) else ''
+    return partial+f'{count} starts · {ctx.split.split_id} / {ctx.partition} · Bands: 95% CIs'
 
 
 def log_display(value):
@@ -152,7 +153,17 @@ def color_map(fig,ax,image,title,label,*,X=None,Y=None,limits=None,cmap='inferno
         artist._gval_error_map={**audit,'title':title,'view':view}
         if notice:ax.text(.5,.5,notice,transform=ax.transAxes,ha='center',va='center',fontsize=8,bbox={'facecolor':'white','alpha':.8,'edgecolor':'none'})
     ax.set_title(title)
-    fig.colorbar(artist,ax=ax,pad=.02,fraction=.046).set_label(label)
+    bar=fig.colorbar(artist,ax=ax,pad=.02,fraction=.046)
+    bar.set_label(label)
+    if error_scale=='signed':
+        # Two-decade major ticks avoid crowded labels near the linear core.
+        from matplotlib.ticker import FixedLocator, NullLocator
+        bound=float(norm.vmax);threshold=float(norm.linthresh)
+        exponents=range(int(np.ceil(np.log10(threshold)/2))*2,int(np.floor(np.log10(bound)/2))*2+1,2)
+        positive=[10.**power for power in exponents]
+        bar.locator=FixedLocator([-value for value in positive[::-1]]+[0.]+positive)
+        bar.minorlocator=NullLocator()
+        bar.update_ticks()
 
 
 def limits(values,*,symmetric=False):

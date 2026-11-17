@@ -1,0 +1,100 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "coverage": {
+   "additionalProperties": false,
+   "properties": {
+    "invalid": {
+     "items": {
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "missing": {
+     "items": {
+      "type": "object"
+     },
+     "type": "array"
+    },
+    "received": {
+     "type": "integer"
+    },
+    "required": {
+     "type": "integer"
+    }
+   },
+   "required": [
+    "required",
+    "received",
+    "missing",
+    "invalid"
+   ],
+   "type": "object"
+  },
+  "entries": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "chunk": {
+      "type": "string"
+     },
+     "kind": {
+      "type": "string"
+     },
+     "path": {
+      "type": "string"
+     },
+     "record_path": {
+      "type": "string"
+     },
+     "record_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+     },
+     "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+     },
+     "start": {
+      "type": "integer"
+     },
+     "step": {
+      "type": "integer"
+     }
+    },
+    "required": [
+     "kind",
+     "chunk",
+     "start",
+     "step",
+     "path",
+     "sha256",
+     "record_path",
+     "record_sha256"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  },
+  "provenance_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "schema_version": {
+   "const": 1
+  },
+  "task_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  }
+ },
+ "required": [
+  "schema_version",
+  "task_sha256",
+  "entries",
+  "coverage",
+  "provenance_sha256"
+ ],
+ "type": "object"
+}

@@ -155,19 +155,42 @@
       },
       "minItems": 1,
       "type": "array"
+    },
+    "status": {
+      "const": "not evaluated"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
     }
   },
-  "required": [
-    "n_starts",
-    "steps",
-    "mean_nmae",
-    "std_nmae",
-    "mean_persist",
-    "skill",
-    "skill_ci",
-    "ci_method",
-    "per_channel",
-    "attractor"
-  ],
-  "type": "object"
+  "type": "object",
+  "oneOf": [
+    {
+      "required": [
+        "n_starts",
+        "steps",
+        "mean_nmae",
+        "std_nmae",
+        "mean_persist",
+        "skill",
+        "skill_ci",
+        "ci_method",
+        "per_channel",
+        "attractor"
+      ],
+      "not": {
+        "required": [
+          "status"
+        ]
+      }
+    },
+    {
+      "required": [
+        "status",
+        "reason"
+      ],
+      "maxProperties": 2
+    }
+  ]
 }

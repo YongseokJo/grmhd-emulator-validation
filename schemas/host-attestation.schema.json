@@ -1,0 +1,126 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "operator": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "minLength": 1
+  },
+  "host": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "minLength": 1
+  },
+  "job_id": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "minLength": 1
+  },
+  "implementation_commit": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "minLength": 1
+  },
+  "attested_at": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "minLength": 1
+  },
+  "isolation_mechanism": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "minLength": 1
+  },
+  "evidence_sha256": {
+   "type": "array",
+   "items": {
+    "type": "string",
+    "pattern": "^[0-9a-f]{64}$"
+   }
+  },
+  "exceptions": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "claims": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "workspace_isolated": {
+     "type": "boolean"
+    },
+    "history_only": {
+     "type": "boolean"
+    },
+    "no_future_truth": {
+     "type": "boolean"
+    },
+    "no_evaluator": {
+     "type": "boolean"
+    },
+    "no_other_starts": {
+     "type": "boolean"
+    },
+    "no_scorer_feedback": {
+     "type": "boolean"
+    },
+    "session_policy_followed": {
+     "type": "boolean"
+    },
+    "frozen_autoregressive_chain": {
+     "type": "boolean"
+    },
+    "source_prompt_frozen": {
+     "type": "boolean"
+    },
+    "complete_without_selection": {
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "workspace_isolated",
+    "history_only",
+    "no_future_truth",
+    "no_evaluator",
+    "no_other_starts",
+    "no_scorer_feedback",
+    "session_policy_followed",
+    "frozen_autoregressive_chain",
+    "source_prompt_frozen",
+    "complete_without_selection"
+   ]
+  },
+  "predictions_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  }
+ },
+ "required": [
+  "operator",
+  "host",
+  "job_id",
+  "implementation_commit",
+  "attested_at",
+  "isolation_mechanism",
+  "evidence_sha256",
+  "exceptions",
+  "claims",
+  "predictions_sha256"
+ ]
+}

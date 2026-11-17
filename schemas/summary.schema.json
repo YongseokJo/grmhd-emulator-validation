@@ -2097,14 +2097,37 @@
     "n_starts": {
      "minimum": 1,
      "type": "integer"
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "n_starts",
-    "at_steps",
-    "attractor"
-   ],
-   "type": "object"
+   "type": "object",
+   "oneOf": [
+    {
+     "required": [
+      "n_starts",
+      "at_steps",
+      "attractor"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "single_step": {
    "additionalProperties": false,
@@ -2201,18 +2224,41 @@
       "B3"
      ],
      "type": "object"
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "n_samples",
-    "n_blocks",
-    "ci_method",
-    "per_channel",
-    "mean",
-    "fluid",
-    "magnetic"
-   ],
-   "type": "object"
+   "type": "object",
+   "oneOf": [
+    {
+     "required": [
+      "n_samples",
+      "n_blocks",
+      "ci_method",
+      "per_channel",
+      "mean",
+      "fluid",
+      "magnetic"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "accretion_diagnostics": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2349,15 +2395,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "azimuthal_spectra": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2494,15 +2563,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "bias_analysis": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2639,15 +2731,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "coherence": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2784,15 +2899,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "conditional_error": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -2929,15 +3067,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "conservation_closure": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3074,15 +3235,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "correlation_times": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3219,15 +3403,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "cost": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3364,15 +3571,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "error_correlation": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3509,15 +3739,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "lorentz": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3654,15 +3907,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "mdot": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3799,15 +4075,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "mean_profiles": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -3944,15 +4243,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "meridional_slice": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4089,15 +4411,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "physics_table": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4234,15 +4579,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "rollout_evolution": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4379,15 +4747,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "shell_profiles": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4524,15 +4915,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "spatial_error": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4669,15 +5083,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "spectrum": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4814,15 +5251,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "stability": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -4959,15 +5419,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "statistical_props": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -5104,15 +5587,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "temporal_consistency": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -5249,15 +5755,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "temporal_spectrum": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -5394,15 +5923,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   },
   "turbulence_stats": {
    "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -5539,15 +6091,38 @@
       "time"
      ],
      "additionalProperties": false
+    },
+    "status": {
+     "const": "not evaluated"
+    },
+    "reason": {
+     "type": "string",
+     "minLength": 1
     }
    },
-   "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-   ],
-   "additionalProperties": false
+   "additionalProperties": false,
+   "oneOf": [
+    {
+     "required": [
+      "analysis",
+      "space",
+      "starts",
+      "data"
+     ],
+     "not": {
+      "required": [
+       "status"
+      ]
+     }
+    },
+    {
+     "required": [
+      "status",
+      "reason"
+     ],
+     "maxProperties": 2
+    }
+   ]
   }
  },
  "required": [

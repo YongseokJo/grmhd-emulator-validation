@@ -166,16 +166,39 @@
         "B3"
       ],
       "type": "object"
+    },
+    "status": {
+      "const": "not evaluated"
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
     }
   },
-  "required": [
-    "n_samples",
-    "n_blocks",
-    "ci_method",
-    "per_channel",
-    "mean",
-    "fluid",
-    "magnetic"
-  ],
-  "type": "object"
+  "type": "object",
+  "oneOf": [
+    {
+      "required": [
+        "n_samples",
+        "n_blocks",
+        "ci_method",
+        "per_channel",
+        "mean",
+        "fluid",
+        "magnetic"
+      ],
+      "not": {
+        "required": [
+          "status"
+        ]
+      }
+    },
+    {
+      "required": [
+        "status",
+        "reason"
+      ],
+      "maxProperties": 2
+    }
+  ]
 }

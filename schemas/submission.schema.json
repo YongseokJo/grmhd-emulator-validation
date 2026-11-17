@@ -1,0 +1,48 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "active_step": {
+   "type": "integer"
+  },
+  "chunk": {
+   "type": "string"
+  },
+  "episode_id": {
+   "type": "string"
+  },
+  "kind": {
+   "enum": [
+    "rollout",
+    "single_step"
+   ]
+  },
+  "prediction_file": {
+   "type": "string"
+  },
+  "prompt_id": {
+   "type": "string"
+  },
+  "schema_version": {
+   "const": 1
+  },
+  "start": {
+   "type": "integer"
+  },
+  "task_id": {
+   "type": "string"
+  }
+ },
+ "required": [
+  "schema_version",
+  "task_id",
+  "episode_id",
+  "prompt_id",
+  "kind",
+  "chunk",
+  "start",
+  "active_step",
+  "prediction_file"
+ ],
+ "type": "object"
+}

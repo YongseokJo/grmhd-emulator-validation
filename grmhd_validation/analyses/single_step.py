@@ -37,7 +37,7 @@ def run(ctx):
                 print(f"single_step {selected.chunk}: {position}/{len(selected.every)} starts", flush=True)
             history = ctx.reader.history(start, ctx.adapter.history_length, ctx.device)
             initial = history[0, -1].cpu().numpy().copy()
-            prediction = ctx.step(history)[0].cpu().numpy()
+            prediction = ctx.step(history, ('single_step', start, 1))[0].cpu().numpy()
             if getattr(ctx,'full',None) is not None:ctx.full.save('single',start,1,prediction)
             truth = ctx.reader.numpy(start + 1)
             models.append(nmae(prediction, truth, ctx.constants))

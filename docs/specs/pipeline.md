@@ -783,6 +783,43 @@ inside each packet; host instructions for task/create/advance/collect and audit;
 scorer instructions for completeness, evaluate --predictions and reporting.
 Benchmark-repository instructions are not the forecasting-agent prompt.
 
+### Implementation formats and audit boundaries
+
+Task and packet schemas are version 1. The initial immutable prompt IDs are
+`eden-code-v1` (A, fresh context per start) and `eden-step-v1` (B, fresh context
+per step). They permit local Python/NumPy/SciPy tools and no network. New access
+policies use new prompt IDs. Provider/model/session details are host-supplied
+metadata, never guessed from the request model name.
+
+The host workspace stores private `host.json` and `episodes/` beside task.json;
+only the packet directory is exposed to the forecasting agent. For B, the
+request options declare `history_length`; for A it comes from the adapter.
+`packet create` writes blank `submission/submission.json` metadata for the agent
+and a separate host `generation.json` template, which must be completed before
+advance. The latter carries actual session/provider/model identifiers, timing,
+logs and explicit unknown reasons. Host run provenance and attestation templates
+are outside the packet, at `provenance.json` and `host_attestation.json` in the
+task workspace. Attestation evidence is checked structurally and hashed; the
+scorer labels claims as host-attested, never independently proven isolation.
+Unknown or missing evidence yields unattested status.
+
+Each accepted step is copied under the private task episode and made read-only.
+Input arrays and rendered prompt are reconstructed from frozen history before
+advance; a modified packet input or prompt is rejected. Every rejection is an
+append-only, separate audit record. Advancing an episode updates only the host's
+packet inputs and active-step metadata; accepted outputs cannot be overwritten.
+Collect records missing coverage without manufacturing predictions. It validates
+both file hashes and the complete history chain again. The scorer additionally
+binds each initial history to checksum-verified truth. A changed task, frozen
+output, provenance record or manifest invalidates that entry.
+
+For imported predictions, cost and stability are not evaluated because no
+executable adapter was measured. An incomplete request is retained as a sealed
+NOT_EVALUATED staging attempt, with per-analysis reasons in coverage.json; only
+eligible analyses may have partial inspection outputs. No successful COMPLETE
+marker or runs/ publication is allowed. This also applies to a complete B bundle
+requesting the full tier, whose adapter-only analyses remain unavailable.
+
 ### Eden's three reference methods and credit
 
 Pinned source: KevinFortuneCodes/neural_operator_msai_spring26, branch
@@ -912,13 +949,47 @@ runs/<split_id>/<model>/<run_id>/
   - It checks write access to `staging/` with `os.access`; it does not test with a real file.
   - It reports any file in the tree that the group can't read.
 
-## 9. Training provenance (record, not required)
+## 9. Training provenance (operator declaration, not verified)
 
-- `gval record-training --request run_request.json --split-id <id> --config <training config> [--log …]`
-  writes `training_records/<model>/<ckpt_sha8>.json`.
-- It records: split file SHA256, the chunks used for training and for checkpoint selection, where the
-  normalization statistics were fitted (must be train), the training code commit and the config.
-- `run.json` links it. The leaderboard shows "trained on this split: yes / no / unknown".
+`gval record-training --request run_request.json --split-id <id> --config
+<training config.json> [--log <training log>]` writes
+`training_records/<model>/<ckpt_sha8>.json`. Keep the entire JSON configuration
+and hash its original bytes, the checkpoint and optional log. Reuse an identical
+record; reject a conflicting existing record. Never overwrite one.
+
+The configuration has a `provenance` block with `training_code_commit`,
+`normalization_split`, `source_split`, `known_prior_data_exposure` (free text)
+and `prior_data_exposure` (a structured string list). Declare training and
+checkpoint-selection data through `training_chunks` / `selection_chunks`
+(frozen chunk names) and/or `training_dump_ranges` / `selection_dump_ranges`
+(inclusive [first,last] pairs). Missing selectors are empty. Reject unknown
+chunk names and invalid ranges. Optional `seed`, `epochs` and `data_root` are
+preserved. External historical source_split names are allowed: for example
+`kevin_fall26_80_10_10`, training 3000–10707, selection 10708–11671.
+
+The command computes overlap itself, using unions so duplicate selectors do
+not double-count dumps. Store separate training and selection counts in every
+current train/validation/test/excluded chunk, and their partition totals.
+Store declared dumps outside this frozen split too. Overlap is never a reason
+to reject: historical checkpoints must be evaluated with honest labels.
+
+Bind each record to `split_id` and `split_file_sha256`. Evaluation rejects a
+record for another split/hash or checkpoint/model/version. Normalization fitted
+outside `train` is accepted and flagged. Training status is computed, never read
+from an operator's yes/no flag:
+
+- `yes`: nonempty training data only in current train chunks, nonempty checkpoint
+  selection only in validation chunks, and normalization fitted on `train`;
+- `no`: declared training/selection violates that boundary, with exact overlap
+  counts (including validation/test training exposure), out-of-split counts and
+  normalization flags visible;
+- `unknown`: no record, or insufficient declared data to establish either case.
+
+run.json links the record and its hash, computed label and overlap counts. The
+leaderboard displays `no, overlaps validation/test (n dumps)` when applicable,
+where n is the union of training dumps in those partitions; other boundary or
+normalization failures retain explicit reasons. Every record says
+`operator declaration`, never verified training provenance.
 
 ## 10. Reporting and the leaderboard
 

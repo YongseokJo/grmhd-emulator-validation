@@ -86,8 +86,13 @@ class Context:
     def constants(self):
         return self.protocol["constants"]
 
-    def step(self, history):
+    def step(self, history, prediction_key=None):
         validate_history(history, self.adapter, self.geometry)
+        source = getattr(self, 'predictions', None)
+        if source is not None:
+            if prediction_key is None:
+                raise ValueError('Prediction scoring needs an explicit kind/start/step')
+            return validate_output(source.prediction(*prediction_key, history), history, self.geometry)
         with torch.inference_mode(), torch.autocast(device_type=self.device.type, enabled=False):
             # An adapter cannot mutate the runner's past states or persistence baseline.
             output = self.adapter.step(history.clone())
@@ -110,7 +115,7 @@ def metadata(request, split, protocol, protocol_sha, checkpoint_sha, device, env
             "result_fingerprint": None, "runner_autocast": False}
 
 
-def execute(request, split, protocol, protocol_sha, partition, writer, device, verify_data, repo=REPO, run_info=None, tier='quick',truth_cache=None):
+def execute(request, split, protocol, protocol_sha, partition, writer, device, verify_data, repo=REPO, run_info=None, tier='quick',truth_cache=None,predictions=None):
     """Shared by evaluate, reference and conformance; callers own output placement."""
     environment = check_environment(repo)
     if environment["status"] == "fail":
@@ -124,24 +129,36 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
         log = io.TextIOWrapper(raw_log, encoding="utf-8", write_through=True)
         with redirect_stdout(log), redirect_stderr(log):
             initialize(protocol, device)
-            adapter_class, source = adapter_source(request["adapter"])
-            info.update(adapter_sha256=source["source_sha256"], adapter_repo_commit=source["repo_commit"])
-            validate_declaration(adapter_class, protocol)
-            if adapter_class.name != request["model"] or adapter_class.version != request["version"]:
-                raise ValueError("Run request model/version differs from adapter declaration")
-            if adapter_class.requires_checkpoint != (request["checkpoint"] is not None):
-                raise ValueError("Request checkpoint null/path disagrees with adapter.requires_checkpoint")
             reader = FrameReader(split, partition, writer.storage.root / "checksums" / (split.split_id + ".sha256"), verify_data)
             geometry = load_geometry(split, device, reader.hashes)
-            adapter = adapter_class(request["checkpoint"], geometry, str(device), request["options"])
-            adapter.eval()
+            if predictions is None:
+                adapter_class, source = adapter_source(request["adapter"])
+                info.update(adapter_sha256=source["source_sha256"], adapter_repo_commit=source["repo_commit"])
+                validate_declaration(adapter_class, protocol)
+                if adapter_class.name != request["model"] or adapter_class.version != request["version"]:
+                    raise ValueError("Run request model/version differs from adapter declaration")
+                if adapter_class.requires_checkpoint != (request["checkpoint"] is not None):
+                    raise ValueError("Request checkpoint null/path disagrees with adapter.requires_checkpoint")
+                adapter = adapter_class(request["checkpoint"], geometry, str(device), request["options"])
+                adapter.eval()
+                info['model_provenance'] = getattr(adapter, 'provenance', None)
+            else:
+                from types import SimpleNamespace
+                adapter = SimpleNamespace(name=request['model'], version=request['version'],
+                                          history_length=predictions.history_length, max_batch=1)
+                info['predictions'] = predictions.metadata()
+            from .training import training_provenance
+            info['training_provenance'] = training_provenance(request, split)
             starts = select_starts(split, partition, protocol)
             info["history_length"] = adapter.history_length
             info["rollout_starts"] = {entry.chunk: list(entry.rollout) for entry in starts}
             ctx = Context(adapter, geometry, reader, starts, protocol, split, partition, device, writer)
             ctx.run_info = info
+            ctx.predictions = predictions
+            ctx.partial_predictions = predictions is not None and any(not predictions.availability(name)[0] for name in protocol['tiers'][tier])
             from .truth_cache import open_cache
-            ctx.truth_cache=truth_cache if truth_cache is not None else open_cache(writer.storage,split,partition,protocol,protocol_sha,required=tier=='full' and full_tier_ready(protocol))
+            any_available=predictions is None or any(predictions.availability(name)[0] for name in protocol['tiers'][tier])
+            ctx.truth_cache=truth_cache if truth_cache is not None else open_cache(writer.storage,split,partition,protocol,protocol_sha,required=tier=='full' and full_tier_ready(protocol) and any_available) if any_available else None
             if ctx.truth_cache is not None and ctx.truth_cache.manifest is not None:
                 info['truth_cache_sha256']=ctx.truth_cache.manifest['cache_sha256']
                 info['truth_cache_manifest_sha256']=sha256(ctx.truth_cache.path/'manifest.json')
@@ -153,15 +170,23 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
                 import importlib
                 ctx.full=FullStore(ctx)
                 scale_path=writer.storage.root/'references'/split.split_id/'channel_scales.json'
-                ctx.channel_scales=read_channel_scales(scale_path,split)
-                info['channel_scales_sha256']=sha256(scale_path)
+                if any_available:
+                    ctx.channel_scales=read_channel_scales(scale_path,split)
+                    info['channel_scales_sha256']=sha256(scale_path)
                 for name in protocol['tiers']['full']:
                     if name not in analyses:analyses[name]=importlib.import_module('.analyses.'+name,__package__)
             summary = {}
+            unavailable = {}
             memory={}
             for name in protocol["tiers"][tier]:
                 print('analysis:',name,flush=True)
                 from .memory import measure
+                available, reason = (True, None) if predictions is None else predictions.availability(name)
+                if not available:
+                    summary[name] = {'status':'not evaluated', 'reason':reason}
+                    unavailable[name] = reason
+                    writer.json('metrics/'+name+'.json', summary[name])
+                    continue
                 with measure(memory,name):
                     summary[name] = analyses[name].run(ctx)
                 writer.json('logs/memory.json',memory)
@@ -174,6 +199,10 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
             for name in summary:
                 result = json.loads((writer.root / "metrics" / (name + ".json")).read_text())
                 schema_validate(result, name + ".schema.json")
+            if predictions is not None:
+                info['not_evaluated'] = unavailable
+                writer.json('coverage.json', {'analyses': {name: {'status':'not evaluated', 'reason':unavailable[name]} if name in unavailable else {'status':'evaluated'} for name in summary},
+                                              'coverage':predictions.coverage})
             info["data_verified"] = verify_data
             info["result_fingerprint"] = fingerprint(result_files(writer.root))
             info["end_time"] = now()
@@ -207,7 +236,7 @@ def record_failure(writer, info, error):
 
 
 def evaluate(request_path, split_id, partition="validation", tier="quick", device=None, data_root=None, no_verify_data=False,
-             storage=None, repo=REPO):
+             storage=None, repo=REPO, predictions=None):
     require_compute()
     if tier not in {'quick','full'}:
         raise ValueError('Tier must be quick or full')
@@ -233,7 +262,23 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
         from .conformance import last_conformance
         info["conformance"] = last_conformance(storage, split_id, protocol_sha, environment,tier='full' if tier=='full' and full_tier_ready(protocol) else 'quick')
         info["no_verify_data"] = no_verify_data
-        execute(request, split, protocol, protocol_sha, partition, writer, device, not no_verify_data, repo, info,tier)
+        prediction_source = None
+        if predictions is not None:
+            if no_verify_data:raise ValueError('Prediction input-chain validation requires verified data')
+            from .predictions import Bundle
+            prediction_source = Bundle(predictions, request_path, split, protocol, protocol_sha, partition,
+                                       storage.root/'checksums'/(split_id+'.sha256'), repo)
+        execute(request, split, protocol, protocol_sha, partition, writer, device, not no_verify_data, repo, info,tier,
+                predictions=prediction_source)
+        if info.get('not_evaluated'):
+            info.update(status='not evaluated')
+            writer.json('run.json', info)
+            schema_validate(info, 'run.schema.json')
+            writer.write('NOT_EVALUATED', b'Required analysis inputs are incomplete or unavailable; see coverage.json.\n')
+            bundle_checksums(writer, complete=False)
+            storage.make_readonly(root)
+            return {'ok':False, 'status':'not evaluated', 'next':'Complete the frozen task and record a new evaluation attempt',
+                    'run_id':run_id, 'run_dir':str(root), 'analyses':info['not_evaluated']}
         if tier=='full' and not full_tier_ready(protocol):
             reason='Milestone 4 final full-tier semantics are not approved: all-start CIs, transport/coarse-ring handling and truth cache are required'
             info.update(status='preview',preview_reason=reason)
