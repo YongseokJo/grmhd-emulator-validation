@@ -420,6 +420,16 @@ Figure-only regeneration may read existing verified result content without
 inference and writes a separate presentation bundle. Attach an rc300 contact
 sheet of every full-tier figure to the milestone-4 receipt for visual review.
 
+For panels overlaying multiple report steps, plot both roles' means at every
+report step (truth solid, model dashed, one shared colour per step), but draw
+only the final report step's 95% CI bands: one per role, light and without an
+outline. Error/ratio overlays similarly show a band only at the final step.
+The caption states the start count, final band step, split and the metric JSON
+containing all intervals. The dimensionless-flux time-series panel keeps one
+line and one band per role across all its steps. Other time series, single-step
+panels and maps retain their original designs. This is presentation only;
+all per-step means and CIs remain in the metric artifacts.
+
 Owner command `gval reference truth --split-id <id> --split validation|test`
 builds the verified truth/persistence cache. It writes only under
 references/<split_id>/<protocol_id>/<protocol_sha256>/, mode 2750, with separate
