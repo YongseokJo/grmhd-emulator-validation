@@ -44,6 +44,19 @@ Each completed analysis records process RSS and Slurm cgroup memory in
 same compute environment with
 `python scripts/profile_memory.py --starts 3 --output gval-memory-profile.log`.
 Its shortened windows are never benchmark results or shared references.
+To refresh presentation from a completed full-tier bundle, run on a compute
+node:
+
+```bash
+python scripts/render_aggregate_figures.py --source <full-reference-or-run-directory> \
+  --receipt-dir docs/artifacts/milestone4
+```
+
+It writes a versioned owner report bundle with all figures, the contact sheet,
+label/CI audit and source hashes. The source result fingerprint is checked
+before and after rendering; no inference is run. Multi-step overlays retain
+every mean curve and show bands only at the final report step. The
+dimensionless-flux time series retains both role bands across all steps.
 For a separate cache (including test truth), the owner runs
 `gval reference truth --split-id <id> --split validation|test`. Cache entries are
 read-only to readers and pinned by hashes, including training scales. Full

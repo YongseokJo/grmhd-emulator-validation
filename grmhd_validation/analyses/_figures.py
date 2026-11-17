@@ -81,6 +81,11 @@ def report_legend(ctx,ax,steps):
 
 
 def panel(ax,title,xlabel,ylabel,*,xscale='linear',yscale='linear',legend=True):
+    if yscale=='log' and not any(np.any(np.isfinite(artist.get_ydata())&(np.asarray(artist.get_ydata())>0)) for artist in ax.lines):
+        # Undefined normalized curves (e.g. zero S2(1)) must remain undefined,
+        # rather than acquiring fabricated positive values for a logarithm.
+        ax.set_ylim(1.,10.)
+        ax.text(.5,.5,'No finite positive values\non logarithmic scale',transform=ax.transAxes,ha='center',va='center',fontsize=9)
     ax.set(title=title,xlabel=xlabel,ylabel=ylabel,xscale=xscale,yscale=yscale)
     if yscale=='symlog':
         pool=np.concatenate([np.asarray(artist.get_ydata(),dtype=float).ravel() for artist in ax.lines if (artist.get_gid() or '').startswith('mean:')])

@@ -52,6 +52,19 @@ class FigurePresentationTests(FullFixture):
 
 
 class FigureLabelOracles(unittest.TestCase):
+    def test_undefined_structure_curves_keep_log_scale_without_inventing_values(self):
+        import matplotlib.pyplot as plt
+        from grmhd_validation.analyses._figures import panel
+        fig,ax=plt.subplots()
+        try:
+            ax.plot([1,2],[np.nan,np.nan],label='Truth')
+            panel(ax,'Radial Structure Function','Radial lag [cells]','Normalized structure function',xscale='log',yscale='log')
+            fig.tight_layout()
+            self.assertEqual(ax.get_yscale(),'log')
+            self.assertTrue(np.isnan(ax.lines[0].get_ydata()).all())
+            self.assertTrue(any('No finite positive values' in text.get_text() for text in ax.texts))
+        finally:plt.close(fig)
+
     def test_raw_titles_raw_legends_and_unlabeled_axes_fail(self):
         import matplotlib.pyplot as plt
         fig,ax=plt.subplots()
