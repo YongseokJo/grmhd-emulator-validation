@@ -408,6 +408,18 @@ fixed from the pooled truth at the analysis horizon, and conditional-bin edges
 use the original seeded truth-only sampling rule. No model prediction sets the
 shared bins. A source regression continues to use the original sampling/bins.
 
+Aggregate figure presentation retains Kevin's panel designs, physics titles,
+channel names, axis units and logarithmic scales. Each displayed truth/model
+curve has one mean and one 95% CI band; only panels designed for multiple
+report steps show those steps. Step labels give the actual step and elapsed
+time from dt_dump, for example step 10 (1,000 R_g/c), never an array index.
+Use shared role/channel/step colours and a caption naming the start count and
+evaluated split and identifying bands as 95% CIs. Every visible data axis has
+physics labels; internal result keys are forbidden in titles and legends.
+Figure-only regeneration may read existing verified result content without
+inference and writes a separate presentation bundle. Attach an rc300 contact
+sheet of every full-tier figure to the milestone-4 receipt for visual review.
+
 Owner command `gval reference truth --split-id <id> --split validation|test`
 builds the verified truth/persistence cache. It writes only under
 references/<split_id>/<protocol_id>/<protocol_sha256>/, mode 2750, with separate
