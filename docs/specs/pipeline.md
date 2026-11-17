@@ -1115,7 +1115,7 @@ run_id. Report settings keep the protocol's Agg/150 dpi/DejaVu Sans 11.
 `gval report --split-id <id> --export-results <repo_root>` also writes verified
 run.json/summary.json records under results/<split_id>/<model>/<run_id>/ only. New run metadata binds the original summary and result-file hashes. Only owner-verified sealed completed runs are exported. Export original
 metadata unchanged; do not hand-edit summary or run.json. Include
-results/<split_id>/attempts.json, a closed-schema snapshot of every observed
+reports/<split_id>/attempts.json, a closed-schema snapshot of every observed
 attempt's identity, status, location class, eligibility and exclusion reason.
 This ledger is required to reproduce failed test-attempt counts without Delta.
 Never overwrite a conflicting exported run record. Regeneration updates only
