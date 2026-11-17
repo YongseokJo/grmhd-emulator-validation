@@ -5,7 +5,7 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestones 1–3 merged; milestone 4 ready for owner review.** The adapter API,
+**Status: milestones 1–4 merged; error-map presentation follow-up in progress.** The adapter API,
 persistence, recorded runner, owner goldens, conformance and verification are
 implemented. Milestone 4 adds final all-start aggregates/CIs, audited transport,
 resolved-shell headlines and shared truth caches. The finalized protocol enables
