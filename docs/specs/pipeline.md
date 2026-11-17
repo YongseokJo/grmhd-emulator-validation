@@ -437,6 +437,19 @@ the metric/CSV/summary files and golden fingerprint are unchanged. Keep the
 versioned review bundle as the presentation receipt. This permission applies
 to owner persistence references, not completed model runs.
 
+Non-negative physical error maps (absolute errors and RMS) use LogNorm, with
+limits at the 1st and 99.5th percentiles of positive finite cell values whose
+centres lie in the displayed region. Zero/non-finite values are uncoloured;
+the underlying arrays are unchanged. All-zero or unavailable maps are labelled
+explicitly. A degenerate positive percentile range uses one decade centred on
+that value. Signed bias maps use SymLogNorm centred on zero: the symmetric
+bound is the 99.5th percentile of nonzero absolute values and the linear
+threshold is their 1st percentile, again within the displayed region. Every
+error colourbar names its units and log scale (symmetric log for bias).
+Presentation tests reject a nonconstant visible map if over 90% of its
+unmasked cell values occupy the lowest 5% of the colour range. Figure-only
+receipts record the normalization, bounds, visibility and contrast checks.
+
 Owner command `gval reference truth --split-id <id> --split validation|test`
 builds the verified truth/persistence cache. It writes only under
 references/<split_id>/<protocol_id>/<protocol_sha256>/, mode 2750, with separate
