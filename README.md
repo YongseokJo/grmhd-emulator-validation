@@ -5,17 +5,18 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestones 1–4 merged; error-map presentation follow-up ready for review.** The adapter API,
-persistence, recorded runner, owner goldens, conformance and verification are
-implemented. Milestone 4 adds final all-start aggregates/CIs, audited transport,
-resolved-shell headlines and shared truth caches. The finalized protocol enables
-full publication with a verified truth cache and passing full conformance;
-historical previews stay in staging. Both datasets pass final quick/full
-conformance; the [milestone 4 receipt and figure contact sheet](docs/milestone_4_validation.md)
-record fingerprints, memory measurements and presentation checks.
-The [error-map review receipt and crops](docs/error_map_scales_review.md) cover
-the subsequent logarithmic colour-scale fix. Milestone 5 awaits that review.
-Learned-model examples and prediction mode are milestone 5.
+**Status: milestones 1–4 and the error-map figure fix are merged. Milestone 5
+is implemented and undergoing validation.** It adds credited TRON/ViT and
+Eden's three adapters, declared training provenance with computed split overlap,
+and agent prediction tasks/packets feeding the common scorer. See
+[model setup](docs/plugging_in_a_model.md), [host](docs/prediction_roles/host.md),
+[forecasting agent](docs/prediction_roles/forecasting.md) and
+[scorer](docs/prediction_roles/scorer.md) instructions. Missing coverage remains
+`not evaluated` in staging; imported files never execute agent code in the scorer.
+
+The finalized protocol, metric spaces, common inference and result fingerprints
+are unchanged. The [milestone 4 receipt](docs/milestone_4_validation.md) and
+[figure receipt](docs/error_map_scales_review.md) retain their numerical evidence.
 See [milestone 4 usage](docs/milestone_4.md).
 See [milestone 3 usage and validation](docs/milestone_3.md), [milestone 2 usage](docs/milestone_2.md),
 [metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md). Locked DeltaAI references and real-data
@@ -36,13 +37,13 @@ exceeds about two hours.
 
 Shared results folder (Delta and DeltaAI, group `delta_bgun`): `/work/nvme/bgun/share/validation`.
 
-## Planned prediction mode (milestone 5)
+## Prediction mode (milestone 5)
 
 The full [prediction-mode specification](docs/specs/pipeline.md#61-agent-driven-prediction-mode-milestone-5)
 defines the forecasting agent, host and scorer roles; task/packet commands;
 versioned prompts; fixed prediction layout; complete 12-start × 50-step coverage;
-provenance/attestation; and Eden's three credited adapters. Implementation is
-milestone 5. Missing required predictions are reported as “not evaluated”.
+provenance/attestation; and Eden's three credited adapters. The [role-specific workflow](docs/prediction_roles/host.md) implements that contract.
+Missing required predictions are reported as “not evaluated”.
 
 ## Split rules (every model, every agent)
 

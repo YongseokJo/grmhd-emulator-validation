@@ -61,6 +61,8 @@ def _verify_bundle(path, repo=None):
 def verify_run(path, repo=None):
     """An unsealed COMPLETE run is not eligible for comparison or reporting."""
     path=Path(path)
+    if (path/'NOT_EVALUATED').is_file():
+        return {'ok':False,'status':'not evaluated','run_dir':str(path),'next':'Inspect coverage.json; complete the task and record a new attempt'}
     if (path/'PREVIEW').is_file() and not (path/'FAILED').exists():
         info=json.loads((path/'run.json').read_text())
         return {'ok':False,'preview':True,'run_dir':str(path),'reason':info.get('preview_reason'),

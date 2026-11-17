@@ -48,3 +48,20 @@ reference for these ports. The TRON adapter port is milestone 5; the fixed
 checkpoint/full-suite regression belongs to milestone 3. Paths abbreviated as
 `analyses/` above are under `grmhd_validation/`. Milestone-3 sampling versus the
 final milestone-4 aggregate is explicit in `docs/metrics.md` and spec §3.4.
+
+## Milestone 5 adapters and packet host
+
+| Module | Original source | Changes |
+|---|---|---|
+| `adapters/learned.py` | Kevin Fortune, `Fall26/eval/evaluate_tron.py`, `fall26-tron-rc300@2667a5f`; `Fall26/eval/evaluate_vit.py`, `Fall26/common/normalizer.py`, `main@ebcc218` (TRON originals: Sachin) | Argument-only geometry and physical history, strict state-dict checkpoint loading, residual decode and exact Lorentz clamp; no data paths, scoring or experiment discovery. |
+| `adapters/_tron_model.py` | Kevin Fortune / Sachin, `Fall26/tron/model.py`, `fall26-tron-rc300@2667a5f` | Architecture definitions selected for the standalone adapter; evaluator/training context removed. |
+| `adapters/_vit_model.py` | Kevin Fortune, `Fall26/vit/model.py`, `main@ebcc218` | Architecture definitions selected for the standalone adapter; restored checkpoint configuration and argument coordinates. |
+| `adapters/eden.py`, `_eden_claude.py` | Eden Growney, originating agent Claude, `eden_rc300_pilot/benchmark_pilot/rc300_packets/start_11672_claude/submission/code/forecast_one_step.py`, `eden/rc300-frontier-15nov@f8cd379a562e9b0fc6f96ee36d5f9855ddc1d27a` | Remove packet I/O and fixed-shape guards; validate log-radius, reflection and periodic-phi assumptions. Preserve smoothing, phase/shear damping, radial interpolation and magnetization floors. |
+| `adapters/eden.py`, `_eden_gpt.py` | Eden Growney, originating agent GPT, same branch/commit, `start_11672_gpt/submission/code/predict_one_step.py` | Argument-only input; dynamic shape; unchanged phi shift, phase mixing, Courant-limited radial step, radial persistence blend and floors. |
+| `adapters/eden.py`, `_eden_gemini.py` | Eden Growney, originating agent Gemini, same branch/commit, `start_11672_gemini/submission/code/predict_step.py` | Argument-only input; canonical dt_dump replaces packet-only dt_dump_exact; unchanged density-weighted rotation, FFT shift and floors. |
+| `predictions.py`, `prompts/eden-{code,step}-v1/` | Eden Growney, same branch/commit, rc300 `primary_ar_onestep` packet contract and `tools/advance_rc300_ar.py` | New implementation of frozen benchmark coverage, h-frame rolling history, strict float32, immutable acceptance, separated host/scorer roles, hashed provenance and explicit host attestation. Dynamic dimensions/cadence. |
+
+The Eden examples are protocol A methods with known pilot exposure. Their historic
+start-11672 cubes/scores are not imported. Wrapping them does not establish blind
+development on the frozen split. Original scripts are read only in regression
+checks, never committed unchanged. No new dependency is introduced.

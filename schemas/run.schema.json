@@ -230,7 +230,8 @@
     "running",
     "complete",
     "failed",
-    "preview"
+    "preview",
+    "not evaluated"
    ]
   },
   "tier": {
@@ -402,6 +403,30 @@
     "null"
    ],
    "pattern": "^[0-9a-f]{64}$"
+  },
+  "predictions": {
+   "type": [
+    "object",
+    "null"
+   ]
+  },
+  "model_provenance": {
+   "type": [
+    "object",
+    "null"
+   ]
+  },
+  "training_provenance": {
+   "type": [
+    "object",
+    "null"
+   ]
+  },
+  "not_evaluated": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "type": "object"
   }
  },
  "required": [

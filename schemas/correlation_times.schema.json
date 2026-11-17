@@ -133,14 +133,15 @@
     "time"
    ],
    "additionalProperties": false
+  },
+  "status": {
+   "const": "not evaluated"
+  },
+  "reason": {
+   "type": "string",
+   "minLength": 1
   }
  },
- "required": [
-  "analysis",
-  "space",
-  "starts",
-  "data"
- ],
  "additionalProperties": false,
  "$defs": {
   "value": {
@@ -255,5 +256,27 @@
    ],
    "additionalProperties": false
   }
- }
+ },
+ "oneOf": [
+  {
+   "required": [
+    "analysis",
+    "space",
+    "starts",
+    "data"
+   ],
+   "not": {
+    "required": [
+     "status"
+    ]
+   }
+  },
+  {
+   "required": [
+    "status",
+    "reason"
+   ],
+   "maxProperties": 2
+  }
+ ]
 }

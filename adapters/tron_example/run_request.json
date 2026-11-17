@@ -1,0 +1,9 @@
+{
+ "adapter": "tron",
+ "checkpoint": "/absolute/path/best.pth",
+ "model": "tron",
+ "notes": "",
+ "options": {},
+ "training_record": null,
+ "version": "v1"
+}

@@ -1,0 +1,135 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "active_step": {
+   "type": "integer"
+  },
+  "chunk": {
+   "type": "string"
+  },
+  "code_sha256": {
+   "additionalProperties": {
+    "pattern": "^[0-9a-f]{64}$",
+    "type": "string"
+   },
+   "type": "object"
+  },
+  "dtype": {
+   "const": "float32"
+  },
+  "episode_id": {
+   "type": "string"
+  },
+  "freeze_time": {
+   "type": "string"
+  },
+  "generation": {
+   "type": "object"
+  },
+  "geometry_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "input_history_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "kind": {
+   "enum": [
+    "rollout",
+    "single_step"
+   ]
+  },
+  "prediction_file": {
+   "type": "string"
+  },
+  "prediction_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "previous_output_sha256": {
+   "anyOf": [
+    {
+     "pattern": "^[0-9a-f]{64}$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "prompt_id": {
+   "type": "string"
+  },
+  "rendered_prompt_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "schema_version": {
+   "const": 1
+  },
+  "shape": {
+   "items": {
+    "type": "integer"
+   },
+   "type": "array"
+  },
+  "start": {
+   "type": "integer"
+  },
+  "step": {
+   "type": "integer"
+  },
+  "target": {
+   "type": "integer"
+  },
+  "task_id": {
+   "type": "string"
+  },
+  "task_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "validation": {
+   "const": "accepted"
+  },
+  "code_directory": {
+   "type": "string"
+  },
+  "rejections": {
+   "type": "array",
+   "items": {
+    "type": "object"
+   }
+  }
+ },
+ "required": [
+  "schema_version",
+  "task_id",
+  "episode_id",
+  "prompt_id",
+  "kind",
+  "chunk",
+  "start",
+  "active_step",
+  "task_sha256",
+  "step",
+  "target",
+  "input_history_sha256",
+  "geometry_sha256",
+  "previous_output_sha256",
+  "rendered_prompt_sha256",
+  "prediction_file",
+  "prediction_sha256",
+  "shape",
+  "dtype",
+  "code_sha256",
+  "generation",
+  "freeze_time",
+  "validation",
+  "code_directory",
+  "rejections"
+ ],
+ "type": "object"
+}

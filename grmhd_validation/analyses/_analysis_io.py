@@ -98,7 +98,7 @@ class FullStore:
             if key in self.paths:
                 output=torch.from_numpy(self.load(*key)).to(self.ctx.device)[None]
             else:
-                output=self.ctx.step(history)
+                output=self.ctx.step(history, ('rollout', start, step))
                 self.save('rollout',start,step,output[0].cpu().numpy())
             history=torch.cat((history[:,1:],output[:,None]),dim=1)
         return DiskFrames(self,start,count)
@@ -198,11 +198,14 @@ def forecast_one_step(model, norm, state, device):
         history[:,-1]=state.to(ctx.device,dtype=torch.float32)
     else:history=history.to(ctx.device)
     key=('single',int(index),1) if index is not None else None
-    use_cache=bound['analysis'] not in {'cost','stability'}
+    use_cache=bound['analysis'] not in {'cost','stability'} and not (getattr(ctx, 'predictions', None) is not None and bound['analysis']=='bias_analysis')
     if key is not None and use_cache and key in ctx.full.paths:
         output=torch.from_numpy(ctx.full.load(*key)).to(ctx.device)[None]
     else:
-        output=ctx.step(history)
+        prediction_key = ('single_step', int(index), 1) if index is not None else None
+        if bound['analysis'] == 'bias_analysis' and getattr(ctx, 'predictions', None) is not None:
+            prediction_key = ('rollout', int(index), 1)
+        output=ctx.step(history, prediction_key)
         if key is not None and use_cache:ctx.full.save('single',index,1,output[0].cpu().numpy())
     result=output.to(device)
     result._gval_history=torch.cat((history[:,1:],output[:,None]),dim=1).detach()

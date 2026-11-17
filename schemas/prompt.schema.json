@@ -1,0 +1,75 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "allowed_tools": {
+   "items": {
+    "type": "string"
+   },
+   "type": "array"
+  },
+  "authors": {
+   "type": "string"
+  },
+  "input_schema_version": {
+   "type": "integer"
+  },
+  "network_access": {
+   "const": "none"
+  },
+  "output_schema_version": {
+   "type": "integer"
+  },
+  "prompt_id": {
+   "type": "string"
+  },
+  "protocol": {
+   "enum": [
+    "A",
+    "B"
+   ]
+  },
+  "rendering_fields": {
+   "items": {
+    "type": "string"
+   },
+   "type": "array"
+  },
+  "schema_version": {
+   "const": 1
+  },
+  "session_policy": {
+   "enum": [
+    "fresh_per_step",
+    "fresh_per_start",
+    "continued_per_start"
+   ]
+  },
+  "source_commit": {
+   "type": "string"
+  },
+  "source_contract": {
+   "type": "string"
+  },
+  "template_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  }
+ },
+ "required": [
+  "schema_version",
+  "prompt_id",
+  "protocol",
+  "session_policy",
+  "source_contract",
+  "source_commit",
+  "authors",
+  "allowed_tools",
+  "network_access",
+  "input_schema_version",
+  "output_schema_version",
+  "rendering_fields",
+  "template_sha256"
+ ],
+ "type": "object"
+}

@@ -1,0 +1,183 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "channels": {
+   "items": {
+    "type": "string"
+   },
+   "type": "array"
+  },
+  "completeness": {
+   "additionalProperties": false,
+   "properties": {
+    "rollout": {
+     "type": "string"
+    },
+    "single_step": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "rollout",
+    "single_step"
+   ],
+   "type": "object"
+  },
+  "dtype": {
+   "const": "float32"
+  },
+  "geometry_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "history_length": {
+   "maximum": 10,
+   "minimum": 1,
+   "type": "integer"
+  },
+  "max_steps": {
+   "type": "integer"
+  },
+  "partition": {
+   "enum": [
+    "validation",
+    "test"
+   ]
+  },
+  "prompt_id": {
+   "type": "string"
+  },
+  "prompt_manifest_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "protocol": {
+   "enum": [
+    "A",
+    "B"
+   ]
+  },
+  "protocol_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "request_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "required_targets": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "chunk": {
+      "type": "string"
+     },
+     "kind": {
+      "type": "string"
+     },
+     "start": {
+      "type": "integer"
+     },
+     "targets": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array"
+     }
+    },
+    "required": [
+     "kind",
+     "chunk",
+     "start",
+     "targets"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  },
+  "schema_version": {
+   "const": 1
+  },
+  "seed": {
+   "type": "integer"
+  },
+  "session_policy": {
+   "type": "string"
+  },
+  "shape": {
+   "items": {
+    "type": "integer"
+   },
+   "type": "array"
+  },
+  "split_file_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "split_id": {
+   "type": "string"
+  },
+  "starts": {
+   "items": {
+    "additionalProperties": false,
+    "properties": {
+     "chunk": {
+      "type": "string"
+     },
+     "rollout": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array"
+     },
+     "single_step": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array"
+     }
+    },
+    "required": [
+     "chunk",
+     "rollout",
+     "single_step"
+    ],
+    "type": "object"
+   },
+   "type": "array"
+  },
+  "task_id": {
+   "type": "string"
+  },
+  "template_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  }
+ },
+ "required": [
+  "schema_version",
+  "task_id",
+  "request_sha256",
+  "split_id",
+  "split_file_sha256",
+  "protocol_sha256",
+  "geometry_sha256",
+  "partition",
+  "protocol",
+  "prompt_id",
+  "prompt_manifest_sha256",
+  "template_sha256",
+  "session_policy",
+  "history_length",
+  "shape",
+  "dtype",
+  "channels",
+  "seed",
+  "max_steps",
+  "starts",
+  "required_targets",
+  "completeness"
+ ],
+ "type": "object"
+}

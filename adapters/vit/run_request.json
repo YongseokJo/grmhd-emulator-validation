@@ -1,0 +1,9 @@
+{
+ "adapter": "vit",
+ "checkpoint": "/absolute/path/best.pth",
+ "model": "vit",
+ "notes": "",
+ "options": {},
+ "training_record": null,
+ "version": "v1"
+}
