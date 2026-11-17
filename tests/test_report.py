@@ -81,7 +81,7 @@ class ReportTests(RunnerFixture):
 
     def test_export_record_tampering_and_ledger_mismatch_fail(self):
         result=self.run_eval();self.run_report(export_results=self.export)
-        ledger_path=self.export/'results/synthetic_v1/attempts.json';ledger=json.loads(ledger_path.read_text());ledger['attempts'][0]['eligible']=False;ledger_path.write_bytes(json_bytes(ledger))
+        ledger_path=self.export/'reports/synthetic_v1/attempts.json';ledger=json.loads(ledger_path.read_text());ledger['attempts'][0]['eligible']=False;ledger_path.write_bytes(json_bytes(ledger))
         with self.assertRaisesRegex(ValueError,'eligibility'):report('synthetic_v1',from_results=True,repo=self.export,check=True)
 
     def test_grouping_separates_partition_tier_and_protocol_hash(self):

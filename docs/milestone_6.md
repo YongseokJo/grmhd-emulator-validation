@@ -26,14 +26,13 @@ sbatch scripts/report_delta.sbatch --split-id rc300_reduced_v1 --export-results 
 ```
 
 This verifies shared bundles, refreshes only derived reports in the owner-only
-reports area, and exports original run.json/summary.json plus source hashes under
-results/. An attempt ledger snapshots failures and exclusions; it is necessary
+reports area, and exports original run.json/summary.json under results/. New run metadata and summaries bind the result hashes.
+An attempt ledger under reports/ snapshots failures and exclusions; it is necessary
 to reproduce test counts without Delta. A conflicting completed result export
 is never overwritten. Group directory modes/layout remain unchanged; atomic
 report file replacement uses new group-readable inodes.
 
-Review and commit the generated results, attempt ledger, reports and comparison
-PNGs through the milestone PR (the owner merges). Never hand-edit numbers or
+Review and commit the generated results, attempt ledger and text reports through the milestone PR (the owner merges). Never hand-edit numbers or
 copy a run bundle into shared storage. Full bundles remain on Delta.
 
 ```bash
@@ -45,9 +44,9 @@ python scripts/sync_agent_instructions.py --check
 Replay needs only committed result records, split definitions and protocol Git
 history, not data paths, Delta storage or environment locks. It validates schemas,
 original hashes, identities, the result fingerprint's file-hash map, and ledger
-consistency. Exact JSON/CSV/Markdown bytes are checked. Comparison PNGs are bound
-to report-group data and hashes in figures.json, checked without rerendering so
-FreeType/matplotlib raster differences do not make CI spuriously fail. Empty
+consistency. Exact JSON/CSV/Markdown bytes are checked. Comparison PNGs stay on shared storage or in ignored local replay outputs,
+with a presentation manifest for local integrity checks. No metrics or PNGs are
+exported to Git. CI text checks do not require PNG files or rerender them. Empty
 datasets have explicit empty reports; owner references are not fabricated runs.
 
 GitHub CI runs the public tests on NumPy 1.24 and 2.x, validates both dataset
@@ -67,3 +66,7 @@ precedence. Installed persistence needs no rewritten adapter. Default scope is
 quick validation; full/test require the user's requested scope. Prediction mode
 retains [separate roles](prediction_roles/host.md); forecasting agents see only
 their packet, never the repository-wide participant/host instructions.
+
+The [owner-approved compact summary correction](notes/summary_format_correction.md)
+keeps new summaries below 1 MB, with metric SHA256 values. Legacy model runs
+remain immutable; all new reference and conformance output uses format 2.

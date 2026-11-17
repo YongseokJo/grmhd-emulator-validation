@@ -51,10 +51,17 @@ def _verify_bundle(path, repo=None, allow_historical_protocol=False):
         protocol=protocol_blob(repo,info['protocol_id'],info['protocol_sha256'])
     else:protocol,_=read_protocol(protocol_file)
     from .summary import validate as validate_summary
-    validate_summary(json.loads((path / "summary.json").read_text()),legacy=True)
+    summary=json.loads((path / "summary.json").read_text())
+    validate_summary(summary,legacy=True)
     for name in protocol["tiers"][info["tier"]]:
         schema_validate(json.loads((path / "metrics" / (name + ".json")).read_text()), name + ".schema.json")
-    result = fingerprint(result_files(path))
+    content=result_files(path)
+    if summary.get('schema_version')==2:
+        if info.get('summary_format_version')!=2 or info.get('result_content_sha256')!=content:
+            raise ValueError('Compact summary run hash bindings differ from actual result files')
+        if any(content.get('metrics/'+name+'.json')!=digest for name,digest in summary['metric_sha256'].items()):
+            raise ValueError('Compact summary metric hashes differ from actual metric files')
+    result = fingerprint(content)
     if result != info["result_fingerprint"] or (path / "COMPLETE").read_text().strip() != result:
         raise ValueError("Result fingerprint/completion marker mismatch")
     unsealed = bool(path.stat().st_mode & 0o222)

@@ -5,17 +5,21 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestones 1–4 and the error-map figure fix are merged. Milestone 5
-is ready for owner review.** It adds credited TRON/ViT and
-Eden's three adapters, declared training provenance with computed split overlap,
-and agent prediction tasks/packets feeding the common scorer. See
-[validation receipt](docs/milestone_5_validation.md), [model setup](docs/plugging_in_a_model.md), [host](docs/prediction_roles/host.md),
-[forecasting agent](docs/prediction_roles/forecasting.md) and
-[scorer](docs/prediction_roles/scorer.md) instructions. Missing coverage remains
-`not evaluated` in staging; imported files never execute agent code in the scorer.
+**Status: milestones 1–5 merged; milestone 6 is in validation.** Reporting,
+portable result replay, CI and canonical participant instructions are implemented.
+See [report usage](docs/milestone_6.md) and the
+[compact-summary owner decision](docs/notes/summary_format_correction.md).
+New summaries contain bounded headlines and metric hashes (at most 1 MB);
+full metric/profile/map data remains on shared storage. Result-format correction
+changes persistence fingerprints under the unchanged protocol hash; the
+milestone-6 receipt records the old/new values and unchanged metric bytes.
 
-The finalized protocol, metric spaces, common inference and result fingerprints
-are unchanged. The [milestone 4 receipt](docs/milestone_4_validation.md) and
+Start with [AGENTS.md](AGENTS.md). Model setup is in
+[plugging in a model](docs/plugging_in_a_model.md). Prediction-mode
+[host](docs/prediction_roles/host.md), [forecasting](docs/prediction_roles/forecasting.md)
+and [scorer](docs/prediction_roles/scorer.md) instructions remain separate.
+
+The finalized protocol, metric spaces, common inference and metric values are unchanged. The [milestone 4 receipt](docs/milestone_4_validation.md) and
 [figure receipt](docs/error_map_scales_review.md) retain their numerical evidence.
 See [milestone 4 usage](docs/milestone_4.md).
 See [milestone 3 usage and validation](docs/milestone_3.md), [milestone 2 usage](docs/milestone_2.md),

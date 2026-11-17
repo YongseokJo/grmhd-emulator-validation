@@ -67,6 +67,7 @@ def valid_record(info,summary,repo):
         if name not in summary or summary[name].get('status')=='not evaluated':
             raise ValueError('Completed report record lacks an evaluated analysis: '+name)
     if not isinstance(summary,ReportSummary) and summary.get('schema_version')==2:
+        if info.get('summary_format_version')!=2:raise ValueError('Compact summary needs format-2 run metadata')
         names=protocol['tiers'][info['tier']]
         if set(summary['metric_sha256'])!=set(names):raise ValueError('Summary metric-hash coverage differs from protocol')
         hashes=info.get('result_content_sha256',{})
@@ -373,12 +374,12 @@ def export_snapshot(records,ledger,root):
             else:
                 with target.open('xb') as stream:stream.write(content)
         discard_run_cache(source)
-    local_write(destination,{'attempts.json':json_bytes(ledger)})
+    local_write(Path(root)/'reports'/ledger['split_id'],{'attempts.json':json_bytes(ledger)})
 
 
 def read_results(repo,split_id):
     directory=safe(repo,'results/'+split_id)
-    ledger_path=directory/'attempts.json'
+    ledger_path=safe(repo,'reports/'+split_id+'/attempts.json')
     if not ledger_path.exists():
         if directory.exists() and any(directory.iterdir()):raise ValueError('Result exports require attempts.json')
         return [],{'schema_version':1,'split_id':split_id,'attempts':[]}
@@ -390,6 +391,7 @@ def read_results(repo,split_id):
     records=[];found=set()
     for model in names(directory):
         for path in names(model):
+            if safe(path,'summary.json').stat().st_size>1_000_000:raise ValueError('Committed summary exceeds 1,000,000 bytes')
             info=read(safe(path,'run.json'));summary=read(safe(path,'summary.json'));valid_record(info,summary,repo)
             if (info['split_id'],info['model'],info['run_id'])!=(split_id,model.name,path.name):raise ValueError('Export path identity mismatch')
             if info.get('summary_format_version')==2:
