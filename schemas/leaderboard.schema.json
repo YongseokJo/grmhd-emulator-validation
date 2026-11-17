@@ -1,0 +1,404 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {
+   "const": 1
+  },
+  "split_id": {
+   "type": "string"
+  },
+  "comparison_fields": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "groups": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "split_id": {
+      "type": "string"
+     },
+     "protocol_id": {
+      "type": "string"
+     },
+     "protocol_sha256": {
+      "type": "string"
+     },
+     "split": {
+      "type": "string"
+     },
+     "tier": {
+      "type": "string"
+     },
+     "rows": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "split_id": {
+         "type": "string"
+        },
+        "protocol_id": {
+         "type": "string"
+        },
+        "protocol_sha256": {
+         "type": "string"
+        },
+        "split": {
+         "type": "string"
+        },
+        "tier": {
+         "type": "string"
+        },
+        "model": {
+         "type": "string"
+        },
+        "version": {
+         "type": "string"
+        },
+        "run_id": {
+         "type": "string"
+        },
+        "checkpoint_sha256": {
+         "anyOf": [
+          {
+           "type": "string",
+           "pattern": "^[0-9a-f]{64}$"
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "report_step": {
+         "type": "integer",
+         "minimum": 0
+        },
+        "skill": {
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "nmae": {
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "single_step_skill": {
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "single_step_nmae": {
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "physical_rel_l1": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "rho": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "ug": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "utilde1": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "utilde2": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "utilde3": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "B1": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "B2": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "B3": {
+           "type": [
+            "number",
+            "null"
+           ]
+          }
+         },
+         "required": [
+          "rho",
+          "ug",
+          "utilde1",
+          "utilde2",
+          "utilde3",
+          "B1",
+          "B2",
+          "B3"
+         ]
+        },
+        "physics_errors": {
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+          "mass": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "energy": {
+           "type": [
+            "number",
+            "null"
+           ]
+          },
+          "angular": {
+           "type": [
+            "number",
+            "null"
+           ]
+          }
+         },
+         "required": [
+          "mass",
+          "energy",
+          "angular"
+         ]
+        },
+        "test_attempts": {
+         "type": "integer",
+         "minimum": 0
+        },
+        "unattributed_test_attempts": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "data_verified": {
+         "type": "boolean"
+        },
+        "training_label": {
+         "type": "string"
+        },
+        "training_evidence": {
+         "type": "string"
+        },
+        "environment_locked": {
+         "type": "boolean"
+        },
+        "prediction_attestation": {
+         "type": "string"
+        },
+        "flags": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "rollout": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+           "step": {
+            "type": "integer",
+            "minimum": 0
+           },
+           "time_rg_c": {
+            "type": [
+             "number",
+             "null"
+            ]
+           },
+           "skill": {
+            "type": [
+             "number",
+             "null"
+            ]
+           },
+           "skill_ci": {
+            "type": "array",
+            "items": {
+             "type": [
+              "number",
+              "null"
+             ]
+            },
+            "minItems": 2,
+            "maxItems": 2
+           },
+           "nmae": {
+            "type": [
+             "number",
+             "null"
+            ]
+           }
+          },
+          "required": [
+           "step",
+           "time_rg_c",
+           "skill",
+           "skill_ci",
+           "nmae"
+          ]
+         }
+        }
+       },
+       "required": [
+        "split_id",
+        "protocol_id",
+        "protocol_sha256",
+        "split",
+        "tier",
+        "model",
+        "version",
+        "run_id",
+        "checkpoint_sha256",
+        "report_step",
+        "skill",
+        "nmae",
+        "single_step_skill",
+        "single_step_nmae",
+        "physical_rel_l1",
+        "physics_errors",
+        "test_attempts",
+        "unattributed_test_attempts",
+        "data_verified",
+        "training_label",
+        "training_evidence",
+        "environment_locked",
+        "prediction_attestation",
+        "flags",
+        "rollout"
+       ]
+      }
+     }
+    },
+    "required": [
+     "split_id",
+     "protocol_id",
+     "protocol_sha256",
+     "split",
+     "tier",
+     "rows"
+    ]
+   }
+  },
+  "excluded_attempts": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "run_id": {
+      "type": "string"
+     },
+     "model": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "checkpoint_sha256": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "checkpoint_known": {
+      "type": "boolean"
+     },
+     "split": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "tier": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "status": {
+      "type": "string"
+     },
+     "location": {
+      "enum": [
+       "runs",
+       "staging"
+      ]
+     },
+     "eligible": {
+      "type": "boolean"
+     },
+     "reason": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    },
+    "required": [
+     "run_id",
+     "model",
+     "checkpoint_sha256",
+     "checkpoint_known",
+     "split",
+     "tier",
+     "status",
+     "location",
+     "eligible",
+     "reason"
+    ]
+   }
+  }
+ },
+ "required": [
+  "schema_version",
+  "split_id",
+  "comparison_fields",
+  "groups",
+  "excluded_attempts"
+ ]
+}

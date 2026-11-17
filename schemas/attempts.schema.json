@@ -1,0 +1,92 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {
+   "const": 1
+  },
+  "split_id": {
+   "type": "string"
+  },
+  "attempts": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "run_id": {
+      "type": "string"
+     },
+     "model": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "checkpoint_sha256": {
+      "anyOf": [
+       {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "checkpoint_known": {
+      "type": "boolean"
+     },
+     "split": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "tier": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "status": {
+      "type": "string"
+     },
+     "location": {
+      "enum": [
+       "runs",
+       "staging"
+      ]
+     },
+     "eligible": {
+      "type": "boolean"
+     },
+     "reason": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    },
+    "required": [
+     "run_id",
+     "model",
+     "checkpoint_sha256",
+     "checkpoint_known",
+     "split",
+     "tier",
+     "status",
+     "location",
+     "eligible",
+     "reason"
+    ]
+   }
+  }
+ },
+ "required": [
+  "schema_version",
+  "split_id",
+  "attempts"
+ ]
+}

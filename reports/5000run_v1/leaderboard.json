@@ -1,0 +1,13 @@
+{
+ "comparison_fields": [
+  "split_id",
+  "protocol_id",
+  "protocol_sha256",
+  "split",
+  "tier"
+ ],
+ "excluded_attempts": [],
+ "groups": [],
+ "schema_version": 1,
+ "split_id": "5000run_v1"
+}

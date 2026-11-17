@@ -8,5 +8,6 @@ def comparison_key(info):
 def report_eligible(path,info):
     """Only sealed, successful runs can enter a report comparison group."""
     return (info.get('status')=='complete' and (path/'COMPLETE').is_file()
+            and not (path/'NOT_EVALUATED').exists() and not info.get('not_evaluated')
             and not (path/'PREVIEW').exists() and not (path/'FAILED').exists()
             and not path.stat().st_mode & 0o222)
