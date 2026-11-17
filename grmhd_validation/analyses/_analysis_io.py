@@ -62,7 +62,7 @@ class FullStore:
         measured=int(diagnostic(reset=True)) if diagnostic is not None else None
         if kind=='rollout':
             if measured is not None:self.clamps[(int(start),int(step))]=measured
-            elif self.ctx.adapter.name=='persistence':self.clamps[(int(start),int(step))]=0
+            elif self.ctx.adapter.name=='persistence' and getattr(self.ctx,'predictions',None) is None:self.clamps[(int(start),int(step))]=0
 
     @staticmethod
     def identity(path):

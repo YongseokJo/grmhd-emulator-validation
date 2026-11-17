@@ -299,6 +299,11 @@ def render_packet(root, task, host, split, packet, kind, chunk, start):
     schema = {'schema_version':1, 'task_id':task['task_id'], 'episode_id':episode_id,
               'prompt_id':task['prompt_id'], 'kind':kind, 'chunk':chunk, 'start':start,
               'active_step':step, 'prediction_file':f'prediction_step_{step:04d}.npy'}
+    folder = episode_root(root,kind,chunk,start)
+    state_path=folder/'packet_states'/f'step_{step:04d}.json'
+    if state_path.exists():
+        if read(state_path)!=episode:raise ValueError('Resumed packet differs from its frozen host input identity')
+    else:write(state_path,episode,True)
     replace(packet/'episode.json',episode)
     if not (packet/'output_schema.json').exists():
         write(packet/'output_schema.json',read(Path(host['repo'])/'schemas/submission.schema.json'))
@@ -373,6 +378,8 @@ def packet_advance(task_dir, packet_dir):
             step = len(records)+1;limit = task['max_steps'] if kind=='rollout' else 1
             if step>limit:raise ValueError('Episode is already complete')
             expected_episode=hashlib.sha256(f"{task['task_id']}:{kind}:{chunk}:{start}".encode()).hexdigest()
+            frozen_episode=read(folder/'packet_states'/f'step_{step:04d}.json')
+            if episode!=frozen_episode:raise ValueError('Packet metadata differs from the frozen host input identity')
             if episode['episode_id']!=expected_episode or episode['prompt_id']!=task['prompt_id']:
                 raise ValueError('Episode identity changed')
             if episode['task_id'] != task['task_id'] or episode['active_step'] != step or episode['input_history_sha256'] != tensor_hash(history):
@@ -380,8 +387,8 @@ def packet_advance(task_dir, packet_dir):
             for name,digest in episode['input_hashes'].items():
                 if sha256(confined(packet/'inputs',name)) != digest:raise ValueError('Packet input changed')
             current = array(packet/'inputs/current_state.npy',task['shape'])
-            if not np.array_equal(current,history[-1]):raise ValueError('Packet current state changed')
-            if len(history)>1 and not np.array_equal(array(packet/'inputs/history.npy',history.shape),history):raise ValueError('Packet history changed')
+            if tensor_hash(current)!=tensor_hash(history[-1]):raise ValueError('Packet current state changed')
+            if len(history)>1 and tensor_hash(array(packet/'inputs/history.npy',history.shape))!=tensor_hash(history):raise ValueError('Packet history changed')
             if sha256(packet/'inputs/geometry.npz') != task['geometry_sha256']:raise ValueError('Packet geometry changed')
             _,template = prompt(host['repo'],task['prompt_id'],task['protocol'])
             expected = template.format(shape=tuple(task['shape']),dt_dump=split.dt_dump,history_length=task['history_length'],protocol=task['protocol'])
@@ -421,6 +428,7 @@ def packet_advance(task_dir, packet_dir):
                       'input_history_sha256':tensor_hash(history), 'geometry_sha256':task['geometry_sha256'],
                       'previous_output_sha256':records[-1]['prediction_sha256'] if records else None,
                       'rendered_prompt_sha256':hashlib.sha256(expected.encode()).hexdigest(),
+                      'packet_inputs_sha256':frozen_episode['input_hashes'],
                       'prediction_file':name,'prediction_sha256':before,'shape':task['shape'],'dtype':'float32',
                       'code_sha256':hashes,'code_directory':code_relative,'generation':generation,
                       'rejections':[read(p) for p in sorted((root/'rejections').glob('*.json')) if read(p)['packet']==str(packet)],'freeze_time':now(),'validation':'accepted'}

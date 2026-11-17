@@ -102,6 +102,13 @@
    "items": {
     "type": "object"
    }
+  },
+  "packet_inputs_sha256": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "string",
+    "pattern": "^[0-9a-f]{64}$"
+   }
   }
  },
  "required": [
@@ -129,7 +136,8 @@
   "freeze_time",
   "validation",
   "code_directory",
-  "rejections"
+  "rejections",
+  "packet_inputs_sha256"
  ],
  "type": "object"
 }

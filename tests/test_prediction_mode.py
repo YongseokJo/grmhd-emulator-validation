@@ -222,3 +222,11 @@ class PredictionTests(RunnerFixture):
         write(path,{'value':1},True)
         with self.assertRaises(FileExistsError):write(path,{'value':2},True)
         self.assertEqual(read(path),{'value':1})
+
+    def test_agent_cannot_change_inputs_then_rewrite_episode_hashes(self):
+        self.task_make('B',1);task=read(self.task/'task.json');start=task['starts'][0]['rollout'][0]
+        packet=self.packet('rollout',start);episode=read(packet/'episode.json')
+        path=packet/'inputs/current_state.npy';value=np.load(path);np.save(path,value+1)
+        episode['input_hashes']['current_state.npy']=sha256(path)
+        (packet/'episode.json').write_bytes(json_bytes(episode))
+        with self.assertRaisesRegex(ValueError,'frozen host input'):self.submit(packet)
