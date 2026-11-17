@@ -23,6 +23,18 @@
    "split": "validation",
    "status": "complete",
    "tier": "quick"
+  },
+  {
+   "checkpoint_known": true,
+   "checkpoint_sha256": null,
+   "eligible": true,
+   "location": "runs",
+   "model": "persistence",
+   "reason": null,
+   "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3",
+   "split": "validation",
+   "status": "complete",
+   "tier": "quick"
   }
  ],
  "schema_version": 1,

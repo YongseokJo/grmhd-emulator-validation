@@ -1,0 +1,169 @@
+{
+ "checks": {
+  "gval-m6-final-doctor.log": {
+   "checks": {
+    "environment": {
+     "environment_locked": true,
+     "lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+     "mismatches": [],
+     "platform": "deltaai-aarch64",
+     "status": "pass"
+    },
+    "protocol": {
+     "protocol_id": "forecast_v1",
+     "sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "status": "pass"
+    },
+    "splits": [
+     {
+      "checksums_sha256": "a2f651a52f438854a43d625bc4e1062a7fad14f38623a925dcb3f6de28b80ff2",
+      "file": "/u/gkerex/project/grmhd-emulator-validation/splits/5000run_v1.json",
+      "sha256": "2db2b032bdc27372e6ab6c3ab3547063b95f0d4fafb27ce2936bbaad421cf506",
+      "split_id": "5000run_v1",
+      "status": "pass"
+     },
+     {
+      "checksums_sha256": "5d9da7ba1c85f45d21911db528d5b8ff09886bae828d2fd235f44f193fd284e8",
+      "file": "/u/gkerex/project/grmhd-emulator-validation/splits/rc300_reduced_v1.json",
+      "sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+      "split_id": "rc300_reduced_v1",
+      "status": "pass"
+     }
+    ],
+    "storage": {
+     "acl_subprocesses": 9,
+     "errors": [],
+     "group": "delta_bgun",
+     "group_unreadable_files": [],
+     "root": "/work/nvme/bgun/share/validation",
+     "scan_duration_seconds": 6.942768259905279,
+     "scanned_entries": 6565,
+     "status": "pass",
+     "unfinished_reference_candidates": []
+    }
+   },
+   "environment_locked": true,
+   "next": "gval conformance",
+   "ok": true,
+   "status": "pass"
+  },
+  "gval-m6-final-replay-5000run_v1.log": {
+   "checked": true,
+   "excluded_attempts": 2,
+   "groups": 0,
+   "next": "Review generated reports and export through an owner PR",
+   "ok": true,
+   "runs": 0,
+   "split_id": "5000run_v1"
+  },
+  "gval-m6-final-replay-rc300_reduced_v1.log": {
+   "checked": true,
+   "excluded_attempts": 0,
+   "groups": 1,
+   "next": "Review generated reports and export through an owner PR",
+   "ok": true,
+   "runs": 2,
+   "split_id": "rc300_reduced_v1"
+  },
+  "gval-m6-final-report-5000run_v1.log": {
+   "checked": false,
+   "excluded_attempts": 2,
+   "groups": 0,
+   "next": "Review generated reports and export through an owner PR",
+   "ok": true,
+   "runs": 0,
+   "split_id": "5000run_v1"
+  },
+  "gval-m6-final-report-rc300_reduced_v1.log": {
+   "checked": false,
+   "excluded_attempts": 0,
+   "groups": 1,
+   "next": "Review generated reports and export through an owner PR",
+   "ok": true,
+   "runs": 2,
+   "split_id": "rc300_reduced_v1"
+  }
+ },
+ "format2_publication": {
+  "checks": {
+   "gval-m6-format2-adapter.log": {
+    "cuda_peak_bytes": null,
+    "history_length": 1,
+    "next": "gval evaluate --tier quick --split validation --request <request> --split-id rc300_reduced_v1",
+    "ok": true,
+    "seconds_per_step": [
+     0.009044931270182133,
+     0.00873658712953329,
+     0.008900518994778395
+    ],
+    "source": {
+     "repo_commit": "6986c33e5afd97545349583667c10ac7cae7c954",
+     "source_sha256": "e3007636e8a40dab54fa67f643731e0fcc9edea977e5795f3071f5afec686b92"
+    }
+   },
+   "gval-m6-format2-evaluate.log": {
+    "data_verified": true,
+    "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3",
+    "ok": true,
+    "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+    "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3",
+    "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3"
+   },
+   "gval-m6-format2-replay.log": {
+    "checked": true,
+    "excluded_attempts": 0,
+    "groups": 1,
+    "next": "Review generated reports and export through an owner PR",
+    "ok": true,
+    "runs": 3,
+    "split_id": "rc300_reduced_v1"
+   },
+   "gval-m6-format2-report.log": {
+    "checked": false,
+    "excluded_attempts": 0,
+    "groups": 1,
+    "next": "Review generated reports and export through an owner PR",
+    "ok": true,
+    "runs": 3,
+    "split_id": "rc300_reduced_v1"
+   },
+   "gval-m6-format2-verify.log": {
+    "data_verified": true,
+    "next": "Review this verified run; the owner may publish it with gval report",
+    "ok": true,
+    "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+    "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3",
+    "unsealed": false
+   }
+  },
+  "elapsed": "00:05:51",
+  "job_id": "3620596",
+  "sacct_maxrss": "1087M",
+  "step_elapsed": "00:05:46"
+ },
+ "job_id": "3620119",
+ "native_tests": {
+  "count": 44,
+  "ok": true,
+  "seconds": 550.61
+ },
+ "public_ci": {
+  "commit": "6986c33",
+  "numpy_1_24_4": {
+   "ok": true,
+   "seconds": 834.437,
+   "skipped": 8,
+   "tests": 150
+  },
+  "numpy_2_x": {
+   "ok": true,
+   "seconds": 707.929,
+   "skipped": 8,
+   "tests": 150
+  },
+  "run_id": 44174005913
+ },
+ "step": "1",
+ "step_elapsed": "00:09:56",
+ "step_sacct_maxrss": "735360K"
+}

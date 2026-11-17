@@ -1,0 +1,89 @@
+{
+ "adapter_repo_commit": "6986c33e5afd97545349583667c10ac7cae7c954",
+ "adapter_sha256": "e3007636e8a40dab54fa67f643731e0fcc9edea977e5795f3071f5afec686b92",
+ "attempt": 3,
+ "checkpoint": null,
+ "checkpoint_sha256": null,
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-17T20:43:33.467332+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cpu",
+ "end_time": "2026-11-17T22:24:18.575201+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": null,
+ "history_length": 1,
+ "host": "gh069.hsn.cm.delta.internal.ncsa.edu",
+ "model": "persistence",
+ "model_provenance": null,
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "6986c33e5afd97545349583667c10ac7cae7c954",
+ "request": {
+  "adapter": "persistence",
+  "checkpoint": null,
+  "model": "persistence",
+  "notes": "",
+  "options": {},
+  "training_record": null,
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/rollout_curve.json": "9d32e4530e2059858e9b1948e2912f443c10b85cf07ae5b2e1e854fc32126281",
+  "metrics/single_step.json": "a4340d1790d5b62ae42dffc647503e660080fc0d238786bca2bc12f99cf3fbf6",
+  "summary.json": "768576e90c9c5b9fc82c770053058fd822f2e7366ae92c85d0740795ce65b111",
+  "tables/rollout_curve.csv": "8f39160c2cb5501934d1d8a5f108b53317e618330c4367329cfdc4fc6f210f3e",
+  "tables/single_step.csv": "ef1e466112ed4048b1faff9f08ea8aec07f0a1449ff5d6a90d547ebafe70b644"
+ },
+ "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-17T22:18:58.930347+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "quick",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "reason": "No training record supplied",
+  "record_sha256": null,
+  "trained_on_this_split": "unknown"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

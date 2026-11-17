@@ -5,14 +5,15 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestones 1–5 merged; milestone 6 is in validation.** Reporting,
+**Status: milestones 1–5 merged; milestone 6 is complete for review.** Reporting,
 portable result replay, CI and canonical participant instructions are implemented.
 See [report usage](docs/milestone_6.md) and the
 [compact-summary owner decision](docs/notes/summary_format_correction.md).
 New summaries contain bounded headlines and metric hashes (at most 1 MB);
 full metric/profile/map data remains on shared storage. Result-format correction
 changes persistence fingerprints under the unchanged protocol hash; the
-milestone-6 receipt records the old/new values and unchanged metric bytes.
+[milestone 6 receipt](docs/milestone_6_validation.md) records the old/new values
+and unchanged metric bytes.
 
 Start with [AGENTS.md](AGENTS.md). Model setup is in
 [plugging in a model](docs/plugging_in_a_model.md). Prediction-mode

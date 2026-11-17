@@ -26,13 +26,15 @@ sbatch scripts/report_delta.sbatch --split-id rc300_reduced_v1 --export-results 
 ```
 
 This verifies shared bundles, refreshes only derived reports in the owner-only
-reports area, and exports original run.json/summary.json under results/. New run metadata and summaries bind the result hashes.
+reports area, and exports original run.json/summary.json under results/.
+New run metadata and summaries bind the result hashes.
 An attempt ledger under reports/ snapshots failures and exclusions; it is necessary
 to reproduce test counts without Delta. A conflicting completed result export
 is never overwritten. Group directory modes/layout remain unchanged; atomic
 report file replacement uses new group-readable inodes.
 
-Review and commit the generated results, attempt ledger and text reports through the milestone PR (the owner merges). Never hand-edit numbers or
+Review and commit the generated results, attempt ledger and text reports through
+the milestone PR (the owner merges). Never hand-edit numbers or
 copy a run bundle into shared storage. Full bundles remain on Delta.
 
 ```bash
@@ -44,7 +46,8 @@ python scripts/sync_agent_instructions.py --check
 Replay needs only committed result records, split definitions and protocol Git
 history, not data paths, Delta storage or environment locks. It validates schemas,
 original hashes, identities, the result fingerprint's file-hash map, and ledger
-consistency. Exact JSON/CSV/Markdown bytes are checked. Comparison PNGs stay on shared storage or in ignored local replay outputs,
+consistency. Exact JSON/CSV/Markdown bytes are checked. Comparison PNGs stay on
+shared storage or in ignored local replay outputs,
 with a presentation manifest for local integrity checks. No metrics or PNGs are
 exported to Git. CI text checks do not require PNG files or rerender them. Empty
 datasets have explicit empty reports; owner references are not fabricated runs.
