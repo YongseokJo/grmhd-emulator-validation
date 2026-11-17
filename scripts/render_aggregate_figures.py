@@ -29,6 +29,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source',type=Path,required=True)
     parser.add_argument('--receipt-dir',type=Path,help='Copy contact sheet and fig18 into a repository docs directory')
+    parser.add_argument('--refresh-reference',action='store_true',help='Owner-only atomic PNG refresh of the verified source golden')
     args=parser.parse_args()
     source=args.source.resolve();info=json.loads((source/'run.json').read_text())
     files=result_files(source);before=fingerprint(files)
@@ -86,6 +87,10 @@ def main():
              'renderer_sha256':{name:sha256(REPO/'grmhd_validation/analyses'/name) for name in ('_figures.py','rollout_curve.py')},
              'figures':{name:sha256(root/'figures'/name) for name in names},'contact_sheet_sha256':sha256(root/'contact_sheet.png')}
     writer.json('presentation.json',receipt)
+    if args.refresh_reference:
+        from grmhd_validation.conformance import refresh_reference_figures
+        receipt['reference_presentation']=refresh_reference_figures(storage,source,root/'figures',before)
+        writer.json('presentation.json',receipt)
     if args.receipt_dir:
         destination=args.receipt_dir.resolve()
         if not destination.is_relative_to(REPO/'docs'):raise ValueError('Receipt copies must be under repository docs/')

@@ -288,6 +288,9 @@ every full-tier PNG, reject raw result keys and unlabeled axes, and verify
 the final-step band count. scripts/render_aggregate_figures.py regenerates
 figures from verified stored results without inference and attaches a contact
 sheet; its receipt checks the source result fingerprint before and after.
+Owner persistence references may acquire updated derived PNGs atomically when
+their numerical result fingerprint matches; a presentation sidecar records
+the image hashes. Completed model-run bundles cannot use this refresh path.
 
 ### Bounded evaluation memory
 

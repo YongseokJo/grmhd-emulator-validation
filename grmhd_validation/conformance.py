@@ -45,6 +45,39 @@ def load_golden(path):
     return record
 
 
+def refresh_reference_figures(storage,reference,figures,expected_fingerprint):
+    """Owner-only derived metadata refresh; completed model runs are immutable."""
+    storage.require_owner();reference=Path(reference).absolute();figures=Path(figures)
+    if not reference.is_relative_to(storage.root/'references') or reference.is_symlink():
+        raise ValueError('Figure refresh requires an owner persistence reference')
+    golden=load_golden(reference)
+    if golden['result_fingerprint']!=expected_fingerprint:raise ValueError('Reference result fingerprint differs')
+    info=json.loads((reference/'run.json').read_text())
+    if info.get('model')!='persistence' or info.get('purpose')!='reference':raise ValueError('Figure refresh requires a persistence golden')
+    from .analyses._port_manifest import FIGURES
+    expected={'fig02_rollout_curve.png'}
+    if info.get('tier')=='full':expected|={filename for files in FIGURES.values() for filename in files.values()}
+    actual={path.name:path for path in figures.glob('*.png')}
+    if set(actual)!=expected:raise ValueError('Reference figure refresh is incomplete')
+    contents={}
+    for name,path in actual.items():
+        if path.is_symlink():raise ValueError('Reference presentation cannot contain symlinks')
+        content=path.read_bytes()
+        if not content.startswith(b'\x89PNG\r\n\x1a\n'):raise ValueError('Reference presentation must contain PNGs')
+        contents[name]=content
+    destination=storage.folder(*reference.relative_to(storage.root).parts,'figures')
+    def replace(name,content):
+        temporary='.'+name+'.'+uuid.uuid4().hex
+        with storage.new_file(destination,temporary) as stream:stream.write(content)
+        os.replace(destination/temporary,destination/name)
+    for name,content in contents.items():replace(name,content)
+    if load_golden(reference)['result_fingerprint']!=expected_fingerprint:raise RuntimeError('Reference results changed during figure refresh')
+    from .artifacts import json_bytes
+    record={'result_fingerprint':expected_fingerprint,'figures':{name:sha256(destination/name) for name in sorted(actual)}}
+    replace('presentation.json',json_bytes(record))
+    return record
+
+
 def _number(value):
     try:
         return float(value)
@@ -163,6 +196,7 @@ def reference(split_id, tier="quick", partition="validation", device="cpu", stor
         if existing["result_fingerprint"] != record["result_fingerprint"]:
             _remove_candidate(storage,candidate)
             raise ValueError('Golden differs; a new protocol or recorded owner decision is required')
+        refresh_reference_figures(storage,target,candidate/'figures',record['result_fingerprint'])
         # Identical result bytes may acquire a real lock after a provisional run.
         # Replace metadata atomically, without chmodding any existing entry.
         for filename in ("golden.json", "run.json"):

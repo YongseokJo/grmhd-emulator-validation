@@ -57,6 +57,9 @@ label/CI audit and source hashes. The source result fingerprint is checked
 before and after rendering; no inference is run. Multi-step overlays retain
 every mean curve and show bands only at the final report step. The
 dimensionless-flux time series retains both role bands across all steps.
+For an owner persistence golden, `--refresh-reference` atomically refreshes
+its derived PNGs after checking the unchanged numerical fingerprint. Normal
+reference regeneration also refreshes presentations when result bytes match.
 For a separate cache (including test truth), the owner runs
 `gval reference truth --split-id <id> --split validation|test`. Cache entries are
 read-only to readers and pinned by hashes, including training scales. Full

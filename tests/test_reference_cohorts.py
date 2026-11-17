@@ -3,9 +3,36 @@ from grmhd_validation.artifacts import json_bytes
 from grmhd_validation.conformance import reference
 from test_runner import RunnerFixture
 from unittest.mock import patch
+from pathlib import Path
+import json
+from grmhd_validation.artifacts import result_files
+from grmhd_validation.hashing import sha256
+from grmhd_validation.conformance import refresh_reference_figures
 
 
 class ReferenceCohortTests(RunnerFixture):
+    def test_identical_result_reference_refreshes_pngs_without_changing_metrics(self):
+        first=self.golden();root=Path(first['reference_dir']);image=root/'figures/fig02_rollout_curve.png'
+        before=result_files(root);old_image=sha256(image);old_mode=image.stat().st_mode
+        from matplotlib.figure import Figure
+        save=Figure.savefig
+        def revised(figure,*args,**kwargs):
+            figure.text(.5,.5,'Updated presentation',ha='center')
+            return save(figure,*args,**kwargs)
+        with patch('matplotlib.figure.Figure.savefig',autospec=True,side_effect=revised):second=self.golden()
+        self.assertEqual(first['result_fingerprint'],second['result_fingerprint'])
+        self.assertEqual(before,result_files(root));self.assertNotEqual(old_image,sha256(image))
+        self.assertEqual(image.stat().st_mode,old_mode)
+        record=json.loads((root/'figures/presentation.json').read_text())
+        self.assertEqual(record['figures'][image.name],sha256(image))
+        with self.assertRaisesRegex(ValueError,'fingerprint differs'):
+            refresh_reference_figures(self.storage(),root,root/'figures','0'*64)
+        self.assertEqual(before,result_files(root))
+
+    def test_presentation_refresh_rejects_completed_model_run_paths(self):
+        with self.assertRaisesRegex(ValueError,'owner persistence reference'):
+            refresh_reference_figures(self.storage(),self.shared/'runs/synthetic/model/completed',self.base,'0'*64)
+
     def test_identical_content_hashes_pass_without_numeric_reparsing(self):
         from grmhd_validation.conformance import compare_results
         roots=[self.base/'first-result',self.base/'second-result']
