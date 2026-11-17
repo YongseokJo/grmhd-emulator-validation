@@ -949,13 +949,47 @@ runs/<split_id>/<model>/<run_id>/
   - It checks write access to `staging/` with `os.access`; it does not test with a real file.
   - It reports any file in the tree that the group can't read.
 
-## 9. Training provenance (record, not required)
+## 9. Training provenance (operator declaration, not verified)
 
-- `gval record-training --request run_request.json --split-id <id> --config <training config> [--log …]`
-  writes `training_records/<model>/<ckpt_sha8>.json`.
-- It records: split file SHA256, the chunks used for training and for checkpoint selection, where the
-  normalization statistics were fitted (must be train), the training code commit and the config.
-- `run.json` links it. The leaderboard shows "trained on this split: yes / no / unknown".
+`gval record-training --request run_request.json --split-id <id> --config
+<training config.json> [--log <training log>]` writes
+`training_records/<model>/<ckpt_sha8>.json`. Keep the entire JSON configuration
+and hash its original bytes, the checkpoint and optional log. Reuse an identical
+record; reject a conflicting existing record. Never overwrite one.
+
+The configuration has a `provenance` block with `training_code_commit`,
+`normalization_split`, `source_split`, `known_prior_data_exposure` (free text)
+and `prior_data_exposure` (a structured string list). Declare training and
+checkpoint-selection data through `training_chunks` / `selection_chunks`
+(frozen chunk names) and/or `training_dump_ranges` / `selection_dump_ranges`
+(inclusive [first,last] pairs). Missing selectors are empty. Reject unknown
+chunk names and invalid ranges. Optional `seed`, `epochs` and `data_root` are
+preserved. External historical source_split names are allowed: for example
+`kevin_fall26_80_10_10`, training 3000–10707, selection 10708–11671.
+
+The command computes overlap itself, using unions so duplicate selectors do
+not double-count dumps. Store separate training and selection counts in every
+current train/validation/test/excluded chunk, and their partition totals.
+Store declared dumps outside this frozen split too. Overlap is never a reason
+to reject: historical checkpoints must be evaluated with honest labels.
+
+Bind each record to `split_id` and `split_file_sha256`. Evaluation rejects a
+record for another split/hash or checkpoint/model/version. Normalization fitted
+outside `train` is accepted and flagged. Training status is computed, never read
+from an operator's yes/no flag:
+
+- `yes`: nonempty training data only in current train chunks, nonempty checkpoint
+  selection only in validation chunks, and normalization fitted on `train`;
+- `no`: declared training/selection violates that boundary, with exact overlap
+  counts (including validation/test training exposure), out-of-split counts and
+  normalization flags visible;
+- `unknown`: no record, or insufficient declared data to establish either case.
+
+run.json links the record and its hash, computed label and overlap counts. The
+leaderboard displays `no, overlaps validation/test (n dumps)` when applicable,
+where n is the union of training dumps in those partitions; other boundary or
+normalization failures retain explicit reasons. Every record says
+`operator declaration`, never verified training provenance.
 
 ## 10. Reporting and the leaderboard
 
