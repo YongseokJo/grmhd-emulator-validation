@@ -430,6 +430,13 @@ line and one band per role across all its steps. Other time series, single-step
 panels and maps retain their original designs. This is presentation only;
 all per-step means and CIs remain in the metric artifacts.
 
+The owner may refresh derived PNGs in an existing persistence reference only
+after verifying its unchanged result-content fingerprint. Replace PNGs
+atomically with group-readable owner files and record presentation hashes;
+the metric/CSV/summary files and golden fingerprint are unchanged. Keep the
+versioned review bundle as the presentation receipt. This permission applies
+to owner persistence references, not completed model runs.
+
 Owner command `gval reference truth --split-id <id> --split validation|test`
 builds the verified truth/persistence cache. It writes only under
 references/<split_id>/<protocol_id>/<protocol_sha256>/, mode 2750, with separate
