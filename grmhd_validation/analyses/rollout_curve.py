@@ -42,40 +42,56 @@ def truth_sigma(ctx):
     return truth_value(ctx,'attractor_sigma',{},lambda:_truth_sigma(ctx))
 
 
-def plot(ctx, mean, std, baseline, per_channel):
+def plot(ctx, mean, std, baseline, per_channel,models=None,persistence=None):
     settings = ctx.constants["figures"]
     import matplotlib
     matplotlib.use(settings["backend"])
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
+    from ._figures import ROLE_COLORS,CHANNEL_LABELS,caption,validate_figure,T_LABEL
     with matplotlib.rc_context({"font.family": settings["font"], "font.size": settings["font_size"]}):
         figure = Figure(figsize=settings["rollout_curve_figsize"], dpi=settings["dpi"])
+        figure.set_label('fig02_rollout_curve.png')
         FigureCanvasAgg(figure)
         left, right = figure.subplots(1, 2)
         steps = np.arange(1, ctx.protocol["max_steps"] + 1)
-        left.plot(steps, mean, "b-o", markersize=3, linewidth=1.5, label="model")
-        left.fill_between(steps, mean - std, mean + std, alpha=.2, color="blue")
-        left.plot(steps, baseline, "k--", linewidth=1.2, label="Persistence")
-        left.set(xlabel="Forecast steps", ylabel="Channel-averaged nMAE", title="(a) Forecast Error")
+        time=steps*float(ctx.split.dt_dump)
+        left.plot(time, mean, '--',color=ROLE_COLORS['model'],linewidth=1.5,label='Model')
+        left.plot(time, baseline, ':',color=ROLE_COLORS['persistence'],linewidth=1.5,label='Persistence')
+        for artist in left.lines:artist.set_gid('mean:'+artist.get_label())
+        if models is not None and persistence is not None:
+            random=np.random.default_rng(ctx.protocol['seed']);count=len(models)
+            samples=[[],[]]
+            for _ in range(ctx.protocol['bootstrap_resamples']):
+                draw=random.integers(0,count,size=count)
+                for slot,values in zip(samples,(models,persistence)):slot.append(values[draw].mean(axis=-1).mean(axis=0))
+            for slot,role in zip(samples,('model','persistence')):
+                low,high=ci(slot,ctx.constants)
+                left.fill_between(time,low,high,color=ROLE_COLORS[role],alpha=.10,linewidth=0)
+                left.collections[-1].set_gid('ci95:'+role)
+        left.set(xlabel=T_LABEL,ylabel="Channel-averaged nMAE",title="(a) Forecast Error")
         left.legend()
         fallback = False
         for channel, name in enumerate(ctx.channels):
             absolute = per_channel[0, channel] < ctx.constants["growth_curve"]["step1_min"]
             fallback |= absolute
             curve = per_channel[:, channel] if absolute else per_channel[:, channel] / per_channel[0, channel]
-            right.plot(steps, curve, linewidth=1.4, color=CHANNEL_COLORS[channel], label=name + (" (abs)" if absolute else ""))
-        right.set(xlabel="Forecast steps", ylabel="Error growth (rel or abs)" if fallback else "Error growth (relative to step 1)",
+            right.plot(time, curve, linewidth=1.4, color=CHANNEL_COLORS[channel], label=CHANNEL_LABELS[channel] + (" (abs)" if absolute else ""))
+        right.set(xlabel=T_LABEL, ylabel="Error growth (relative or absolute)" if fallback else "Error growth (relative to step 1)",
                   title="(b) Per-Channel Error Growth")
         right.legend(fontsize=8, ncol=2)
         for axis in (left, right):
-            axis.set_xlim(1, max(2, ctx.protocol["max_steps"]))
-            axis.set_xticks(dynamic_xticks(ctx.protocol["max_steps"]))
+            axis.set_xlim(time[0],max(time[0]+float(ctx.split.dt_dump),time[-1]))
             axis.grid(True, alpha=.3)
         figure.suptitle("Autoregressive Forecast Accuracy")
-        figure.tight_layout()
+        count=len(models) if models is not None else sum(len(group.rollout) for group in ctx.starts)
+        figure.text(.5,.012,caption(ctx,count),ha='center',fontsize=9)
+        figure.tight_layout(rect=(0,.065,1,.94))
+        audit=validate_figure(figure)
         with ctx.writer.open("figures/fig02_rollout_curve.png") as stream:
             figure.savefig(stream, format="png", dpi=settings["dpi"], metadata={"Software": None})
         figure.clear()
+        return audit
 
 
 def run(ctx):
@@ -126,5 +142,5 @@ def run(ctx):
                   "per_channel": {name: per_channel[index, c] for c, name in enumerate(ctx.channels)}})
     from ..artifacts import csv_bytes
     ctx.writer.write("tables/rollout_curve.csv", csv_bytes(rows, list(rows[0])))
-    plot(ctx, mean, std, baseline, per_channel)
+    plot(ctx, mean, std, baseline, per_channel,models,persistence)
     return clean({"n_starts": len(models), "at_steps": reports, "attractor": saturation})

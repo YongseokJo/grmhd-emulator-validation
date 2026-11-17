@@ -256,6 +256,39 @@ tests/test_truth_cache.py checks build/read fingerprint identity, corruption,
 strict misses and failed-candidate cleanup. The full synthetic acceptance test
 checks every analysis's complete starts, time units, schema and fixed outputs.
 
+### Aggregate figure presentation
+
+Production plots use explicit physics panels adapted from Kevin's source
+designs, with channel symbols, units, ISCO markers and the original log/symlog
+axes. Truth is solid and model is dashed. A common step palette is used in
+multi-step overlays; each report step is labelled with its actual step and
+elapsed time from the frozen dt_dump. Every step's mean is drawn, but only the
+final step has CI shading (one light, outline-free band per displayed role).
+The dimensionless-flux time series keeps both role bands across all steps.
+Panels with a single horizon retain a band per role. Maps show means, with
+their full pointwise intervals retained in JSON/CSV. Each figure identifies
+the evaluated split and number of starts and states which bands are shown.
+
+The radial accretion panels label the full magnetic-flux integral and the
+production rest-mass-subtracted jet-power integral. The dimensionless-flux
+panel identifies the resolved headline shell. Mean-profile beta and sigma
+are averaged physically before display logs; the vertical density display
+uses a shared truth-peak normalization at each radius. Signed binding-energy
+profiles use the original displayed -E with correctly ordered transformed
+bounds. No metric or result fingerprint changes.
+The vertical mean-profile curves index radii within their prescribed temporal
+averaging window, rather than different report steps; their radius labels and
+role intervals are kept distinct from the multi-step overlay rule.
+
+The rollout-accuracy figure now shades 95% start-bootstrap CIs for the model
+and persistence mean nMAE, rather than displaying standard deviation as a
+band. Existing numerical mean/std/skill outputs are unchanged. The original
+growth curves and channel palette remain. Label/CI acceptance tests cover
+every full-tier PNG, reject raw result keys and unlabeled axes, and verify
+the final-step band count. scripts/render_aggregate_figures.py regenerates
+figures from verified stored results without inference and attaches a contact
+sheet; its receipt checks the source result fingerprint before and after.
+
 ### Bounded evaluation memory
 
 Rollout replay is a disk-backed mapping of float32 states. An analysis reads only
