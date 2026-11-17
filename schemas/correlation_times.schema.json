@@ -1,161 +1,259 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "analysis": {
-      "const": "correlation_times"
-    },
-    "space": {
-      "enum": [
-        "loss",
-        "physical"
-      ]
-    },
-    "starts": {
-      "type": "array",
-      "items": {
-        "type": "integer"
-      },
-      "minItems": 1,
-      "uniqueItems": true
-    },
-    "data": {
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+  "analysis": {
+   "const": "correlation_times"
+  },
+  "space": {
+   "enum": [
+    "loss",
+    "physical"
+   ]
+  },
+  "starts": {
+   "type": "array",
+   "items": {
+    "type": "integer"
+   },
+   "minItems": 1,
+   "uniqueItems": true
+  },
+  "data": {
+   "type": "object",
+   "properties": {
+    "per_start": {
+     "type": "array",
+     "items": {
       "type": "object",
       "properties": {
-        "per_start": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "start": {
-                "type": "integer"
-              },
-              "values": {
-                "type": "object",
-                "properties": {
-                  "tau_c": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "r1": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "saturated": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "n_pairs": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "n_dumps": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "n_cells": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "steps": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "skill": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "crossing_steps": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "never_crossed": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "last_positive_steps": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "fraction_positive_after_first": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "mean_skill_25_50": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "horizon_rg_c": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "horizon_tau_c": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "tau_c_rg_c": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "resolved_mask": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "starts": {
-                    "$ref": "#/$defs/value"
-                  }
-                },
-                "required": [
-                  "tau_c",
-                  "r1",
-                  "saturated",
-                  "n_pairs",
-                  "n_dumps",
-                  "n_cells",
-                  "steps",
-                  "skill",
-                  "crossing_steps",
-                  "never_crossed",
-                  "last_positive_steps",
-                  "fraction_positive_after_first",
-                  "mean_skill_25_50",
-                  "horizon_rg_c",
-                  "horizon_tau_c",
-                  "tau_c_rg_c",
-                  "resolved_mask",
-                  "starts"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "required": [
-              "start",
-              "values"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 1
-        }
+       "start": {
+        "type": "integer"
+       },
+       "values": {
+        "$ref": "#/$defs/values"
+       }
       },
       "required": [
-        "per_start"
+       "start",
+       "values"
       ],
       "additionalProperties": false
-    }
-  },
-  "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-  ],
-  "additionalProperties": false,
-  "$defs": {
-    "value": {
-      "anyOf": [
-        {
-          "type": [
-            "number",
-            "boolean",
-            "null"
-          ]
+     },
+     "minItems": 1
+    },
+    "aggregate": {
+     "type": "object",
+     "properties": {
+      "mean": {
+       "$ref": "#/$defs/values"
+      },
+      "lower": {
+       "$ref": "#/$defs/values"
+      },
+      "upper": {
+       "$ref": "#/$defs/values"
+      },
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "bootstrap": {
+       "type": "object",
+       "properties": {
+        "method": {
+         "const": "chunk_block_bootstrap"
         },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/value"
-          }
+        "block_length": {
+         "type": "integer",
+         "minimum": 1
         },
-        {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/value"
-          }
+        "n_blocks": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "resamples": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "seed": {
+         "type": "integer"
         }
-      ]
+       },
+       "required": [
+        "method",
+        "block_length",
+        "n_blocks",
+        "resamples",
+        "seed"
+       ],
+       "additionalProperties": false
+      },
+      "valid_counts": {
+       "type": "object",
+       "additionalProperties": {
+        "$ref": "#/$defs/value"
+       }
+      }
+     },
+     "required": [
+      "mean",
+      "lower",
+      "upper",
+      "n_starts",
+      "bootstrap",
+      "valid_counts"
+     ],
+     "additionalProperties": false
+    },
+    "time": {
+     "type": "object",
+     "properties": {
+      "steps": {
+       "$ref": "#/$defs/value"
+      },
+      "rg_c": {
+       "$ref": "#/$defs/value"
+      },
+      "tau_c": {
+       "$ref": "#/$defs/value"
+      }
+     },
+     "required": [
+      "steps",
+      "rg_c",
+      "tau_c"
+     ],
+     "additionalProperties": false
     }
+   },
+   "required": [
+    "per_start",
+    "aggregate",
+    "time"
+   ],
+   "additionalProperties": false
   }
+ },
+ "required": [
+  "analysis",
+  "space",
+  "starts",
+  "data"
+ ],
+ "additionalProperties": false,
+ "$defs": {
+  "value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/value"
+     }
+    }
+   ]
+  },
+  "values": {
+   "type": "object",
+   "properties": {
+    "tau_c": {
+     "$ref": "#/$defs/value"
+    },
+    "r1": {
+     "$ref": "#/$defs/value"
+    },
+    "saturated": {
+     "$ref": "#/$defs/value"
+    },
+    "n_pairs": {
+     "$ref": "#/$defs/value"
+    },
+    "n_dumps": {
+     "$ref": "#/$defs/value"
+    },
+    "n_cells": {
+     "$ref": "#/$defs/value"
+    },
+    "steps": {
+     "$ref": "#/$defs/value"
+    },
+    "skill": {
+     "$ref": "#/$defs/value"
+    },
+    "crossing_steps": {
+     "$ref": "#/$defs/value"
+    },
+    "never_crossed": {
+     "$ref": "#/$defs/value"
+    },
+    "last_positive_steps": {
+     "$ref": "#/$defs/value"
+    },
+    "fraction_positive_after_first": {
+     "$ref": "#/$defs/value"
+    },
+    "mean_skill_25_50": {
+     "$ref": "#/$defs/value"
+    },
+    "horizon_rg_c": {
+     "$ref": "#/$defs/value"
+    },
+    "horizon_tau_c": {
+     "$ref": "#/$defs/value"
+    },
+    "tau_c_rg_c": {
+     "$ref": "#/$defs/value"
+    },
+    "resolved_mask": {
+     "$ref": "#/$defs/value"
+    },
+    "starts": {
+     "$ref": "#/$defs/value"
+    },
+    "nmae_model": {
+     "$ref": "#/$defs/value"
+    },
+    "nmae_persistence": {
+     "$ref": "#/$defs/value"
+    }
+   },
+   "required": [
+    "tau_c",
+    "r1",
+    "saturated",
+    "n_pairs",
+    "n_dumps",
+    "n_cells",
+    "steps",
+    "skill",
+    "crossing_steps",
+    "never_crossed",
+    "last_positive_steps",
+    "fraction_positive_after_first",
+    "mean_skill_25_50",
+    "horizon_rg_c",
+    "horizon_tau_c",
+    "tau_c_rg_c",
+    "resolved_mask",
+    "starts",
+    "nmae_model",
+    "nmae_persistence"
+   ],
+   "additionalProperties": false
+  }
+ }
 }

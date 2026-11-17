@@ -4,6 +4,11 @@ from pathlib import Path
 from .hashing import sha256
 
 
+def full_tier_ready(protocol):
+    """Only the final owner-reviewed protocol can authorize full publication."""
+    return protocol['constants']['full'].get('production_ready') is True
+
+
 def read_protocol(path):
     path = Path(path)
     data = json.loads(path.read_text())
@@ -32,6 +37,13 @@ def read_protocol(path):
     if correlation["r1_cap"] > correlation["r1_clip"] or correlation["r1_saturated"] > correlation["r1_clip"]:
         raise ValueError("Correlation cap/saturation cannot exceed clipping bound")
     full=data['constants']['full']
+    if full_tier_ready(data):
+        if full['milestone3_start_policy']!='all' or not {'transport','coarse_ring_r_min','jet_density_floor_multiple'}<=set(full):
+            raise ValueError('A production full protocol requires all starts and final transport/ring settings')
+        from .analyses._port_manifest import FIGURES
+        sizes=data['constants']['figures'].get('full_figsizes',{})
+        if set(sizes)!={name for name,files in FIGURES.items() if files} or any(len(sizes[name])!=len(files) for name,files in FIGURES.items() if files):
+            raise ValueError('A production full protocol requires every fixed figure size')
     if full['spatial_bins_min']>full['spatial_bins_max']:
         raise ValueError('Spatial bin minimum exceeds maximum')
     for name in ('histogram_linear_percentiles','histogram_log_percentiles','spectrum_fit_fraction'):

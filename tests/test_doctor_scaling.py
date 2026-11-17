@@ -23,7 +23,7 @@ class DoctorScalingTests(unittest.TestCase):
             for path in [root,*(root/n for n in OWNER_AREAS+GROUP_AREAS)]:
                 rights='rwx' if path.name in GROUP_AREAS and path!=root else 'r-x'
                 subprocess.run(['setfacl','-m',f'g::{rights},m::{rights},d:u::rwx,d:g::{rights},d:m::{rights},d:o::---',str(path)],check=True)
-            candidate=root/'references/synthetic_v1/forecast_v1/persistence_quick/.candidate-cancelled'
+            candidate=root/('references/rc300_reduced_v1/forecast_v1/'+'a'*64+'/persistence_full/.candidate-a4711ea224e84bebb642da9c9c0ac1c2')
             candidate.mkdir(parents=True)
             (candidate/'run.json').write_text('{}\n')
             before={p:(p.stat().st_mode,p.stat().st_mtime_ns) for p in root.rglob('*')}

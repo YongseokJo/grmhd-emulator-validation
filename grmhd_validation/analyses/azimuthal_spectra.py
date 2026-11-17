@@ -28,6 +28,7 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         raise ValueError('Analysis has insufficient valid data: azimuthal_spectra')
     cand_horizons = [10, 25, 50, args.max_steps]
     horizons = sorted(list({h for h in cand_horizons if 1 <= h <= args.max_steps}))
+    if current()['space']=='physical':horizons=list(ctx.protocol['report_steps'])
     horizons = [h for h in horizons if load_dump(data_dir, args.start + h) is not None]
     if not horizons:
         raise ValueError('Analysis has insufficient valid data: azimuthal_spectra')
@@ -53,7 +54,9 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         p_dump = states[h]
         t_norm = norm_cpu(to_tensor_cpu(t_dump))[0].numpy()
         p_norm = norm_cpu(to_tensor_cpu(p_dump))[0].numpy()
-        truth_specs[h] = {c: m_spec(t_norm, c).mean(axis=(0, 1)) for c in channels}
+        from ..truth_cache import truth_value
+        calculate=lambda: {c:m_spec(t_norm,c).mean(axis=(0,1)) for c in channels}
+        truth_specs[h] = truth_value(ctx,'azimuthal_spectra',{'dump':int(args.start+h)},calculate) if current()['space']=='physical' else calculate()
         pred_specs[h] = {c: m_spec(p_norm, c).mean(axis=(0, 1)) for c in channels}
     m_axis = np.arange(len(truth_specs[horizons[0]][channels[0]]))
     m_nyq = len(m_axis) - 1
@@ -102,12 +105,22 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
             parts = [f'm={m} {ratio[m]:.3f}' if not np.isnan(ratio[m]) else f'm={m} n/a' for m in modes_to_report if m < len(ratio)]
             p_high = float(np.sum(pred_specs[h][c][high_m_mask])) / (float(np.sum(pred_specs[h][c])) + 1e-30)
             t_high = float(np.sum(truth_specs[h][c][high_m_mask])) / (float(np.sum(truth_specs[h][c])) + 1e-30)
-    return sample(**{'modes': m_axis, 'truth': truth_specs, 'pred': pred_specs, 'steps': horizons})
+    result=sample(**{'modes': m_axis, 'truth': truth_specs, 'pred': pred_specs, 'steps': horizons})
+    if current()['space']=='physical':
+        ratio={}
+        for h in horizons:
+            ratio[h]={}
+            for channel in channels:
+                target=truth_specs[h][channel];predicted=pred_specs[h][channel]
+                mask=target>=np.percentile(target[1:],setting('spectrum_truth_percentile'));mask[0]=False
+                ratio[h][channel]=np.where(mask,predicted/(target+setting('epsilon')),np.nan)
+        result['ratio']=sample(ratio=ratio)['ratio']
+    return result
 
 def compute(ctx, *, space='physical', starts=None):
     """Numerical core: explicit space and one/all starts for source regression."""
     return execute_core(ctx, 'azimuthal_spectra', _compute, space, starts, native_multi=False)
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'azimuthal_spectra', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'azimuthal_spectra',compute)

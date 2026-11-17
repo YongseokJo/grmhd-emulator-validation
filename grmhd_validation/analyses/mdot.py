@@ -107,8 +107,18 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
 
 def compute(ctx, *, space='physical', starts=None):
     """Numerical core: explicit space and one/all starts for source regression."""
-    return execute_core(ctx, 'mdot', _compute, space, starts, native_multi=False)
+    result=execute_core(ctx, 'mdot', _compute, space, starts, native_multi=False)
+    if space=='physical':
+        from ._transport import shells
+        metadata=shells(ctx)
+        for row in result['per_start']:
+            values=row['values'];values['shells']=metadata
+            for role,label in (('horizon','horizon'),('resolved','headline')):
+                index=metadata[role]['index']
+                values[label+'_pred']=np.array([sample['pred'][index] for sample in values['samples']])
+                values[label+'_truth']=np.array([sample['truth'][index] for sample in values['samples']])
+    return result
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'mdot', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'mdot',compute)

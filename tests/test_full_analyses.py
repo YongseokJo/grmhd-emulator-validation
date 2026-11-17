@@ -76,17 +76,58 @@ class FullFixture(RunnerFixture):
 
 
 class FullAnalysisTests(FullFixture):
+    def test_physical_pair_analyses_keep_each_starts_entire_model_history(self):
+        from grmhd_validation.analyses._final import pair_rows
+        ctx=self.context();seen=[]
+        class HistoryAdapter:
+            name='history-test';version='v1';history_length=3;max_batch=1
+            def step(self,history):seen.append(history.clone());return history[:,-1].clone()
+        ctx.adapter=HistoryAdapter();starts=[s for group in ctx.starts for s in group.every]
+        for name in ('error_correlation','conditional_error'):
+            rows=pair_rows(ctx,name,starts)
+            self.assertEqual([row['start'] for row in rows],starts)
+            self.assertEqual(len(seen),len(starts))
+            for start,history in zip(starts,seen):torch.testing.assert_close(history,ctx.reader.history(start,3,'cpu'))
+            seen.clear();ctx.full.cleanup();ctx.full=FullStore(ctx)
+
+    def test_complete_prediction_cache_replays_without_history_or_inference(self):
+        ctx=self.context();start=ctx.starts[0].rollout[0]
+        first=ctx.full.ensure_rollout(start,8)
+        with patch.object(ctx.reader,'history',side_effect=AssertionError('Replayed cache must not rebuild history')),patch.object(ctx,'step',side_effect=AssertionError('Replayed cache must not infer')):
+            second=ctx.full.ensure_rollout(start,8)
+        for step in first:np.testing.assert_array_equal(first[step],second[step])
+        path=ctx.full.paths[('rollout',start,1)];changed=first[1].copy();changed[0,0,0,0]+=1.
+        np.save(path,changed)
+        with self.assertRaisesRegex(ValueError,'cache changed'):ctx.full.ensure_rollout(start,8)
+
     def test_every_full_analysis_emits_schema_valid_json_and_csv(self):
         ctx=self.context()
         for name in [*ANALYSES,'correlation_times']:
             with self.subTest(analysis=name):
                 result=importlib.import_module('grmhd_validation.analyses.'+name).run(ctx)
                 self.assertEqual(result['analysis'],name)
+                expected=[s for group in ctx.starts for s in (group.every if name in {'conditional_error','error_correlation'} else group.rollout)]
+                self.assertEqual(result['starts'],expected)
+                self.assertEqual(result['data']['aggregate']['n_starts'],len(expected))
+                np.testing.assert_allclose(result['data']['time']['rg_c'],np.arange(1,9)*25.)
                 self.assertTrue((ctx.writer.root/'metrics'/(name+'.json')).is_file())
                 self.assertTrue((ctx.writer.root/'tables'/(name+'.csv')).is_file())
+                from grmhd_validation.analyses._port_manifest import FIGURES
+                from grmhd_validation.analyses._figures import SIZES
+                import struct
+                for index,filename in enumerate(FIGURES.get(name,{}).values()):
+                    content=(ctx.writer.root/'figures'/filename).read_bytes()
+                    dimensions=struct.unpack('>II',content[16:24])
+                    self.assertEqual(dimensions,tuple(int(x*ctx.constants['figures']['dpi']) for x in SIZES[name][index]))
                 if name=='azimuthal_spectra':
                     spectra=result['data']['per_start'][0]['values']['truth']
                     self.assertTrue(np.isfinite(next(iter(next(iter(spectra.values())).values()))).all())
+                if name=='spectrum':
+                    for row in result['data']['per_start']:
+                        for channel in ('rho','B1'):
+                            values=row['values']
+                            self.assertEqual(len(values[channel+'_modes']),len(values[channel+'_ratio']))
+                            self.assertEqual(len(values[channel+'_ratio_mask']),len(values[channel+'_ratio']))
                 if name=='mean_profiles':
                     self.assertTrue(np.isfinite(result['data']['per_start'][0]['values']['omega_truth']).all())
         ctx.full.cleanup()
@@ -94,8 +135,14 @@ class FullAnalysisTests(FullFixture):
 
     def test_full_runner_publishes_and_repeat_content_is_identical(self):
         self.golden();self.conform()
-        first=self.run_eval(tier='full');self.assertTrue(first['ok'],first)
-        second=self.run_eval(tier='full');self.assertTrue(second['ok'],second)
+        from grmhd_validation.conformance import reference,conformance
+        reference('synthetic_v1',tier='full',storage=self.storage(),repo=self.repo)
+        verdict=conformance('synthetic_v1',tier='full',storage=self.storage(),repo=self.repo)
+        self.assertTrue(verdict['ok'],verdict)
+        # Publication lifecycle remains tested while unfinished production is gated.
+        with patch('grmhd_validation.runner.full_tier_ready',return_value=True):
+            first=self.run_eval(tier='full');self.assertTrue(first['ok'],first)
+            second=self.run_eval(tier='full');self.assertTrue(second['ok'],second)
         self.assertEqual(result_files(first['run_dir']),result_files(second['run_dir']))
         info=json.loads((Path(first['run_dir'])/'run.json').read_text())
         self.assertIn('cost',info['analysis_runtime'])

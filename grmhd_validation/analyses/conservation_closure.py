@@ -84,8 +84,13 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
 
 def compute(ctx, *, space='physical', starts=None):
     """Numerical core: explicit space and one/all starts for source regression."""
+    if space=='physical':
+        from ._transport import mass_budget
+        selected=[ctx.starts[0].rollout[0]] if starts is None else starts
+        one=lambda ctx,args,*unused:mass_budget(ctx,args.start)
+        return execute_core(ctx,'conservation_closure',one,space,selected)
     return execute_core(ctx, 'conservation_closure', _compute, space, starts, native_multi=False)
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'conservation_closure', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'conservation_closure',compute)

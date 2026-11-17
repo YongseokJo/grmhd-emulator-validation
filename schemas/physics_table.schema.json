@@ -1,158 +1,248 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "analysis": {
-      "const": "physics_table"
-    },
-    "space": {
-      "enum": [
-        "loss",
-        "physical"
-      ]
-    },
-    "starts": {
-      "type": "array",
-      "items": {
-        "type": "integer"
-      },
-      "minItems": 1,
-      "uniqueItems": true
-    },
-    "data": {
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "properties": {
+  "analysis": {
+   "const": "physics_table"
+  },
+  "space": {
+   "enum": [
+    "loss",
+    "physical"
+   ]
+  },
+  "starts": {
+   "type": "array",
+   "items": {
+    "type": "integer"
+   },
+   "minItems": 1,
+   "uniqueItems": true
+  },
+  "data": {
+   "type": "object",
+   "properties": {
+    "per_start": {
+     "type": "array",
+     "items": {
       "type": "object",
       "properties": {
-        "per_start": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "start": {
-                "type": "integer"
-              },
-              "values": {
-                "type": "object",
-                "properties": {
-                  "samples": {
-                    "type": "array",
-                    "minItems": 1,
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "step": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "mass_error": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "energy_error": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "angular_error": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "divb_pred": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "divb_truth": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "normalized_divb_pred": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "normalized_divb_truth": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "flux_pred": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "flux_truth": {
-                          "$ref": "#/$defs/value"
-                        },
-                        "gamma_max": {
-                          "$ref": "#/$defs/value"
-                        }
-                      },
-                      "required": [
-                        "step",
-                        "mass_error",
-                        "energy_error",
-                        "angular_error",
-                        "divb_pred",
-                        "divb_truth",
-                        "normalized_divb_pred",
-                        "normalized_divb_truth",
-                        "flux_pred",
-                        "flux_truth",
-                        "gamma_max"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "initial_divb": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "initial_normalized_divb": {
-                    "$ref": "#/$defs/value"
-                  },
-                  "initial_normalized_divb_global": {
-                    "$ref": "#/$defs/value"
-                  }
-                },
-                "required": [
-                  "samples",
-                  "initial_divb",
-                  "initial_normalized_divb",
-                  "initial_normalized_divb_global"
-                ],
-                "additionalProperties": false
-              }
-            },
-            "required": [
-              "start",
-              "values"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 1
-        }
+       "start": {
+        "type": "integer"
+       },
+       "values": {
+        "$ref": "#/$defs/values"
+       }
       },
       "required": [
-        "per_start"
+       "start",
+       "values"
       ],
       "additionalProperties": false
-    }
-  },
-  "required": [
-    "analysis",
-    "space",
-    "starts",
-    "data"
-  ],
-  "additionalProperties": false,
-  "$defs": {
-    "value": {
-      "anyOf": [
-        {
-          "type": [
-            "number",
-            "boolean",
-            "null"
-          ]
+     },
+     "minItems": 1
+    },
+    "aggregate": {
+     "type": "object",
+     "properties": {
+      "mean": {
+       "$ref": "#/$defs/values"
+      },
+      "lower": {
+       "$ref": "#/$defs/values"
+      },
+      "upper": {
+       "$ref": "#/$defs/values"
+      },
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "bootstrap": {
+       "type": "object",
+       "properties": {
+        "method": {
+         "const": "chunk_block_bootstrap"
         },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/value"
-          }
+        "block_length": {
+         "type": "integer",
+         "minimum": 1
         },
-        {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/value"
-          }
+        "n_blocks": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "resamples": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "seed": {
+         "type": "integer"
         }
-      ]
+       },
+       "required": [
+        "method",
+        "block_length",
+        "n_blocks",
+        "resamples",
+        "seed"
+       ],
+       "additionalProperties": false
+      },
+      "valid_counts": {
+       "type": "object",
+       "additionalProperties": {
+        "$ref": "#/$defs/value"
+       }
+      }
+     },
+     "required": [
+      "mean",
+      "lower",
+      "upper",
+      "n_starts",
+      "bootstrap",
+      "valid_counts"
+     ],
+     "additionalProperties": false
+    },
+    "time": {
+     "type": "object",
+     "properties": {
+      "steps": {
+       "$ref": "#/$defs/value"
+      },
+      "rg_c": {
+       "$ref": "#/$defs/value"
+      },
+      "tau_c": {
+       "$ref": "#/$defs/value"
+      }
+     },
+     "required": [
+      "steps",
+      "rg_c",
+      "tau_c"
+     ],
+     "additionalProperties": false
     }
+   },
+   "required": [
+    "per_start",
+    "aggregate",
+    "time"
+   ],
+   "additionalProperties": false
   }
+ },
+ "required": [
+  "analysis",
+  "space",
+  "starts",
+  "data"
+ ],
+ "additionalProperties": false,
+ "$defs": {
+  "value": {
+   "anyOf": [
+    {
+     "type": [
+      "number",
+      "boolean",
+      "null",
+      "string"
+     ]
+    },
+    {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/value"
+     }
+    },
+    {
+     "type": "object",
+     "additionalProperties": {
+      "$ref": "#/$defs/value"
+     }
+    }
+   ]
+  },
+  "values": {
+   "type": "object",
+   "properties": {
+    "samples": {
+     "type": "array",
+     "minItems": 1,
+     "items": {
+      "type": "object",
+      "properties": {
+       "step": {
+        "$ref": "#/$defs/value"
+       },
+       "mass_error": {
+        "$ref": "#/$defs/value"
+       },
+       "energy_error": {
+        "$ref": "#/$defs/value"
+       },
+       "angular_error": {
+        "$ref": "#/$defs/value"
+       },
+       "divb_pred": {
+        "$ref": "#/$defs/value"
+       },
+       "divb_truth": {
+        "$ref": "#/$defs/value"
+       },
+       "normalized_divb_pred": {
+        "$ref": "#/$defs/value"
+       },
+       "normalized_divb_truth": {
+        "$ref": "#/$defs/value"
+       },
+       "flux_pred": {
+        "$ref": "#/$defs/value"
+       },
+       "flux_truth": {
+        "$ref": "#/$defs/value"
+       },
+       "gamma_max": {
+        "$ref": "#/$defs/value"
+       }
+      },
+      "required": [
+       "step",
+       "mass_error",
+       "energy_error",
+       "angular_error",
+       "divb_pred",
+       "divb_truth",
+       "normalized_divb_pred",
+       "normalized_divb_truth",
+       "flux_pred",
+       "flux_truth",
+       "gamma_max"
+      ],
+      "additionalProperties": false
+     }
+    },
+    "initial_divb": {
+     "$ref": "#/$defs/value"
+    },
+    "initial_normalized_divb": {
+     "$ref": "#/$defs/value"
+    },
+    "initial_normalized_divb_global": {
+     "$ref": "#/$defs/value"
+    }
+   },
+   "required": [
+    "samples",
+    "initial_divb",
+    "initial_normalized_divb",
+    "initial_normalized_divb_global"
+   ],
+   "additionalProperties": false
+  }
+ }
 }

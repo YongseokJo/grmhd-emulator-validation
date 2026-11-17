@@ -1,24 +1,25 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "field": {
-        "type": "string"
-      },
-      "value": {
-        "type": [
-          "number",
-          "boolean",
-          "null"
-        ]
-      }
-    },
-    "required": [
-      "field",
-      "value"
-    ],
-    "additionalProperties": false
-  }
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "array",
+ "items": {
+  "type": "object",
+  "properties": {
+   "field": {
+    "type": "string"
+   },
+   "value": {
+    "type": [
+     "number",
+     "boolean",
+     "null",
+     "string"
+    ]
+   }
+  },
+  "required": [
+   "field",
+   "value"
+  ],
+  "additionalProperties": false
+ }
 }

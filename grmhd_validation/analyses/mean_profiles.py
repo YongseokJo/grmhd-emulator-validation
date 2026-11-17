@@ -20,6 +20,9 @@ E_YMAX_CAP = 100000.0
 L_YMAX_CAP = 1000000.0
 
 def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
+    if current()['space']=='physical':
+        from ._profiles import mean_profiles as physical_profiles
+        return physical_profiles(ctx,args.start)
     geo, geo_raw = geometry_views(ctx.geometry)
     _records = []
     'Time+phi-averaged radial physics profiles, pred vs truth:\n      (a) rotation curve Omega(r) = u^phi/u^0 in the equatorial band vs the\n          Kerr Keplerian curve 1/(r^{3/2}+a) — does the model learn GR orbital\n          mechanics? (b) vertical density structure rho(theta) at r=10/30/100 —\n          the disk scale height, (c) plasma beta p_gas/p_mag in the equatorial\n          band, (d) magnetization sigma = b^2/rho in the equatorial band.'
@@ -215,5 +218,5 @@ def compute(ctx, *, space='physical', starts=None):
     return execute_core(ctx, 'mean_profiles', _compute, space, starts, native_multi=False)
 
 def run(ctx):
-    starts = production_starts(ctx)
-    return emit(ctx, 'mean_profiles', compute(ctx, space='physical', starts=starts), 'physical', starts)
+    from ._final import run as final_run
+    return final_run(ctx,'mean_profiles',compute)

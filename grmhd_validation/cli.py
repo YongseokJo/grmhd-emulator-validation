@@ -32,15 +32,16 @@ def main(argv=None):
     command.add_argument("--data-root")
     command.add_argument("--no-verify-data", action="store_true")
     command = sub.add_parser("reference", help="Owner-only persistence golden on a Slurm CPU")
-    command.add_argument("adapter", choices=("persistence", "channel-scales"))
+    command.add_argument("adapter", choices=("persistence", "channel-scales", "truth"))
     command.add_argument("--split-id", required=True)
-    command.add_argument("--split", choices=("validation",), default="validation")
-    command.add_argument("--tier", choices=("quick",), default="quick")
+    command.add_argument("--split", choices=("validation","test"), default="validation")
+    command.add_argument("--tier", choices=("quick","full"), default="quick")
     command.add_argument("--device", choices=("cpu",), default="cpu")
     command.add_argument("--data-root")
     command = sub.add_parser("conformance", help="Check persistence against the platform golden on Slurm CPU")
     command.add_argument("--split-id", required=True)
     command.add_argument("--data-root")
+    command.add_argument('--tier',choices=('quick','full','all'))
     command = sub.add_parser("verify", help="Read-only bundle verification or numerical comparison")
     command.add_argument("--compare", action="store_true")
     command.add_argument("runs", nargs="+")
@@ -65,10 +66,14 @@ def main(argv=None):
                 verdict=generate(args.split_id,data_root=args.data_root)
             else:
                 from .conformance import reference
-                verdict = reference(args.split_id, args.tier, args.split, args.device, data_root=args.data_root)
+                verdict = reference(args.split_id, args.tier, args.split, args.device, data_root=args.data_root,truth_only=args.adapter=='truth')
         elif args.command == "conformance":
             from .conformance import conformance
-            verdict = conformance(args.split_id, data_root=args.data_root)
+            from .protocol import read_protocol,full_tier_ready
+            protocol,_=read_protocol(Path(__file__).resolve().parents[1]/'protocols/forecast_v1.json')
+            tier=args.tier or ('all' if full_tier_ready(protocol) else 'quick')
+            results=[conformance(args.split_id,data_root=args.data_root,tier=value) for value in (['quick','full'] if tier=='all' else [tier])]
+            verdict=results[0] if len(results)==1 else {'ok':all(r['ok'] for r in results),'next':'gval new-adapter <dir>','tiers':results}
         elif args.command == "verify":
             from .verify import verify_run, compare_runs
             expected = 2 if args.compare else 1

@@ -84,7 +84,7 @@ def no_replace_rename(source, destination):
 
 
 def publish(storage, root, split_id, model):
-    if not (root / "COMPLETE").is_file():
+    if (root/'PREVIEW').exists() or not (root / "COMPLETE").is_file():
         raise ValueError("Only a COMPLETE run may be published")
     with reservation_lock(storage):
         parent = storage.destination(split_id, model)

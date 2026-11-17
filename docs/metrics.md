@@ -119,14 +119,198 @@ normalized-divergence magnetic denominator. Spectra/structure/conditional errors
 in physical space can rank models differently from normalized-space diagnostics;
 this is the intended §4 change and should be reviewed as such.
 
-The milestone-3 mass shell plots/table retain the original normalization by
+The milestone-3 mass shell plots/table retained the original normalization by
 `gdet.shape[-2]*gdet.shape[-1]`. When geometry stores a singleton phi axis, this
-is not the number of physical angular cells. Energy/angular profiles use the
-physical array's angular count. This source convention is exposed for review
-and is not silently repaired in the legacy port. Full all-start/ring/transport
+is not the number of physical angular cells. Milestone 4 corrects production
+fig 5 and Table 2 to divide by the physical Ntheta*Nphi, as energy/angular
+profiles already do. The original expression remains only for `space="loss"`
+legacy regression. For rho=1/2 at rest, production mass profiles are 1/2 and
+the signed-log error is log(3)-log(2), independent of geometry's phi storage;
+legacy profiles are multiplied by Nphi. A synthetic singleton-phi test checks
+both profiles and the changed Table-2 error. See the [owner's note for Kevin](notes/mass_shell_normalization_for_kevin.md).
+Full all-start/ring/transport
 improvements remain deferred as above. Temporal-spectrum frequency labels use
 `c/R_g` instead of the original unsupported mathtext `text` command, so the
 declared Matplotlib 3.7 minimum can render every full-tier figure.
+
+## Milestone-4 production semantics
+
+This section supersedes the intermediate single-start settings above. Quick
+single_step and rollout_curve keep their milestone-2 definitions and bytes.
+Every other analysis retains per-start values and emits aggregate mean/lower/
+upper, n_starts, bootstrap configuration and counts for partially undefined
+values. Intervals are pointwise 95%, not simultaneous bands. Curves display
+intervals; map intervals are in JSON/CSV. Coordinates and fixed configuration
+have degenerate intervals. Each time-dependent output includes steps, elapsed
+R_g/c (steps times geometry dt_dump), and elapsed time divided by each channel's
+shared loss-space correlation time; nonpositive tau_c gives null.
+
+Consecutive **selected starts** form blocks inside each chunk, including a final
+short block. Pool blocks, draw the original number with replacement, concatenate
+their starts, and recompute each estimator, with the protocol seed/resamples/
+percentiles. Thus four rollout starts and block length ten give one block per
+chunk, not four independent samples. All calculations use float64 NumPy on CPU.
+Bootstrap memory is bounded by processing spatial fields in feature blocks.
+The explicit loss-space/single-start regression configuration remains available.
+Physical single-step pair analyses retain the registered truth dump identity
+through float64 conversion, so each call uses that start's entire model history
+and can reuse its verified private prediction. A three-frame adapter test checks
+both pair analyses across chunks; no earlier start substitutes its history.
+
+| Analysis | Final sampling and estimator; change from the intermediate port |
+|---|---|
+| error_correlation | Every common single-step start; recompute Pearson matrices from sampled per-channel physical error vectors, rather than averaging matrices or using 20 pairs. |
+| conditional_error | Every common single-step start; fixed truth-only seeded quantile edges. Recompute summed absolute errors divided by summed counts for every resample. Empty bins are null. |
+| correlation_times | Every rollout start; shared resolved-disk truth tau_c stays fixed. Recompute loss-space skill and horizon crossings from start-mean model/persistence errors on each resample. Censored crossings remain labelled. |
+| stability | Every rollout start, original ten perturbation draws each; start means and CIs of channel-RMS-scaled responses/draws. |
+| cost | Every rollout start; parameter count and configuration are invariant result content. Timing means/CIs and individual measurements live only in run.json, excluded from fingerprints. |
+| physics_table | Every rollout start and report horizon; average per-start physical diagnostics and bootstrap. Correct mass angular normalization applies before signed-log comparison. |
+| shell_profiles | Every rollout start; angular means of physical M/E/L and their per-start signed-log errors. Shell-profile E is the binding-energy diagnostic, distinct from the total transport Edot below. |
+| temporal_consistency | Every rollout start; start-relative total M/E/L drifts, followed by equal-start means/CIs, retaining each start's reference scales. |
+| conservation_closure | Every rollout start/step; full-velocity finite-volume mass budget at horizon and resolved inner boundary (formula below). |
+| accretion_diagnostics | Every rollout start; corrected inward fluxes, rest-mass-subtracted jet power and both efficiencies at every report step, with both shell records. |
+| mdot | Every rollout start/report horizon; full coordinate u^r, physical angular area, horizon and resolved headline values plus profiles/errors. |
+| lorentz | Every rollout start; gamma max/99.9th percentile curves, worst steps and model-reported clamp diagnostics, with CIs. Unknown clamps remain null. |
+| mean_profiles | Every rollout start; original within-start time mean, physical Omega, unnormalized vertical rho, median physical beta/sigma. Average physical profiles before plotting log10, instead of averaging per-start display logs or peak-normalized densities. |
+| statistical_props | Every rollout start; histogram edges from pooled truth at the fixed analysis horizon, independent of predictions. Per-start PDF/JS and equal-start means/CIs use those same edges. |
+| spectrum | Every rollout start; truth radial power cached. A common transfer-support mask comes from mean truth power over all starts, so every start has the same wavenumber coordinates. |
+| azimuthal_spectra | Every rollout start at protocol report_steps; physical m-power and transfer curves with intervals; truth spectra cached per dump. Transfers retain all mode coordinates, with nulls below each truth spectrum's 10th percentile and at m=0. Legacy keeps the original literal horizon list. |
+| coherence | Every rollout start/step; mean per-start physical coherence and pointwise map intervals. Cross spectra remain model-dependent. |
+| temporal_spectrum | Every rollout start; retain the mean of cellwise Hann periodograms, never the power of a regional mean. Cached truth masks and spectra; frequency uses geometry dt_dump. |
+| turbulence_stats | Every rollout start; physical structure exponents, fit quality, signed third moment, raw S2(lag) and the original S2/S2(1) curves, with truth quantities cached and pointwise CIs. Zero first-lag power makes the normalized curve undefined. |
+| bias_analysis | Every rollout start at h=1; mean signed phi-mean errors and sqrt(mean(error^2)), recomputing RMS in each resample instead of averaging per-start absolute errors. |
+| spatial_error | Every rollout start/report horizon; training-scale physical errors in disk/jet radial bins with curve intervals. |
+| meridional_slice | Every rollout start at the fixed horizon; average raw rho and B-squared maps before log10 display at all three fixed zooms. Physical error maps and their intervals remain in JSON/CSV. |
+| rollout_evolution | Every rollout start/report horizon; physical rho and error maps, then display log10 of the aggregate density. |
+
+### Four-velocity transport and shell selection
+
+The production signs follow the owner's convention based on
+[Tchekhovskoy, Narayan & McKinney (2011)](https://arxiv.org/abs/1108.0412)
+and [McKinney, Tchekhovskoy & Blandford (2012)](https://arxiv.org/abs/1201.4163).
+Let dA=dx[1]*dx[2] from geometry, and include sqrt(-g) in every integral.
+Recover the future-directed u^t from g_mu_nu u^mu u^nu=-1 and the metric shift,
+then coordinate u^r and covariant u_t/u_phi. Build the ideal-MHD tensor with
+b^t=B^i u_i, b^i=(B^i+b^t u^i)/u^t, b^2=b_mu b^mu,
+w=rho+gamma_EOS*ug, and T^r_nu=(w+b^2)u^r u_nu-b^r b_nu for nu=t,phi.
+No decode clamps or substitution of utilde1 for u^r is allowed.
+
+| Field | Definition and units |
+|---|---|
+| mdot | -integral rho*u^r*sqrt(-g) dA; inward-positive mass/time in code units |
+| edot | +integral T^r_t*sqrt(-g) dA; inward-positive **total** energy/time including rest mass |
+| ldot | -integral T^r_phi*sqrt(-g) dA; inward-positive angular momentum/time |
+| eta | (mdot-edot)/mdot, same shell/step; dimensionless net extraction efficiency |
+| p_jet | -integral_funnel (T^r_t+rho*u^r)*sqrt(-g) dA; outward jet power with rest mass removed |
+| eta_jet | p_jet/mdot, same shell/step; dimensionless |
+| magnetic_flux | integral abs(B1)*sqrt(-g) dA |
+| phi_normalized | 0.5*magnetic_flux/sqrt(mdot), same shell/step |
+
+The original funnel mask is sigma>1, abs(theta-pi/2)>1, outward u^r or outward
+gross energy flux, and rho>100*floor_rho. Efficiencies and normalized magnetic
+flux are null with reason nonpositive_mass_inflow when mdot<=0. Per-start
+reasons remain explicit, finite counts accompany partially defined means/CIs,
+and all-undefined intervals are null. Never divide by abs(mdot) in production.
+The legacy regression retains Kevin's gross jet power and p_jet/abs(mdot).
+
+Report the shell nearest r_H and, for rc300, the first shell at r>=6.11 whose
+**every** cell is resolved. Flag the horizon record coarse_ring; the resolved
+record is the headline. Other datasets use the horizon as the resolved headline.
+Conservation closure integrates rho*u^t*sqrt(-g)*product(dx) from each inner
+shell through the shell nearest the active-disk outer radius. At each step,
+residual=(M_k-M_previous)/dt_dump-(mdot_outer-mdot_inner). This is the original
+endpoint snapshot budget, not a time-centered finite-volume integrator.
+
+Independent tests check u.u=-1 and b.u=0 with nonzero shift, tensor contractions,
+jet rest-mass subtraction, angular-momentum sign, nonpositive inflow, shell
+selection, and cold marginally bound u_t=-1 radial inflow (edot=mdot, eta=0,
+ldot=0). Moving cold Minkowski gas includes kinetic energy and is a different
+oracle. See tests/test_transport.py and tests/test_physical_profiles.py.
+
+### Shared references and fixed artifacts
+
+`gval reference truth` builds owner-only verified truth/persistence quantities
+under references/<split>/<protocol>/<protocol_sha256>/truth_<partition>.
+Full persistence reference creation can build a missing cache in the same pass.
+The manifest binds split, geometry, checksum manifest, training scales, partition, protocol and
+per-entry/file hashes. SQLite contains pickle-free NumPy payloads; readers open
+it read-only, reject corrupt/missing/mismatched entries, and record cache hashes
+only in run metadata. Only registered truth dump identities can enter the kernel
+cache; untagged adapter predictions are computed privately. Complete private
+rollouts replay their verified predictions without rebuilding an unused history;
+this skips repeated I/O/inference-buffer work and leaves the arrays unchanged.
+The replay test checks exact arrays, no adapter/history calls and corruption
+rejection. Test data is never
+used for the training channel scales.
+
+Both reference tiers and conformance use the exact protocol-hash cohort. The
+comparison accepts identical content-file hashes directly; it traverses numbers
+only when content differs, preserving tolerance/failure diagnostics without
+reparsing large, already identical tables and maps.
+The full tier requires a shared cache and passing full conformance after the gate
+is lifted; historical previews stay in staging. Fixed PNG names follow the port
+manifest; original figure sizes are protocol settings, with Agg, 150 dpi,
+DejaVu Sans 11 and no timestamp metadata. All figures use aggregate content.
+tests/test_final_statistics.py checks chunk/short-block CIs and nonlinear RMS;
+tests/test_truth_cache.py checks build/read fingerprint identity, corruption,
+strict misses and failed-candidate cleanup. The full synthetic acceptance test
+checks every analysis's complete starts, time units, schema and fixed outputs.
+
+### Aggregate figure presentation
+
+Production plots use explicit physics panels adapted from Kevin's source
+designs, with channel symbols, units, ISCO markers and the original log/symlog
+axes. Truth is solid and model is dashed. A common step palette is used in
+multi-step overlays; each report step is labelled with its actual step and
+elapsed time from the frozen dt_dump. Every step's mean is drawn, but only the
+final step has CI shading (one light, outline-free band per displayed role).
+The dimensionless-flux time series keeps both role bands across all steps.
+Panels with a single horizon retain a band per role. Maps show means, with
+their full pointwise intervals retained in JSON/CSV. Each figure identifies
+the evaluated split and number of starts and states which bands are shown.
+
+The radial accretion panels label the full magnetic-flux integral and the
+production rest-mass-subtracted jet-power integral. The dimensionless-flux
+panel identifies the resolved headline shell. Mean-profile beta and sigma
+are averaged physically before display logs; the vertical density display
+uses a shared truth-peak normalization at each radius. Signed binding-energy
+profiles use the original displayed -E with correctly ordered transformed
+bounds. No metric or result fingerprint changes.
+The vertical mean-profile curves index radii within their prescribed temporal
+averaging window, rather than different report steps; their radius labels and
+role intervals are kept distinct from the multi-step overlay rule.
+
+The rollout-accuracy figure now shades 95% start-bootstrap CIs for the model
+and persistence mean nMAE, rather than displaying standard deviation as a
+band. Existing numerical mean/std/skill outputs are unchanged. The original
+growth curves and channel palette remain. Label/CI acceptance tests cover
+every full-tier PNG, reject raw result keys and unlabeled axes, and verify
+the final-step band count. scripts/render_aggregate_figures.py regenerates
+figures from verified stored results without inference and attaches a contact
+sheet; its receipt checks the source result fingerprint before and after.
+Owner persistence references may acquire updated derived PNGs atomically when
+their numerical result fingerprint matches; a presentation sidecar records
+the image hashes. Completed model-run bundles cannot use this refresh path.
+
+### Bounded evaluation memory
+
+Rollout replay is a disk-backed mapping of float32 states. An analysis reads only
+the frame it reduces, with float64 conversion at that access when required by
+the existing physical computation. Per-start rows retain reduced values; the
+runner collects reference cycles between starts and analyses. Truth-cache
+entries commit individually with a bounded SQLite page cache. Exact pooled
+histogram percentiles use a disk-backed pool and the same NumPy interpolation.
+Completed scratch writes are synchronized, and sequential data/prediction reads
+release clean file-cache pages with POSIX_FADV_DONTNEED. This matters because
+Slurm's cgroup memory charge includes file cache as well as anonymous memory.
+
+No metric definition, summation order, state values or protocol setting changes.
+`tests/test_memory.py` exercises a large grid over one versus eight starts,
+checks float32 storage, and rejects eager full-rollout materialization.
+`logs/memory.json` records per-analysis RSS and cgroup peaks outside result
+content. `scripts/profile_memory.py` profiles three shortened 5000run windows
+in private staging, including truth/persistence cache entries; it never creates
+a reference or benchmark submission.
 
 ## Regression-only checkpoint
 

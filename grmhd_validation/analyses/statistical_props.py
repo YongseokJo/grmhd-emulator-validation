@@ -38,7 +38,7 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
     for c in range(8):
         row, col = (c // 4, c % 4)
         is_log = c in [0, 1]
-        centers, pp, pt, widths = pdf_on_shared_bins(pred[c], target[c], log_scale=is_log)
+        centers, pp, pt, widths = pdf_on_shared_bins(pred[c], target[c], log_scale=is_log,channel=c)
         js = js_divergence(pp, pt, widths=widths)
         pred_mean = float(np.sum(centers * pp * widths) / (np.sum(pp * widths) + 1e-30))
         true_mean = float(np.sum(centers * pt * widths) / (np.sum(pt * widths) + 1e-30))
@@ -65,5 +65,5 @@ def compute(ctx, *, space="physical", starts=None):
 
 
 def run(ctx):
-    starts=production_starts(ctx)
-    return emit(ctx,'statistical_props',compute(ctx,space="physical",starts=starts),"physical",starts)
+    from ._final import run as final_run
+    return final_run(ctx,'statistical_props',compute)

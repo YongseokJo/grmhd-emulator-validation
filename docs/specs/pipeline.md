@@ -240,6 +240,32 @@ any quick result bytes. The normal owner reference path can regenerate identical
 quick content and refresh its metadata; an unequal quick fingerprint is an error,
 not a new golden to accept. No frozen split definitions change.
 
+### 3.5 Milestone-4 publication gate and finalization (owner decision)
+
+Until milestone 4 is complete, full-tier evaluations are previews. The runner
+must keep their completed bundles in staging/<user>/<run_id>/, write PREVIEW,
+set run.json status to preview with preview_reason, and never write COMPLETE or
+create a runs/ destination for them. The CLI returns preview: true and the
+staging path; a completed preview is not a leaderboard submission. Quick-tier
+publication is unchanged. Failed previews retain the normal FAILED record.
+verify identifies previews, and report excludes them even if files are otherwise
+valid. Preview attempts still count toward attempt numbering.
+
+The gate is closed unless constants.full.production_ready is explicitly true;
+its absence in the milestone-3 protocol means false. During implementation the
+committed forecast_v1.json stays unchanged. Final settings, all-start/CIs,
+transport/coarse-ring handling, verified owner truth caches and fixed artifacts
+are validated before the last milestone-4 implementation step. That last step
+updates forecast_v1.json once to the final semantics and production_ready: true,
+lifting the gate and changing its SHA256 once. It does not promote any existing
+preview or rewrite historical results. Regenerate quick and full persistence
+references under the final protocol hash, then rerun both splits' conformance.
+
+The comparison identity is (split_id, protocol_id, protocol_sha256, tier).
+Leaderboard/report grouping, verification comparisons and reference/cache
+selection must use the protocol SHA256, not protocol_id alone. Results with
+different hashes are separate comparison groups, even when both say forecast_v1.
+
 ## 4. Metric spaces
 
 - **Loss space.** The fixed TRON normalization, identical to `Fall26/common/normalizer.py`: log10 for
@@ -344,6 +370,139 @@ run.json. This truth-only owner command creates only references/<split_id>/.
 9. **Truth-only quantities cached per split.** Correlation times, truth spectra, truth shell profiles
    and persistence baselines are computed once by the owner into `references/<split_id>/<protocol_id>/`,
    then reused. Every model is then compared against identical truth statistics.
+
+**Mass-shell normalization (owner decision, milestone 4).** Production fig 5
+(shell_profiles) and Table 2 (physics_table) divide bare mass shells by the
+physical Ntheta*Nphi from the state shape, as energy/angular momentum and the
+training loss already do. Keep gdet.shape[-2]*gdet.shape[-1] only for the explicit
+legacy regression configuration. A singleton geometry phi axis must not change
+the production mass profile or its signed-log error. Document/test this fix and
+write an owner-facing note identifying Kevin's affected outputs.
+
+### 5.10 Final all-start statistics and truth-cache contract
+
+Full-tier rollout diagnostics use every common rollout start from §3.1. Preserve
+per-start values and report equal-weight start means with pointwise 95% CIs.
+Resample bootstrap_block consecutive selected starts within each chunk, retaining
+the last short block, and draw the original number of pooled blocks with
+replacement. With four rollout starts per chunk and block length ten, each
+chunk contributes one short block. The existing seed/resample count/percentiles
+apply. Quick-tier statistics retain §3.3 exactly.
+
+Nonlinear statistics are recomputed on each resample: error-correlation matrices
+use the sampled single-step error vectors; conditional-bin errors use summed
+absolute errors divided by summed bin counts; bias RMS uses the square root of
+the mean squared phi-mean errors; predictability horizons use skill from the
+start-mean model/persistence errors. Correlation-time truth estimates remain a
+fixed shared reference during the forecast-start bootstrap. Coordinates, channel
+IDs, step axes and model parameter counts are invariant/degenerate intervals,
+not noisy measurements. Timing CIs belong only in run metadata.
+
+Each full analysis retains data.per_start and adds data.aggregate with mean,
+lower, upper, n_starts and bootstrap (method, block length, block count, resample
+count and seed). Conditional error and error correlation use every common
+single-step start; the other diagnostics use all common rollout starts. Figures
+show these aggregate values and curve CIs; map CIs remain in JSON/CSV. Physical
+states/profiles are averaged before any display logarithm. Histogram edges are
+fixed from the pooled truth at the analysis horizon, and conditional-bin edges
+use the original seeded truth-only sampling rule. No model prediction sets the
+shared bins. A source regression continues to use the original sampling/bins.
+
+Aggregate figure presentation retains Kevin's panel designs, physics titles,
+channel names, axis units and logarithmic scales. Each displayed truth/model
+curve has one mean and one 95% CI band; only panels designed for multiple
+report steps show those steps. Step labels give the actual step and elapsed
+time from dt_dump, for example step 10 (1,000 R_g/c), never an array index.
+Use shared role/channel/step colours and a caption naming the start count and
+evaluated split and identifying bands as 95% CIs. Every visible data axis has
+physics labels; internal result keys are forbidden in titles and legends.
+Figure-only regeneration may read existing verified result content without
+inference and writes a separate presentation bundle. Attach an rc300 contact
+sheet of every full-tier figure to the milestone-4 receipt for visual review.
+
+For panels overlaying multiple report steps, plot both roles' means at every
+report step (truth solid, model dashed, one shared colour per step), but draw
+only the final report step's 95% CI bands: one per role, light and without an
+outline. Error/ratio overlays similarly show a band only at the final step.
+The caption states the start count, final band step, split and the metric JSON
+containing all intervals. The dimensionless-flux time-series panel keeps one
+line and one band per role across all its steps. Other time series, single-step
+panels and maps retain their original designs. This is presentation only;
+all per-step means and CIs remain in the metric artifacts.
+
+The owner may refresh derived PNGs in an existing persistence reference only
+after verifying its unchanged result-content fingerprint. Replace PNGs
+atomically with group-readable owner files and record presentation hashes;
+the metric/CSV/summary files and golden fingerprint are unchanged. Keep the
+versioned review bundle as the presentation receipt. This permission applies
+to owner persistence references, not completed model runs.
+
+Owner command `gval reference truth --split-id <id> --split validation|test`
+builds the verified truth/persistence cache. It writes only under
+references/<split_id>/<protocol_id>/<protocol_sha256>/, mode 2750, with separate
+partition identity. The cache contains correlation times, truth spectra/shell
+profiles, fixed bin edges and persistence baseline errors. It contains no learned
+model predictions. Its manifest pins the frozen split/geometry/checksum-manifest
+hashes, partition, protocol hash, cache schema, entry hashes and cache-file hash.
+The manifest also binds the training channel-scales SHA256 used by physical
+persistence baselines. Entries use pickle-free NumPy serialization. Readers are strictly read-only and
+reject missing/corrupt/mismatched caches. run.json records the cache hash; cache
+metadata is excluded from result fingerprints. Only the owner on a compute node
+may create a missing cache, and an existing verified cache is reused.
+
+Memory is bounded independently of the number of forecast starts: reduce one
+start at a time, release its volume fields before the next, and retain only
+reduced profiles, spectra, maps and scalars in per-start result rows. Store
+prediction states as float32; materialize float64 only for the reduction that
+needs it. Build disk caches incrementally. Sequential scratch/data I/O must not
+retain a run-sized file cache in the Slurm memory cgroup. Record per-analysis
+process RSS and allocation memory outside deterministic result content. The
+5000run full reference and conformance must each stay within 48 GB, verified
+with sacct MaxRSS under the existing 64 GB allocation. These implementation
+changes must preserve existing result fingerprints and the protocol hash.
+
+The final owner persistence reference supports --tier quick|full. Golden/cache
+selection includes the protocol SHA256 directory, so previous hash cohorts are
+not overwritten. Before finalization, the unchanged milestone-3 quick reference
+location remains readable only when its recorded hash matches. Conformance
+supports either tier, and the CLI defaults to checking both tiers once the
+protocol is final (quick only while gated). A production full evaluation requires
+passing full-tier conformance for its platform/lock/split/protocol hash.
+
+### 5.11 Production transport signs and efficiencies (owner option 4)
+
+Use geometry dx[1]*dx[2] as the angular coordinate area element, including
+sqrt(-g) in every shell integral. All accretion fluxes are positive inward:
+Mdot = -integral rho*u^r*sqrt(-g) dA;
+Edot = +integral T^r_t*sqrt(-g) dA (total energy, including rest mass);
+Ldot = -integral T^r_phi*sqrt(-g) dA.
+The total efficiency is eta = (Mdot-Edot)/Mdot on the same shell and step.
+P_jet = -integral_funnel (T^r_t+rho*u^r)*sqrt(-g) dA removes rest-mass flux;
+eta_jet = P_jet/Mdot on that same shell/step. Efficiencies are undefined for
+Mdot <= 0: emit null and nonpositive_mass_inflow as the reason, never |Mdot|.
+Across starts, preserve per-start reasons and report finite-sample counts along
+with nanmean/CIs; an entirely undefined quantity has null mean and CI.
+
+Use Kevin's funnel mask (magnetization, polar cut, outflow/energy-flux condition,
+and density guard), but use the rest-mass-subtracted production jet power.
+Compute u^t from the normalization with the metric, reconstruct coordinate u^r,
+u_t and u_phi, and form the ideal-MHD stress tensor with fluid-frame b^mu.
+Audit the normalization and flux components in a nonzero-shift synthetic metric.
+Cold marginally bound radial inflow with u_t=-1, u_phi=0, ug=B=0 must give
+Edot=Mdot, eta=0 and Ldot=0. A moving Minkowski flow also carries kinetic energy
+and is not that oracle.
+
+Report horizon and first-resolved-shell quantities. For rc300 the horizon
+record is flagged coarse_ring and the headline selects the first wholly
+resolved shell at r>=6.11. Preserve Kevin's original rest-mass-inclusive P_jet
+and eta=P_jet/|Mdot| only in the explicit legacy regression path.
+
+The final protocol records these fixed conventions in constants.full.transport,
+coarse_ring_r_min=6.11 and jet_density_floor_multiple=100. The existing
+milestone3_start_policy becomes all; production_ready becomes true only at the
+last implementation step. constants.figures.full_figsizes maps each analysis to
+the original figure sizes in fixed output order (including each zoom/variant).
+These additions are applied together, changing the protocol-file hash once.
 
 ## 6. Plugging in a model (adapter contract)
 
@@ -764,7 +923,7 @@ runs/<split_id>/<model>/<run_id>/
   - training provenance.
 
   Rows are sorted by model, then run_id. Numbers have fixed formatting.
-- Only compare rows with the same `split_id`, `protocol_id` and tier. The report states this rule.
+- Only compare rows with the same `split_id`, `protocol_id`, `protocol_sha256` and tier. The report states this rule.
 - **GitHub.**
   - The owner commits `reports/<split_id>/leaderboard.md`, the comparison figures and each run's
     `summary.json` + `run.json` (under `results/<split_id>/<model>/<run_id>/`) through a PR.

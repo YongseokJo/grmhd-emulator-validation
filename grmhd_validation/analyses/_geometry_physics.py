@@ -24,7 +24,9 @@ class MetricNormalizer(nn.Module):
             if state['analysis']=='stability':
                 scale=np.asarray(state['scales']['rms'],dtype=np.float64).reshape(1,8,1,1,1)
                 value=np.divide(value,scale,out=np.zeros_like(value),where=scale>1e-30)
-            return torch.from_numpy(value)
+            result=torch.from_numpy(value)
+            if hasattr(raw,'_gval_dump_id'):result._gval_dump_id=raw._gval_dump_id
+            return result
         rho=torch.log10(torch.clamp(raw[:,0],min=CONFIG['floor_rho']))
         ug=torch.log10(torch.clamp(raw[:,1],min=CONFIG['floor_ug']))
         return torch.cat((rho[:,None],ug[:,None],torch.arcsinh(raw[:,2:])),dim=1)

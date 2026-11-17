@@ -33,8 +33,8 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
         raise ValueError('Analysis has insufficient valid data: spectrum')
     states = rollout_predictions(model, norm, init, n_steps, device, dump_id=args.start)
     pred = states[n_steps]
-    pred_norm = norm_cpu(torch.from_numpy(pred).unsqueeze(0).float())
-    target_norm = norm_cpu(torch.from_numpy(target).unsqueeze(0).float())
+    pred_norm = norm_cpu(to_tensor_cpu(pred))
+    target_norm = norm_cpu(to_tensor_cpu(target))
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
     kmax = None
     for ax, ch, name in [(axes[0], 0, '$\\rho$'), (axes[1], 5, '$B^r$')]:
@@ -60,12 +60,16 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
     ax = axes[2]
     p10_rho = np.percentile(s0t[1:], setting('spectrum_truth_percentile'))
     m_rho = s0t[1:] >= p10_rho
+    if current()['space']=='physical':
+        from ._reference_statistics import spectrum_mask
+        m_rho=spectrum_mask(ctx,0,crit)
     ratio_rho = s0p[1:][m_rho] / (s0t[1:][m_rho] + 1e-30)
     ax.plot(k0t[1:][m_rho], ratio_rho, '.-', color=CHANNEL_COLORS[0], label='$\\rho$')
     kp2, sp2 = radial_spectrum(pred_norm, crit, 5)
     kt2, st2 = radial_spectrum(target_norm, crit, 5)
     p10_br = np.percentile(st2[1:], setting('spectrum_truth_percentile'))
     m_br = st2[1:] >= p10_br
+    if current()['space']=='physical':m_br=spectrum_mask(ctx,5,crit)
     ratio_br = sp2[1:][m_br] / (st2[1:][m_br] + 1e-30)
     ax.plot(kt2[1:][m_br], ratio_br, '.-', color=CHANNEL_COLORS[5], label='$B^r$')
     ax.axhline(1.0, color='k', linewidth=0.8, linestyle=':')
@@ -92,7 +96,10 @@ def _compute(ctx, args, model, norm, norm_cpu, crit, device, data_dir):
     path = os.path.join(args.save_dir, 'fig6_windowed_spectra.png')
     save_figure(fig, path)
     plt.close(fig)
-    return sample(**{'samples': _records, 'rho_modes': k0t, 'rho_ratio': ratio_rho, 'rho_ratio_mask': m_rho, 'B1_modes': kt2, 'B1_ratio': ratio_br, 'B1_ratio_mask': m_br, 'step': n_steps})
+    if current()['space']=='physical':
+        rho_full=np.full(len(m_rho),np.nan);rho_full[m_rho]=ratio_rho;ratio_rho=rho_full
+        b_full=np.full(len(m_br),np.nan);b_full[m_br]=ratio_br;ratio_br=b_full
+    return sample(**{'samples': _records, 'rho_modes': k0t[1:] if current()['space']=='physical' else k0t, 'rho_ratio': ratio_rho, 'rho_ratio_mask': m_rho, 'B1_modes': kt2[1:] if current()['space']=='physical' else kt2, 'B1_ratio': ratio_br, 'B1_ratio_mask': m_br, 'step': n_steps})
 
 def compute(ctx, *, space="physical", starts=None):
     """Numerical core: explicit space and one/all starts for source regression."""
@@ -100,5 +107,5 @@ def compute(ctx, *, space="physical", starts=None):
 
 
 def run(ctx):
-    starts=production_starts(ctx)
-    return emit(ctx,'spectrum',compute(ctx,space="physical",starts=starts),"physical",starts)
+    from ._final import run as final_run
+    return final_run(ctx,'spectrum',compute)

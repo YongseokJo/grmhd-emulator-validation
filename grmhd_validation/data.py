@@ -1,5 +1,6 @@
 """Checksum-verified physical data restricted to one model-facing partition."""
 from pathlib import Path
+import weakref
 
 import numpy as np
 import torch
@@ -43,6 +44,15 @@ class FrameReader:
         self.allowed = {dump.index: dump for dump in split.model_dumps(partition)}
         self.hashes = read_checksums(manifest) if verify else None
         self.verified = {}
+        self.arrays = {}
+
+    def tag(self,value,index):
+        self.arrays[id(value)]=(weakref.ref(value),int(index))
+        return value
+
+    def lookup(self,value):
+        record=self.arrays.get(id(value))
+        return record[1] if record is not None and record[0]() is value else None
 
     def numpy(self, index):
         dump = self.allowed.get(index)
@@ -54,14 +64,19 @@ class FrameReader:
             verify_file(path, dump.file, self.hashes)
             self.verified[index] = before
         raw = np.load(path, mmap_mode="r", allow_pickle=False)
-        if raw.dtype != np.float32 or tuple(raw.shape) != self.split.shape:
-            raise ValueError("Dump shape/dtype differs from split contract")
-        result = np.array(raw, copy=True, order="C")
+        try:
+            if raw.dtype != np.float32 or tuple(raw.shape) != self.split.shape:
+                raise ValueError("Dump shape/dtype differs from split contract")
+            result = np.array(raw, copy=True, order="C")
+        finally:
+            raw._mmap.close()
+            from .memory import discard_file_cache
+            discard_file_cache(path)
         if _identity(path) != before:
             raise ValueError("Data changed while being read")
         if not np.isfinite(result).all():
             raise ValueError("Truth contains non-finite values")
-        return result
+        return self.tag(result,index)
 
     def tensor(self, index, device):
         return torch.from_numpy(self.numpy(index)).to(device)

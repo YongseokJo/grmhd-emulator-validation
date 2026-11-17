@@ -1,318 +1,457 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
-  "properties": {
-    "adapter_repo_commit": {
-      "anyOf": [
-        {
-          "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "additionalProperties": false,
+ "properties": {
+  "adapter_repo_commit": {
+   "anyOf": [
+    {
+     "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$",
+     "type": "string"
     },
-    "adapter_sha256": {
-      "anyOf": [
-        {
-          "pattern": "^[0-9a-f]{64}$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "adapter_sha256": {
+   "anyOf": [
+    {
+     "pattern": "^[0-9a-f]{64}$",
+     "type": "string"
     },
-    "attempt": {
-      "minimum": 1,
-      "type": "integer"
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "attempt": {
+   "minimum": 1,
+   "type": "integer"
+  },
+  "checkpoint": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "checkpoint_sha256": {
+   "anyOf": [
+    {
+     "pattern": "^[0-9a-f]{64}$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "conformance": {
+   "type": "object"
+  },
+  "cuda": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "data_verified": {
+   "type": "boolean"
+  },
+  "device": {
+   "type": "string"
+  },
+  "end_time": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "environment_lock_sha256": {
+   "anyOf": [
+    {
+     "pattern": "^[0-9a-f]{64}$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "environment_locked": {
+   "type": "boolean"
+  },
+  "error": {
+   "type": "string"
+  },
+  "gpu": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "history_length": {
+   "minimum": 1,
+   "type": "integer"
+  },
+  "host": {
+   "type": "string"
+  },
+  "model": {
+   "type": "string"
+  },
+  "no_verify_data": {
+   "type": "boolean"
+  },
+  "numpy": {
+   "type": "string"
+  },
+  "platform": {
+   "enum": [
+    "delta-x86_64",
+    "deltaai-aarch64"
+   ]
+  },
+  "protocol_id": {
+   "type": "string"
+  },
+  "protocol_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "purpose": {
+   "enum": [
+    "reference",
+    "conformance"
+   ]
+  },
+  "python": {
+   "type": "string"
+  },
+  "repo_commit": {
+   "anyOf": [
+    {
+     "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "request": {
+   "additionalProperties": false,
+   "properties": {
+    "adapter": {
+     "minLength": 1,
+     "type": "string"
     },
     "checkpoint": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "checkpoint_sha256": {
-      "anyOf": [
-        {
-          "pattern": "^[0-9a-f]{64}$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "conformance": {
-      "type": "object"
-    },
-    "cuda": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "data_verified": {
-      "type": "boolean"
-    },
-    "device": {
-      "type": "string"
-    },
-    "end_time": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "environment_lock_sha256": {
-      "anyOf": [
-        {
-          "pattern": "^[0-9a-f]{64}$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "environment_locked": {
-      "type": "boolean"
-    },
-    "error": {
-      "type": "string"
-    },
-    "gpu": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "history_length": {
-      "minimum": 1,
-      "type": "integer"
-    },
-    "host": {
-      "type": "string"
+     "type": [
+      "string",
+      "null"
+     ]
     },
     "model": {
-      "type": "string"
+     "pattern": "^[a-z0-9-]+$",
+     "type": "string"
     },
-    "no_verify_data": {
-      "type": "boolean"
+    "notes": {
+     "type": "string"
     },
-    "numpy": {
-      "type": "string"
+    "options": {
+     "type": "object"
     },
-    "platform": {
-      "enum": [
-        "delta-x86_64",
-        "deltaai-aarch64"
-      ]
-    },
-    "protocol_id": {
-      "type": "string"
-    },
-    "protocol_sha256": {
-      "pattern": "^[0-9a-f]{64}$",
-      "type": "string"
-    },
-    "purpose": {
-      "enum": [
-        "reference",
-        "conformance"
-      ]
-    },
-    "python": {
-      "type": "string"
-    },
-    "repo_commit": {
-      "anyOf": [
-        {
-          "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "request": {
-      "additionalProperties": false,
-      "properties": {
-        "adapter": {
-          "minLength": 1,
-          "type": "string"
-        },
-        "checkpoint": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "model": {
-          "pattern": "^[a-z0-9-]+$",
-          "type": "string"
-        },
-        "notes": {
-          "type": "string"
-        },
-        "options": {
-          "type": "object"
-        },
-        "training_record": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "version": {
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
-          "type": "string"
-        }
-      },
-      "required": [
-        "model",
-        "version",
-        "adapter",
-        "checkpoint",
-        "options",
-        "training_record",
-        "notes"
-      ],
-      "type": "object"
-    },
-    "result_fingerprint": {
-      "anyOf": [
-        {
-          "pattern": "^[0-9a-f]{64}$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "rollout_starts": {
-      "additionalProperties": {
-        "items": {
-          "type": "integer"
-        },
-        "type": "array"
-      },
-      "type": "object"
-    },
-    "run_id": {
-      "type": "string"
-    },
-    "runner_autocast": {
-      "const": false
-    },
-    "split": {
-      "enum": [
-        "validation",
-        "test"
-      ]
-    },
-    "split_file_sha256": {
-      "pattern": "^[0-9a-f]{64}$",
-      "type": "string"
-    },
-    "split_id": {
-      "type": "string"
-    },
-    "start_time": {
-      "type": "string"
-    },
-    "status": {
-      "enum": [
-        "running",
-        "complete",
-        "failed"
-      ]
-    },
-    "tier": {
-      "enum": [
-        "quick",
-        "full"
-      ]
-    },
-    "torch": {
-      "type": "string"
-    },
-    "user": {
-      "type": "string"
+    "training_record": {
+     "type": [
+      "string",
+      "null"
+     ]
     },
     "version": {
-      "type": "string"
-    },
-    "analysis_runtime": {
-      "type": "object",
-      "properties": {
-        "cost": {
-          "type": "object",
-          "properties": {
-            "milliseconds_per_step": {
-              "type": "number",
-              "minimum": 0
-            },
-            "timed_steps": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "parameters": {
-              "type": [
-                "integer",
-                "null"
-              ],
-              "minimum": 0
-            }
-          },
-          "required": [
-            "milliseconds_per_step",
-            "timed_steps",
-            "parameters"
-          ],
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": false
-    },
-    "channel_scales_sha256": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
+     "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+     "type": "string"
     }
-  },
-  "required": [
-    "request",
+   },
+   "required": [
     "model",
     "version",
+    "adapter",
     "checkpoint",
-    "checkpoint_sha256",
-    "user",
-    "host",
-    "device",
-    "gpu",
-    "cuda",
-    "torch",
-    "numpy",
-    "python",
-    "platform",
-    "environment_lock_sha256",
-    "environment_locked",
-    "repo_commit",
-    "adapter_sha256",
-    "adapter_repo_commit",
-    "split_id",
-    "split_file_sha256",
-    "protocol_id",
-    "protocol_sha256",
-    "data_verified",
-    "start_time",
-    "end_time",
-    "result_fingerprint",
-    "runner_autocast"
-  ],
-  "type": "object"
+    "options",
+    "training_record",
+    "notes"
+   ],
+   "type": "object"
+  },
+  "result_fingerprint": {
+   "anyOf": [
+    {
+     "pattern": "^[0-9a-f]{64}$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "rollout_starts": {
+   "additionalProperties": {
+    "items": {
+     "type": "integer"
+    },
+    "type": "array"
+   },
+   "type": "object"
+  },
+  "run_id": {
+   "type": "string"
+  },
+  "runner_autocast": {
+   "const": false
+  },
+  "split": {
+   "enum": [
+    "validation",
+    "test"
+   ]
+  },
+  "split_file_sha256": {
+   "pattern": "^[0-9a-f]{64}$",
+   "type": "string"
+  },
+  "split_id": {
+   "type": "string"
+  },
+  "start_time": {
+   "type": "string"
+  },
+  "status": {
+   "enum": [
+    "running",
+    "complete",
+    "failed",
+    "preview"
+   ]
+  },
+  "tier": {
+   "enum": [
+    "quick",
+    "full"
+   ]
+  },
+  "torch": {
+   "type": "string"
+  },
+  "user": {
+   "type": "string"
+  },
+  "version": {
+   "type": "string"
+  },
+  "analysis_runtime": {
+   "type": "object",
+   "properties": {
+    "cost": {
+     "type": "object",
+     "properties": {
+      "milliseconds_per_step": {
+       "type": "number",
+       "minimum": 0
+      },
+      "timed_steps": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "parameters": {
+       "type": [
+        "integer",
+        "null"
+       ],
+       "minimum": 0
+      },
+      "all_start_statistics": {
+       "type": "object",
+       "properties": {
+        "mean": {
+         "type": "object",
+         "properties": {
+          "milliseconds_per_step": {
+           "type": [
+            "number",
+            "null"
+           ]
+          }
+         },
+         "required": [
+          "milliseconds_per_step"
+         ],
+         "additionalProperties": false
+        },
+        "lower": {
+         "type": "object",
+         "properties": {
+          "milliseconds_per_step": {
+           "type": [
+            "number",
+            "null"
+           ]
+          }
+         },
+         "required": [
+          "milliseconds_per_step"
+         ],
+         "additionalProperties": false
+        },
+        "upper": {
+         "type": "object",
+         "properties": {
+          "milliseconds_per_step": {
+           "type": [
+            "number",
+            "null"
+           ]
+          }
+         },
+         "required": [
+          "milliseconds_per_step"
+         ],
+         "additionalProperties": false
+        },
+        "n_starts": {
+         "type": "integer",
+         "minimum": 1
+        },
+        "bootstrap": {
+         "type": "object",
+         "properties": {
+          "method": {
+           "const": "chunk_block_bootstrap"
+          },
+          "block_length": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "n_blocks": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "resamples": {
+           "type": "integer",
+           "minimum": 1
+          },
+          "seed": {
+           "type": "integer"
+          }
+         },
+         "required": [
+          "method",
+          "block_length",
+          "n_blocks",
+          "resamples",
+          "seed"
+         ],
+         "additionalProperties": false
+        },
+        "valid_counts": {
+         "type": "object",
+         "additionalProperties": {
+          "type": "integer",
+          "minimum": 0
+         }
+        }
+       },
+       "required": [
+        "mean",
+        "lower",
+        "upper",
+        "n_starts",
+        "bootstrap",
+        "valid_counts"
+       ],
+       "additionalProperties": false
+      }
+     },
+     "required": [
+      "milliseconds_per_step",
+      "timed_steps",
+      "parameters"
+     ],
+     "additionalProperties": false
+    }
+   },
+   "additionalProperties": false
+  },
+  "channel_scales_sha256": {
+   "type": "string",
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "preview_reason": {
+   "type": "string",
+   "minLength": 1
+  },
+  "truth_cache_sha256": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^[0-9a-f]{64}$"
+  },
+  "truth_cache_manifest_sha256": {
+   "type": [
+    "string",
+    "null"
+   ],
+   "pattern": "^[0-9a-f]{64}$"
+  }
+ },
+ "required": [
+  "request",
+  "model",
+  "version",
+  "checkpoint",
+  "checkpoint_sha256",
+  "user",
+  "host",
+  "device",
+  "gpu",
+  "cuda",
+  "torch",
+  "numpy",
+  "python",
+  "platform",
+  "environment_lock_sha256",
+  "environment_locked",
+  "repo_commit",
+  "adapter_sha256",
+  "adapter_repo_commit",
+  "split_id",
+  "split_file_sha256",
+  "protocol_id",
+  "protocol_sha256",
+  "data_verified",
+  "start_time",
+  "end_time",
+  "result_fingerprint",
+  "runner_autocast"
+ ],
+ "type": "object",
+ "allOf": [
+  {
+   "if": {
+    "properties": {
+     "status": {
+      "const": "preview"
+     }
+    },
+    "required": [
+     "status"
+    ]
+   },
+   "then": {
+    "required": [
+     "preview_reason"
+    ]
+   }
+  }
+ ]
 }

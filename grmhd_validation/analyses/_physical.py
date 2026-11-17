@@ -24,9 +24,20 @@ def gamma(utilde,gcov):
 
 
 def ucon(utilde,gcov,gcon):
-    u=array(utilde);g=array(gcon)
-    u0=gamma(u,gcov)*np.sqrt(-g[0,0])
-    ui=u+u0*np.stack([g[0,i]/g[0,0] for i in (1,2,3)])[None]
+    u=array(utilde);g=array(gcov);inverse=array(gcon)
+    beta=-np.stack([inverse[0,i]/inverse[0,0] for i in (1,2,3)])
+    # u^i = utilde^i - beta^i*u^t. Solve the metric normalization
+    # directly, including off-diagonal terms and nonzero coordinate shift.
+    a=g[0,0]-2*np.sum(g[0,1:]*beta,axis=0)+np.einsum('ij...,i...,j...->...',g[1:,1:],beta,beta)
+    b=2*np.einsum('i...,bi...->b...',g[0,1:]-np.einsum('ij...,j...->i...',g[1:,1:],beta),u)
+    c=1+np.einsum('bi...,ij...,bj...->b...',u,g[1:,1:],u)
+    discriminant=b*b-4*a*c
+    if np.any(a>=0) or np.any(discriminant<0):raise ValueError('Geometry has no future-directed timelike normalization')
+    root=np.sqrt(discriminant)
+    with np.errstate(divide='ignore',invalid='ignore'):
+        ut=np.where(b>=0,(-b-root)/(2*a),2*c/(-b+root))
+    if not np.isfinite(ut).all() or np.any(ut<=0):raise ValueError('Invalid normalized u^t')
+    u0=ut[:,None];ui=u-u0*beta[None]
     return np.concatenate((u0,ui),axis=1)
 
 

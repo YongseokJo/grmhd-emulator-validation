@@ -14,6 +14,7 @@ def disk_limit():return current()['ctx'].constants['active_disk']['r_max']
 _FLUX_COUNT_PRINTED=False
 
 def auto_horizons(max_steps):
+    if current()['space']=='physical':return list(current()['ctx'].protocol['report_steps'])
     if max_steps <= 20:
         horizons = [1, max(1, max_steps // 4), max(1, max_steps // 2), max_steps]
     elif max_steps <= 50:
@@ -66,6 +67,12 @@ def mass_shells(raw_t, crit, norm):
     rho = crit._safe_rho_ug(x[:, 0:1], CONFIG['floor_rho'], CONFIG['ceiling_rho'])
     u0 = norm.u0_of(x[:, 2:5])
     return torch.sum(rho * u0 * crit.gdet, dim=(3, 4))
+
+
+def mass_angular_count(raw,crit):
+    """Physical cells in production; original geometry-buffer count in legacy."""
+    if current()['space']=='loss':return float(crit.gdet.shape[-2]*crit.gdet.shape[-1])
+    return float(raw.shape[-2]*raw.shape[-1])
 
 def conserved_shells(raw_t, crit, norm):
     """Per-shell angular-mean conserved densities:
@@ -282,12 +289,21 @@ def magnetic_flux_shells(raw_t, crit, bare=True):
         res = res * (crit.dy * crit.dz)
     return res
 
-def pdf_on_shared_bins(pred_c, true_c, n_bins=None, log_scale=False):
+def pdf_on_shared_bins(pred_c, true_c, n_bins=None, log_scale=False, channel=None):
     """PDFs of pred/true on the SAME bin edges (percentiles from the combined
     sample) — the old version used per-distribution edges, making the JS
     divergence meaningless. Returns (bin_centers, pdf_pred, pdf_true, bin_widths)."""
     n_bins=setting('histogram_bins') if n_bins is None else n_bins
     if current()['space']=='physical':pred_c,true_c=physical.array(pred_c),physical.array(true_c)
+    if current()['space']=='physical' and channel is not None:
+        from ._reference_statistics import histogram_edges
+        edges=histogram_edges(current()['ctx'],channel)
+        p=pred_c;t=true_c
+        if log_scale:p=np.maximum(np.abs(p),setting('epsilon'));t=np.maximum(np.abs(t),setting('epsilon'))
+        hp,_=np.histogram(np.clip(p,edges[0],edges[-1]),bins=edges,density=True)
+        ht,_=np.histogram(np.clip(t,edges[0],edges[-1]),bins=edges,density=True)
+        centers=np.sqrt(edges[:-1]*edges[1:]) if log_scale else (edges[:-1]+edges[1:])/2
+        return centers,hp,ht,np.diff(edges)
     flat = np.concatenate([pred_c.ravel(), true_c.ravel()])
     if log_scale:
         abs_f = np.maximum(np.abs(flat), 1e-30)
@@ -418,10 +434,11 @@ def jet_power_shells(raw_t, geo_raw, norm_cpu, gamma, bare=True, return_mask=Fal
         return (res, mask)
     return res
 
-def pairwise_masked_corrcoef(data):
+def pairwise_masked_corrcoef(data,variance_min=None):
     """Pairwise-NaN-masked Pearson correlation matrix for data (N_samples, N_channels).
     Masks out samples where either channel is NaN. If variance < 1e-12 or valid samples < 3,
     returns NaN (nan_to_num with zero is strictly forbidden)."""
+    if variance_min is None:variance_min=setting('correlation_variance_min')
     n_ch = data.shape[1]
     corr = np.full((n_ch, n_ch), np.nan)
     for i in range(n_ch):
@@ -435,7 +452,7 @@ def pairwise_masked_corrcoef(data):
             xj_m = xj[mask]
             v_i = float(np.var(xi_m))
             v_j = float(np.var(xj_m))
-            if v_i < setting('correlation_variance_min') or v_j < setting('correlation_variance_min'):
+            if v_i < variance_min or v_j < variance_min:
                 continue
             c = np.corrcoef(xi_m, xj_m)[0, 1]
             corr[i, j] = c
@@ -540,3 +557,28 @@ def total_sum(value):
     """Float64 NumPy reduction for physical metrics; legacy reduction retained."""
     if current()["space"]=="physical":return float(np.sum(physical.array(value)))
     return float(torch.sum(value).item())
+
+
+def _truth_cached(function):
+    """Cache only registered ground-truth inputs, never adapter predictions."""
+    import functools,inspect
+    signature=inspect.signature(function)
+    @functools.wraps(function)
+    def cached(raw,*args,**kwargs):
+        state=current();ctx=state['ctx']
+        from ..truth_cache import truth_dump_id,truth_value
+        index=truth_dump_id(ctx,raw)
+        cache=getattr(ctx,'truth_cache',None)
+        if state['space']!='physical' or index is None or cache is None:return function(raw,*args,**kwargs)
+        arguments=signature.bind(raw,*args,**kwargs);arguments.apply_defaults()
+        variant={key:(value.item() if isinstance(value,np.generic) else value)
+                 for key,value in arguments.arguments.items()
+                 if key in {'channel','bare','return_global','return_mask','gamma'}}
+        return truth_value(ctx,'kernel',{'name':function.__name__,'dump':int(index),'variant':variant},
+                           lambda:function(raw,*args,**kwargs))
+    return cached
+
+
+for _name in ('mass_shells','conserved_shells','physical_divb','normalized_divb',
+              'radial_spectrum','mdot_shells','magnetic_flux_shells','jet_power_shells'):
+    globals()[_name]=_truth_cached(globals()[_name])
