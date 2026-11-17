@@ -42,3 +42,5 @@ class ErrorColourOracles(unittest.TestCase):
             self.assertTrue(notice);check_contrast(audit)
             np.testing.assert_array_equal(image,before)
             if np.all(image==0) or not np.isfinite(image).any():self.assertTrue(np.ma.getmaskarray(data).all())
+        _,norm,_,notice=error_colors(np.zeros((3,3)),np.ones((3,3),dtype=bool),signed=True)
+        self.assertEqual(norm(0.),.5);self.assertEqual(notice,'Zero bias in displayed region')

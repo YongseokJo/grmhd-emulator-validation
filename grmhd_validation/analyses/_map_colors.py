@@ -57,6 +57,6 @@ def error_colors(image,region,*,signed=False):
            'lowest_five_percent_fraction':fraction,'constant':constant}
     notice=None
     if not len(values):notice='No finite error values in displayed region'
-    elif not len(positive):notice='Zero error in displayed region'
+    elif not len(positive):notice='Zero bias in displayed region' if signed else 'Zero error in displayed region'
     elif low==high:notice='Constant central error range'
     return data,norm,audit,notice
