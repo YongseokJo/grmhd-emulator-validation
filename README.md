@@ -19,6 +19,12 @@ See [milestone 3 usage and validation](docs/milestone_3.md), [milestone 2 usage]
 [metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md). Locked DeltaAI references and real-data
 conformance for both datasets pass; see the [validation receipt](docs/milestone_2_real_validation.md).
 
+Short compute work uses `ghx4-interactive`, account `bgun-dtai-gh`. The owner's
+jobs share the one-interactive-job-per-user limit. If occupied, inspect
+`squeue -u "$USER"`, wait for the owner's job to finish and resubmit; never
+cancel it or fall back to `ghx4` for short work. Ask the owner only if the wait
+exceeds about two hours.
+
 | Path | Contents |
 |---|---|
 | `splits/rc300_reduced_v1.json`, `splits/5000run_v1.json` | Frozen train / validation / test splits. Do not edit; changes need a new version. |
