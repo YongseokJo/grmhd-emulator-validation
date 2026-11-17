@@ -1232,7 +1232,8 @@ adapter and publish a quick validation run. Do not precompute either session's
 passing conformance or substitute another agent's final answer. Existing goldens
 and the normal shared infrastructure remain available. Native tool permission
 setup is recorded, not an extra benchmark hint. Use default configured models;
-record actual clients/models/session IDs, invocation, tool transcript hashes,
+record actual clients/models/session IDs where exposed (otherwise null with a
+reason, never inferred), invocation, tool transcript hashes,
 job IDs, commands, result paths/fingerprints, pauses and observed hesitations.
 If either session is blocked or needs guidance, record that fact and fix the
 instructions before a new fresh attempt; never claim an assisted run passed.
