@@ -6,10 +6,10 @@ metric and figure code, and the same output layout. Results go to one group fold
 compare them.
 
 **Status: milestones 1–4 and the error-map figure fix are merged. Milestone 5
-is implemented and undergoing validation.** It adds credited TRON/ViT and
+is ready for owner review.** It adds credited TRON/ViT and
 Eden's three adapters, declared training provenance with computed split overlap,
 and agent prediction tasks/packets feeding the common scorer. See
-[model setup](docs/plugging_in_a_model.md), [host](docs/prediction_roles/host.md),
+[validation receipt](docs/milestone_5_validation.md), [model setup](docs/plugging_in_a_model.md), [host](docs/prediction_roles/host.md),
 [forecasting agent](docs/prediction_roles/forecasting.md) and
 [scorer](docs/prediction_roles/scorer.md) instructions. Missing coverage remains
 `not evaluated` in staging; imported files never execute agent code in the scorer.

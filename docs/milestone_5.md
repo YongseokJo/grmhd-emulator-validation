@@ -48,7 +48,7 @@ The explicit real TRON regression requires the pinned checkpoint and fails if
 it is absent or its SHA differs. Its output is regression evidence, never a
 benchmark submission: that checkpoint overlaps current validation.
 
-Numerical and operational evidence is in the milestone-5 validation receipt.
+Numerical and operational evidence is in the [validation receipt](milestone_5_validation.md).
 Milestone 6 (report/leaderboard/CI/participant agent instructions) remains for
 owner approval after this review. The milestone-7 learned-model benchmark dry
 run is not claimed by adapter source/kernel regression.
