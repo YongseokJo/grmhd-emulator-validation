@@ -56,3 +56,14 @@ class CompactSummaryTests(RunnerFixture):
         self.assertEqual({k:v for k,v in files.items() if k!='summary.json'},{k:v for k,v in result_files(path).items() if k!='summary.json'})
         self.assertTrue(rebuild('synthetic_v1','quick',self.storage(),self.repo)['reused'])
         self.assertTrue(self.conform()['ok'])
+
+    def test_coverage_only_diagnostics_do_not_manufacture_confidence_intervals(self):
+        self.golden();protocol,digest=read_protocol(self.repo/'protocols/forecast_v1.json')
+        path=reference_path(self.storage(),'synthetic_v1',protocol,platform_id(),'quick',digest)
+        summary=json.loads((path/'summary.json').read_text())
+        from grmhd_validation.summary import COVERAGE,project
+        result={'space':'physical','data':{'aggregate':{'mean':{},'lower':{},'upper':{},'n_starts':12}}}
+        for name in COVERAGE:
+            summary[name]=project(name,result,protocol)
+            self.assertEqual(summary[name]['ci95'],{})
+        validate(summary)

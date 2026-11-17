@@ -3211,37 +3211,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -4479,37 +4450,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -5835,37 +5777,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -5939,37 +5852,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -6043,37 +5927,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -6525,37 +6380,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -6629,37 +6455,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -6733,37 +6530,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -6837,37 +6605,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
@@ -6941,37 +6680,8 @@
       "ci95": {
        "type": "object",
        "additionalProperties": false,
-       "properties": {
-        "final_step": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        },
-        "sample_count": {
-         "type": "array",
-         "items": {
-          "type": [
-           "number",
-           "boolean",
-           "null"
-          ]
-         },
-         "minItems": 2,
-         "maxItems": 2
-        }
-       },
-       "required": [
-        "final_step",
-        "sample_count"
-       ],
-       "maxProperties": 2
+       "properties": {},
+       "required": []
       }
      },
      "required": [
