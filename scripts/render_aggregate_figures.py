@@ -30,6 +30,7 @@ def main():
     parser.add_argument('--source',type=Path,required=True)
     parser.add_argument('--receipt-dir',type=Path,help='Copy contact sheet and fig18 into a repository docs directory')
     parser.add_argument('--refresh-reference',action='store_true',help='Owner-only atomic PNG refresh of the verified source golden')
+    parser.add_argument('--error-map-crops',action='store_true',help='Export error-column/row crops and check visible-map contrast')
     args=parser.parse_args()
     source=args.source.resolve();info=json.loads((source/'run.json').read_text())
     files=result_files(source);before=fingerprint(files)
@@ -43,7 +44,7 @@ def main():
     writer=Writer(storage,root)
     ctx=SimpleNamespace(split=split,partition=info.get('split','validation'),protocol=protocol,
                         constants=protocol['constants'],writer=writer,channels=CHANNELS,
-                        geometry=load_geometry(split,torch.device('cpu')))
+                        geometry=load_geometry(split,torch.device('cpu')),save_error_crops=args.error_map_crops)
     import matplotlib
     matplotlib.use(ctx.constants['figures']['backend'])
     import matplotlib.pyplot as plt
@@ -54,6 +55,11 @@ def main():
         audit.update(render(ctx,name,metric['data']['aggregate']))
         del metric
         gc.collect()
+    if args.error_map_crops:
+        from grmhd_validation.analyses._map_colors import check_contrast
+        for record in audit.values():
+            for panel in record['panels']:
+                for field in panel['error_maps']:check_contrast(field)
     # The quick-tier accuracy figure is also part of every full-tier bundle.
     # Its per-start error curves are retained by correlation_times, so rendering
     # requires neither re-inference nor a scan of ground-truth dumps.
@@ -84,8 +90,9 @@ def main():
     writer.json('figure_labels.json',audit)
     receipt={'ok':True,'purpose':'figure presentation review','source':str(source),'output_dir':str(root),
              'source_result_fingerprint':before,'protocol_sha256':digest,'renderer_repo_commit':git_commit(REPO),
-             'renderer_sha256':{name:sha256(REPO/'grmhd_validation/analyses'/name) for name in ('_figures.py','rollout_curve.py')},
+             'renderer_sha256':{name:sha256(REPO/'grmhd_validation/analyses'/name) for name in ('_figures.py','_map_colors.py','rollout_curve.py')},
              'figures':{name:sha256(root/'figures'/name) for name in names},'contact_sheet_sha256':sha256(root/'contact_sheet.png')}
+    if args.error_map_crops:receipt['crops']={path.name:sha256(path) for path in sorted((root/'crops').glob('*.png'))}
     writer.json('presentation.json',receipt)
     if args.refresh_reference:
         from grmhd_validation.conformance import refresh_reference_figures
@@ -95,8 +102,9 @@ def main():
         destination=args.receipt_dir.resolve()
         if not destination.is_relative_to(REPO/'docs'):raise ValueError('Receipt copies must be under repository docs/')
         destination.mkdir(parents=True,exist_ok=True)
-        for src,dst in ((root/'contact_sheet.png',split.split_id+'_contact_sheet.png'),
-                        (root/'figures/fig18_accretion_diagnostics.png',split.split_id+'_fig18.png')):
+        copies=([(path,split.split_id+'_'+path.name) for path in sorted((root/'crops').glob('*.png'))] if args.error_map_crops else
+                [(root/'contact_sheet.png',split.split_id+'_contact_sheet.png'),(root/'figures/fig18_accretion_diagnostics.png',split.split_id+'_fig18.png')])
+        for src,dst in copies:
             target=destination/dst
             if target.is_symlink():raise ValueError('Receipt target must not be a symlink')
             shutil.copyfile(src,target)

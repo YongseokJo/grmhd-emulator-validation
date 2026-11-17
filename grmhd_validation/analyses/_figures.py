@@ -132,14 +132,25 @@ def radial(ctx,ax,r,*,full=False):
     ax.axvline(isco,color='.45',linestyle=':',linewidth=.8,label='_nolegend_')
 
 
-def color_map(fig,ax,image,title,label,*,X=None,Y=None,limits=None,cmap='inferno',extent=None):
+def color_map(fig,ax,image,title,label,*,X=None,Y=None,limits=None,cmap='inferno',extent=None,error_scale=None,view=None):
+    audit=None;notice=None
+    data=np.ma.masked_invalid(image)
+    colours={'cmap':cmap,'vmin':None if limits is None else limits[0],'vmax':None if limits is None else limits[1]}
+    if error_scale is not None:
+        from ._map_colors import visible_region,error_colors
+        region=visible_region(np.shape(image),X,Y,view)
+        data,norm,audit,notice=error_colors(image,region,signed=error_scale=='signed')
+        colours={'cmap':cmap,'norm':norm}
+        label+=' (symmetric log scale)' if error_scale=='signed' else ' (log scale)'
     if X is None:
-        artist=ax.imshow(np.ma.masked_invalid(image),cmap=cmap,origin='lower',aspect='auto',extent=extent,
-                         vmin=None if limits is None else limits[0],vmax=None if limits is None else limits[1])
+        artist=ax.imshow(data,origin='lower',aspect='auto',extent=extent,**colours)
     else:
-        artist=ax.pcolormesh(X,Y,np.ma.masked_invalid(image),shading='auto',cmap=cmap,
-                             vmin=None if limits is None else limits[0],vmax=None if limits is None else limits[1])
+        artist=ax.pcolormesh(X,Y,data,shading='auto',**colours)
         ax.set(xlabel=X_LABEL,ylabel=Y_LABEL,aspect='equal')
+    if audit is not None:
+        artist.set_gid('physical-error-map')
+        artist._gval_error_map={**audit,'title':title,'view':view}
+        if notice:ax.text(.5,.5,notice,transform=ax.transAxes,ha='center',va='center',fontsize=8,bbox={'facecolor':'white','alpha':.8,'edgecolor':'none'})
     ax.set_title(title)
     fig.colorbar(artist,ax=ax,pad=.02,fraction=.046).set_label(label)
 
@@ -173,6 +184,7 @@ def validate_figure(fig):
                       'legend':[] if legend is None else [text.get_text() for text in legend.get_texts()],
                       'mean_curves':sum((artist.get_gid() or '').startswith('mean:') for artist in ax.lines),
                       'ci_bands':sum((artist.get_gid() or '').startswith('ci95:') for artist in ax.collections)})
+        audit[-1]['error_maps']=[artist._gval_error_map for artist in ax.collections if hasattr(artist,'_gval_error_map')]
     return {'panels':audit,'caption':[text.get_text() for text in fig.texts if text is not fig._suptitle]}
 
 
@@ -319,16 +331,18 @@ def build_figure(ctx,name,stats,variant=0):
         for row,field in enumerate(('bias','rmse')):
             for col,channel in enumerate((0,4,5,7)):
                 image=np.asarray(m[field][channel],dtype=np.float64)
-                color_map(fig,axes[row,col],image,CHANNEL_LABELS[channel]+(' Bias (Signed Error)' if field=='bias' else ' RMSE'),'Signed error [code units]' if field=='bias' else 'RMSE [code units]',X=X,Y=Y,limits=limits([image],symmetric=field=='bias'),cmap='RdBu_r' if field=='bias' else 'magma')
+                color_map(fig,axes[row,col],image,CHANNEL_LABELS[channel]+(' Bias (Signed Error)' if field=='bias' else ' RMSE'),'Signed error [code units]' if field=='bias' else 'RMSE [code units]',X=X,Y=Y,cmap='RdBu_r' if field=='bias' else 'magma',error_scale='signed' if field=='bias' else 'positive',view=(0,100,-100,100))
                 axes[row,col].set(xlim=(0,100),ylim=(-100,100))
     elif name=='meridional_slice':
         title='Meridional Slices — '+step_label(ctx,m['step'])
+        radius=(100,250)[variant-1] if variant else None
+        view=None if radius is None else (0,radius,-radius,radius)
         for row,(field,quantity) in enumerate((('rho',r'$\rho$'),('B2',r'$B^2$'))):
             images=[log_display(m[field+'_'+side]) for side in ('truth','pred')];scale=limits(images)
             for col,(side,image) in enumerate(zip(('truth','pred'),images)):
                 color_map(fig,axes[row,col],image,quantity+' '+ROLE_LABELS[side],r'$\log_{10}$ '+quantity+' [code units]',X=m['X'],Y=m['Y'],limits=scale)
             image=np.asarray(m[field+'_error'],dtype=np.float64)
-            color_map(fig,axes[row,2],image,quantity+' Absolute Error',quantity+' absolute error [code units]',X=m['X'],Y=m['Y'],limits=(0,max(limits([image])[1],np.finfo(float).eps)),cmap='viridis')
+            color_map(fig,axes[row,2],image,quantity+' Absolute Error',quantity+' absolute error [code units]',X=m['X'],Y=m['Y'],cmap='viridis',error_scale='positive',view=view)
         if variant:
             radius=(100,250)[variant-1]
             for ax in flat:ax.set(xlim=(0,radius),ylim=(-radius,radius))
@@ -339,7 +353,7 @@ def build_figure(ctx,name,stats,variant=0):
             for row,(side,image) in enumerate(zip(('truth','pred'),images)):
                 color_map(fig,axes[row,col],image,ROLE_LABELS[side]+' — '+step_label(ctx,item['step']),r'$\log_{10}\rho$ [code units]',X=m['X'],Y=m['Y'],limits=scale)
             image=np.asarray(item['error'],dtype=np.float64)
-            color_map(fig,axes[2,col],image,'Absolute Error — '+step_label(ctx,item['step']),r'$|\Delta\rho|$ [code units]',X=m['X'],Y=m['Y'],limits=(0,max(limits([image])[1],np.finfo(float).eps)),cmap='viridis')
+            color_map(fig,axes[2,col],image,'Absolute Error — '+step_label(ctx,item['step']),r'$|\Delta\rho|$ [code units]',X=m['X'],Y=m['Y'],cmap='viridis',error_scale='positive',view=(0,100,-100,100))
         for ax in flat:ax.set(xlim=(0,100),ylim=(-100,100))
     else:
         plt.close(fig);raise ValueError('Missing fixed production figure: '+name)
@@ -352,10 +366,34 @@ def build_figure(ctx,name,stats,variant=0):
         if name=='accretion_diagnostics':text+=' · '+r'$\phi_{\rm BH}$'+' time series: a 95% CI band for each role over all steps.'
     elif name in ('error_correlation','coherence','bias_analysis','meridional_slice','rollout_evolution'):
         text=f'Maps: mean over {stats["n_starts"]} starts · {ctx.split.split_id} / {ctx.partition} · Pointwise 95% CIs: metrics/{name}.json'
+    if name in ('bias_analysis','meridional_slice','rollout_evolution'):
+        text+='\nNon-negative error maps: log scale; zero and non-finite values are uncoloured.'
     fig.text(.5,.012,text,ha='center',fontsize=8)
     fig.tight_layout(rect=(0,.08,1,.94))
     validate_figure(fig)
     return fig
+
+
+def error_crops(ctx,fig,name,filename):
+    """Save review crops from the rendered axes, including their colourbars."""
+    from pathlib import Path
+    from matplotlib.transforms import Bbox
+    groups={}
+    for ax in fig.axes:
+        for artist in ax.collections:
+            if not hasattr(artist,'_gval_error_map'):continue
+            kind=artist._gval_error_map['normalization']
+            suffix=('bias' if kind=='SymLogNorm' else 'rms') if name=='bias_analysis' else 'errors'
+            groups.setdefault(suffix,[]).append((ax,artist.colorbar.ax))
+    if not groups:return []
+    fig.canvas.draw();renderer=fig.canvas.get_renderer();outputs=[]
+    for suffix,pairs in groups.items():
+        boxes=[ax.get_tightbbox(renderer) for pair in pairs for ax in pair]
+        bbox=Bbox.union(boxes).transformed(fig.dpi_scale_trans.inverted()).padded(.08)
+        relative='crops/'+Path(filename).stem+'_'+suffix+'.png'
+        with ctx.writer.open(relative) as stream:fig.savefig(stream,format='png',dpi=ctx.constants['figures']['dpi'],bbox_inches=bbox,metadata={'Software':None})
+        outputs.append(relative)
+    return outputs
 
 
 def render(ctx,name,stats):
@@ -372,5 +410,6 @@ def render(ctx,name,stats):
                 audit[filename]=validate_figure(fig)
                 with ctx.writer.open('figures/'+filename) as stream:
                     fig.savefig(stream,format='png',dpi=ctx.constants['figures']['dpi'],metadata={'Software':None})
+                if getattr(ctx,'save_error_crops',False):audit[filename]['crops']=error_crops(ctx,fig,name,filename)
             finally:plt.close(fig)
     return audit

@@ -292,6 +292,26 @@ Owner persistence references may acquire updated derived PNGs atomically when
 their numerical result fingerprint matches; a presentation sidecar records
 the image hashes. Completed model-run bundles cannot use this refresh path.
 
+### Physical error-map colour scales
+
+Absolute-error and RMS maps use LogNorm on their unchanged physical values.
+The limits are the 1st and 99.5th percentiles of positive finite values in the
+displayed coordinate rectangle (the whole image for a full-domain view).
+The r100/r250 views therefore calibrate their colours locally. Zero and
+non-finite error values are uncoloured, rather than assigned artificial floors.
+Empty/zero maps are labelled; equal positive percentile limits receive a
+single decade centred on that value. Signed bias maps use a symmetric
+SymLogNorm about zero, bounded by the 99.5th absolute-value percentile with
+the 1st positive absolute-value percentile as the linear threshold.
+
+Colourbars identify physical units and the log scale. A contrast regression
+measures visible, unmasked cell colours after normalization and rejects a
+nonconstant map if more than 90% fall in the lowest 5% of the colour range.
+It explicitly catches the old linear scale on a synthetic map with large
+horizon outliers. Figure-only receipts include per-panel bounds and measured
+contrast; review crops retain axes and colourbars. Metric files, inference,
+protocol settings and numerical fingerprints are unchanged.
+
 ### Bounded evaluation memory
 
 Rollout replay is a disk-backed mapping of float32 states. An analysis reads only

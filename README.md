@@ -5,7 +5,7 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestones 1–3 merged; milestone 4 ready for owner review.** The adapter API,
+**Status: milestones 1–4 merged; error-map presentation follow-up ready for review.** The adapter API,
 persistence, recorded runner, owner goldens, conformance and verification are
 implemented. Milestone 4 adds final all-start aggregates/CIs, audited transport,
 resolved-shell headlines and shared truth caches. The finalized protocol enables
@@ -13,11 +13,19 @@ full publication with a verified truth cache and passing full conformance;
 historical previews stay in staging. Both datasets pass final quick/full
 conformance; the [milestone 4 receipt and figure contact sheet](docs/milestone_4_validation.md)
 record fingerprints, memory measurements and presentation checks.
+The [error-map review receipt and crops](docs/error_map_scales_review.md) cover
+the subsequent logarithmic colour-scale fix. Milestone 5 awaits that review.
 Learned-model examples and prediction mode are milestone 5.
 See [milestone 4 usage](docs/milestone_4.md).
 See [milestone 3 usage and validation](docs/milestone_3.md), [milestone 2 usage](docs/milestone_2.md),
 [metric definitions](docs/metrics.md) and [port provenance](docs/provenance.md). Locked DeltaAI references and real-data
 conformance for both datasets pass; see the [validation receipt](docs/milestone_2_real_validation.md).
+
+Short compute work uses `ghx4-interactive`, account `bgun-dtai-gh`. The owner's
+jobs share the one-interactive-job-per-user limit. If occupied, inspect
+`squeue -u "$USER"`, wait for the owner's job to finish and resubmit; never
+cancel it or fall back to `ghx4` for short work. Ask the owner only if the wait
+exceeds about two hours.
 
 | Path | Contents |
 |---|---|

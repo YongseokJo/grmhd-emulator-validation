@@ -60,6 +60,10 @@ dimensionless-flux time series retains both role bands across all steps.
 For an owner persistence golden, `--refresh-reference` atomically refreshes
 its derived PNGs after checking the unchanged numerical fingerprint. Normal
 reference regeneration also refreshes presentations when result bytes match.
+For error-map colour review, add `--error-map-crops`. This checks visible-cell
+colour occupancy and exports the fig08 error columns, fig14 bias/RMS rows and
+fig16 error row. With `--receipt-dir`, those crops are copied into repository
+documentation instead of the standard contact-sheet/fig18 pair.
 For a separate cache (including test truth), the owner runs
 `gval reference truth --split-id <id> --split validation|test`. Cache entries are
 read-only to readers and pinned by hashes, including training scales. Full
