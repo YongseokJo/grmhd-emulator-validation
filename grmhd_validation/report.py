@@ -34,7 +34,6 @@ def safe(root,relative):
     from .splits import relative_path
     relative_path(relative);path=Path(root)/relative
     for part in (path,*path.parents):
-        if part==Path(root).parent:break
         if part.is_symlink():raise ValueError('Symlink in report input/output: '+relative)
     return path
 
@@ -70,7 +69,9 @@ def valid_record(info,summary,repo):
 def names(path):
     if not path.exists():return []
     if path.is_symlink():raise ValueError('Shared report scan refuses a symlink directory')
-    return sorted(p for p in path.iterdir() if p.is_dir() and not p.is_symlink())
+    entries=list(path.iterdir())
+    if any(p.is_symlink() for p in entries):raise ValueError('Report scan refuses symlink entries')
+    return sorted(p for p in entries if p.is_dir())
 
 
 def attempt_paths(storage,split_id):
@@ -87,11 +88,18 @@ def discard_run_cache(path):
 
 def scan(storage,split_id,repo):
     from .verify import verify_run
+    from .runstore import reservation_lock
     attempts=[];records=[];seen=set()
-    for path,location in attempt_paths(storage,split_id):
-        info=None
-        try:info=read(path/'run.json')
-        except (OSError,ValueError):pass
+    # Capture path and metadata identities while reservation/publication is
+    # serialized. Release before hashing/rendering immutable completed bundles.
+    snapshots=[]
+    with reservation_lock(storage):
+        for path,location in attempt_paths(storage,split_id):
+            try:info=read(path/'run.json')
+            except (OSError,ValueError):info=None
+            if not isinstance(info,dict):info=None
+            snapshots.append((path,location,info))
+    for path,location,info in snapshots:
         if info is not None:
             if info.get('split_id')!=split_id:continue
         elif ('__'+split_id+'__') not in path.name:continue
@@ -137,7 +145,7 @@ def scan(storage,split_id,repo):
 def record_row(info,summary,ledger,protocol):
     curve=summary['rollout_curve']['at_steps'];step=max(int(k) for k in curve);headline=curve[str(step)]
     single=summary['single_step'];training=info.get('training_provenance') or {}
-    attestation=(info.get('predictions') or {}).get('attestation','not applicable')
+    attestation='not applicable' if info.get('predictions') is None else ('host-attested' if info['predictions'].get('attestation')=='host-attested' else 'unattested')
     flags=[]
     if not info['environment_locked']:flags.append('unlocked')
     if attestation=='unattested':flags.append('unattested')
@@ -222,25 +230,30 @@ def figures(group,protocol):
     with matplotlib.rc_context({'font.family':settings['font'],'font.size':settings['font_size']}):
         for filename in ('rollout_comparison.png','skill_comparison.png'):
             fig=Figure(figsize=(14,max(5,1.2+.4*len(group['rows']))),dpi=settings['dpi']);FigureCanvasAgg(fig)
-            ax=fig.add_axes((.08,.16,.53,.72))
+            ax=fig.add_axes((.08,.18,.28,.70) if filename.startswith('rollout') else (.08,.16,.53,.72))
+            skill_axis=fig.add_axes((.43,.18,.28,.70)) if filename.startswith('rollout') else None
+            palette=matplotlib.rcParams['axes.prop_cycle'].by_key()['color']
             for index,row in enumerate(group['rows']):
                 label=textwrap.fill(row['run_id'],55);curve=row['rollout']
                 if filename.startswith('rollout'):
                     x=[v['time_rg_c'] for v in curve];y=[v['skill'] for v in curve]
-                    line=ax.plot(x,y,marker='o',label=label)[0]
-                    ax.fill_between(x,[v['skill_ci'][0] if v['skill_ci'][0] is not None else float('nan') for v in curve],
+                    line=ax.plot(x,[v['nmae'] for v in curve],marker='o',label=label,color=palette[index%len(palette)])[0]
+                    skill_axis.plot(x,y,marker='o',label=label,color=line.get_color())
+                    skill_axis.fill_between(x,[v['skill_ci'][0] if v['skill_ci'][0] is not None else float('nan') for v in curve],
                                     [v['skill_ci'][1] if v['skill_ci'][1] is not None else float('nan') for v in curve],alpha=.10,color=line.get_color(),linewidth=0)
-                    ax.set(xlabel=r'Time [$R_g/c$]',ylabel='Skill relative to persistence')
+                    ax.set(xlabel=r'Time [$R_g/c$]',ylabel='Loss-space nMAE (dimensionless)')
+                    skill_axis.set(xlabel=r'Time [$R_g/c$]',ylabel='Skill relative to persistence',title='Skill');skill_axis.grid(alpha=.2)
                 else:
-                    value=row['skill'];ax.barh(index,float('nan') if value is None else value,label=label)
+                    value=row['skill'];ax.barh(index,float('nan') if value is None else value,label=label,color=palette[index%len(palette)])
+                    if value is not None:ax.scatter([value],[index],s=14,color=palette[index%len(palette)],zorder=3)
                     lo,hi=curve[-1]['skill_ci']
                     if value is not None and lo is not None and hi is not None:ax.plot([lo,hi],[index,index],color='.2',linewidth=1.5)
                     ax.set_yticks(range(len(group['rows'])),[r['model']+' / '+r['version'] for r in group['rows']])
                     ax.set(xlabel='Final-step skill relative to persistence',ylabel='Model / version')
-            ax.axhline(0,color='.5',linewidth=.6) if filename.startswith('rollout') else ax.axvline(0,color='.5',linewidth=.6)
+            skill_axis.axhline(0,color='.5',linewidth=.6) if skill_axis is not None else ax.axvline(0,color='.5',linewidth=.6)
             ax.set_title(group['split_id']+' / '+group['split']+' / '+group['tier']);ax.grid(alpha=.2)
-            ax.legend(loc='upper left',bbox_to_anchor=(1.02,1),fontsize=7,frameon=False)
-            fig.text(.5,.035,'Protocol '+group['protocol_sha256']+' · Bands/bars: 95% CIs',ha='center',fontsize=8)
+            (skill_axis if skill_axis is not None else ax).legend(loc='upper left',bbox_to_anchor=(1.02,1),fontsize=7,frameon=False)
+            fig.text(.5,.035,'Protocol '+group['protocol_sha256']+' · Skill bands/bars: 95% CIs; nMAE lines: means',ha='center',fontsize=8)
             stream=io.BytesIO();fig.savefig(stream,format='png',metadata={'Software':None});outputs[filename]=stream.getvalue();fig.clear()
     return outputs
 

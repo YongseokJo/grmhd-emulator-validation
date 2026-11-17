@@ -95,3 +95,13 @@ class ReportTests(RunnerFixture):
         test=copy.deepcopy(info);test.update(split='test',run_id='test-partition')
         payload=make_report([records[0],(other,summary,path),(test,summary,path)],ledger,self.repo)
         self.assertEqual(len(payload['groups']),3)
+
+    def test_replay_check_does_not_render_or_repair_shared_artifacts(self):
+        self.run_eval();self.run_report(export_results=self.export)
+        with patch('grmhd_validation.report.figures',side_effect=AssertionError('CI text checks must not render PNGs')):
+            report('synthetic_v1',from_results=True,repo=self.export,check=True)
+
+    def test_export_symlinks_are_rejected(self):
+        self.run_eval();self.run_report(export_results=self.export)
+        (self.export/'results/synthetic_v1/other-model').symlink_to(self.data)
+        with self.assertRaisesRegex(ValueError,'symlink'):report('synthetic_v1',from_results=True,repo=self.export,check=True)
