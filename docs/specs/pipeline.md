@@ -783,6 +783,43 @@ inside each packet; host instructions for task/create/advance/collect and audit;
 scorer instructions for completeness, evaluate --predictions and reporting.
 Benchmark-repository instructions are not the forecasting-agent prompt.
 
+### Implementation formats and audit boundaries
+
+Task and packet schemas are version 1. The initial immutable prompt IDs are
+`eden-code-v1` (A, fresh context per start) and `eden-step-v1` (B, fresh context
+per step). They permit local Python/NumPy/SciPy tools and no network. New access
+policies use new prompt IDs. Provider/model/session details are host-supplied
+metadata, never guessed from the request model name.
+
+The host workspace stores private `host.json` and `episodes/` beside task.json;
+only the packet directory is exposed to the forecasting agent. For B, the
+request options declare `history_length`; for A it comes from the adapter.
+`packet create` writes blank `submission/submission.json` metadata for the agent
+and a separate host `generation.json` template, which must be completed before
+advance. The latter carries actual session/provider/model identifiers, timing,
+logs and explicit unknown reasons. Host run provenance and attestation templates
+are outside the packet, at `provenance.json` and `host_attestation.json` in the
+task workspace. Attestation evidence is checked structurally and hashed; the
+scorer labels claims as host-attested, never independently proven isolation.
+Unknown or missing evidence yields unattested status.
+
+Each accepted step is copied under the private task episode and made read-only.
+Input arrays and rendered prompt are reconstructed from frozen history before
+advance; a modified packet input or prompt is rejected. Every rejection is an
+append-only, separate audit record. Advancing an episode updates only the host's
+packet inputs and active-step metadata; accepted outputs cannot be overwritten.
+Collect records missing coverage without manufacturing predictions. It validates
+both file hashes and the complete history chain again. The scorer additionally
+binds each initial history to checksum-verified truth. A changed task, frozen
+output, provenance record or manifest invalidates that entry.
+
+For imported predictions, cost and stability are not evaluated because no
+executable adapter was measured. An incomplete request is retained as a sealed
+NOT_EVALUATED staging attempt, with per-analysis reasons in coverage.json; only
+eligible analyses may have partial inspection outputs. No successful COMPLETE
+marker or runs/ publication is allowed. This also applies to a complete B bundle
+requesting the full tier, whose adapter-only analyses remain unavailable.
+
 ### Eden's three reference methods and credit
 
 Pinned source: KevinFortuneCodes/neural_operator_msai_spring26, branch
