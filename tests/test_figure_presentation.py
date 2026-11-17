@@ -52,6 +52,20 @@ class FigurePresentationTests(FullFixture):
 
 
 class FigureLabelOracles(unittest.TestCase):
+    def test_outer_domain_values_do_not_set_inner_panel_vertical_limits(self):
+        import matplotlib.pyplot as plt
+        from grmhd_validation.analyses._figures import radial
+        fig,ax=plt.subplots()
+        try:
+            ctx=SimpleNamespace(geometry=SimpleNamespace(spin=0.),constants={'active_disk':{'r_max':100.}})
+            radius=np.array([2.,10.,100.,1000.]);values=np.array([1.,2.,3.,1e9])
+            ax.plot(radius,values,label='Truth');ax.set_yscale('log')
+            radial(ctx,ax,radius)
+            self.assertEqual(ax.get_xlim()[1],100.)
+            self.assertLess(ax.get_ylim()[1],10.)
+            np.testing.assert_array_equal(ax.lines[0].get_ydata(),values)
+        finally:plt.close(fig)
+
     def test_undefined_structure_curves_keep_log_scale_without_inventing_values(self):
         import matplotlib.pyplot as plt
         from grmhd_validation.analyses._figures import panel

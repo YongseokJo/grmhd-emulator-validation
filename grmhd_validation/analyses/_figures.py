@@ -107,7 +107,28 @@ def panel(ax,title,xlabel,ylabel,*,xscale='linear',yscale='linear',legend=True):
 def radial(ctx,ax,r,*,full=False):
     from ._kevin_math import kerr_horizon_isco
     horizon,isco=kerr_horizon_isco(float(ctx.geometry.spin))
-    ax.set_xlim(max(horizon,float(np.min(r))),float(np.max(r)) if full else ctx.constants['active_disk']['r_max'])
+    left=max(horizon,float(np.min(r)));right=float(np.max(r)) if full else ctx.constants['active_disk']['r_max']
+    ax.set_xlim(left,right)
+    # Match the source's pre-plot radial cut: invisible outer-domain values
+    # must not set the vertical scale of an inner-disk panel.
+    pieces=[]
+    for artist in ax.lines:
+        if artist.get_label()=='_nolegend_':continue
+        x=np.asarray(artist.get_xdata(),dtype=float);y=np.asarray(artist.get_ydata(),dtype=float)
+        pieces.append(y[(x>=left)&(x<=right)])
+    for artist in ax.collections:
+        if not (artist.get_gid() or '').startswith('ci95:'):continue
+        for path in artist.get_paths():
+            xy=path.vertices;pieces.append(xy[(xy[:,0]>=left)&(xy[:,0]<=right),1])
+    pool=np.concatenate(pieces) if pieces else np.array([])
+    pool=pool[np.isfinite(pool)]
+    if ax.get_yscale()=='log':pool=pool[pool>0]
+    if len(pool):
+        low,high=float(pool.min()),float(pool.max())
+        if ax.get_yscale()=='log':ax.set_ylim(low/1.12,high*1.12)
+        else:
+            margin=.05*max(high-low,abs(high),abs(low),1e-12)
+            ax.set_ylim(max(0.,low-margin) if low>=0 else low-margin,high+margin)
     ax.axvline(isco,color='.45',linestyle=':',linewidth=.8,label='_nolegend_')
 
 
@@ -329,6 +350,8 @@ def build_figure(ctx,name,stats,variant=0):
         text=f'Lines: mean over {stats["n_starts"]} starts at each report step. Bands: 95% CI at step {int(steps[-1])} only. Full CIs for every step are in metrics/{name}.json.\n'
         text+=f'{ctx.split.split_id} / {ctx.partition}'
         if name=='accretion_diagnostics':text+=' · '+r'$\phi_{\rm BH}$'+' time series: a 95% CI band for each role over all steps.'
+    elif name in ('error_correlation','coherence','bias_analysis','meridional_slice','rollout_evolution'):
+        text=f'Maps: mean over {stats["n_starts"]} starts · {ctx.split.split_id} / {ctx.partition} · Pointwise 95% CIs: metrics/{name}.json'
     fig.text(.5,.012,text,ha='center',fontsize=8)
     fig.tight_layout(rect=(0,.08,1,.94))
     validate_figure(fig)
