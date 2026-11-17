@@ -21,7 +21,7 @@ import uuid
 import numpy as np
 
 from .artifacts import json_bytes
-from .hashing import sha256
+from .hashing import sha256 as _sha256
 from .permissions import SHARED_ROOT, SharedStorage
 from .protocol import read_protocol
 from .splits import CHANNELS, read_split, relative_path
@@ -40,6 +40,14 @@ RUN_FIELDS = ('source_repository','source_commit','checkpoint_sha256','training_
 ATTESTATIONS = ('workspace_isolated', 'history_only', 'no_future_truth', 'no_evaluator',
                 'no_other_starts', 'no_scorer_feedback', 'session_policy_followed',
                 'frozen_autoregressive_chain', 'source_prompt_frozen', 'complete_without_selection')
+
+
+def sha256(path):
+    # Prediction imports must not charge hundreds of cubes to the Slurm file cache.
+    try:return _sha256(path)
+    finally:
+        from .memory import discard_file_cache
+        discard_file_cache(path)
 
 
 def now():return datetime.now(timezone.utc).isoformat()
@@ -94,15 +102,21 @@ def confined(root, name):
 
 def array(path, shape):
     if Path(path).is_symlink():raise ValueError('Prediction arrays cannot be symlinks')
-    value = np.load(path, allow_pickle=False)
-    if value.dtype != np.float32 or tuple(value.shape) != tuple(shape) or not np.isfinite(value).all():
-        raise ValueError('Prediction must be finite float32 with exact physical shape')
-    return value
+    value = np.load(path, mmap_mode='r', allow_pickle=False)
+    try:
+        if value.dtype != np.float32 or tuple(value.shape) != tuple(shape) or not np.isfinite(value).all():
+            raise ValueError('Prediction must be finite float32 with exact physical shape')
+        return np.array(value, copy=True, order='C')
+    finally:
+        if isinstance(value,np.memmap):value._mmap.close()
+        from .memory import discard_file_cache
+        discard_file_cache(path)
 
 
 def save_array(path, value):
     path = Path(path);path.parent.mkdir(parents=True, exist_ok=True, mode=0o770)
-    with path.open('xb') as stream:np.save(stream, value, allow_pickle=False)
+    with path.open('xb') as stream:
+        np.save(stream, value, allow_pickle=False);stream.flush();os.fdatasync(stream.fileno())
 
 
 def tensor_hash(value):
@@ -396,7 +410,9 @@ def packet_advance(task_dir, packet_dir):
                 if target.is_symlink() or sha256(target)!=before:raise ValueError('Interrupted frozen output conflicts with submission')
             else:
                 with target.open('xb') as stream:
-                    with path.open('rb') as source:shutil.copyfileobj(source,stream)
+                    with path.open('rb') as source:
+                        shutil.copyfileobj(source,stream);os.fsync(source.fileno())
+                    stream.flush();os.fdatasync(stream.fileno())
                 target.chmod(0o440)
             if sha256(target)!=before or sha256(path)!=before:raise ValueError('Submission changed during freezing')
             record = {'schema_version':1, 'task_id':task['task_id'], 'task_sha256':sha256(root/'task.json'),
@@ -440,6 +456,7 @@ def packet_collect(task_dir, output):
                         target=destination/name;target.parent.mkdir(parents=True,exist_ok=True)
                         with target.open('xb') as stream:
                             with (folder/record['prediction_file']).open('rb') as source:shutil.copyfileobj(source,stream)
+                            stream.flush();os.fdatasync(stream.fileno())
                         target.chmod(0o440)
                         record_name=str(Path(name).parent/'steps'/f'step_{step:04d}.json')
                         write(destination/record_name,record,True)

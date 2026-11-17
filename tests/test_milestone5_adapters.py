@@ -15,7 +15,8 @@ from grmhd_validation.adapters.learned import Decode,ViT
 from grmhd_validation.adapters import _eden_claude,_eden_gpt,_eden_gemini
 from grmhd_validation.adapters.eden import Claude,GPT,Gemini
 
-REF='/u/gkerex/project/reference/neural_operator_msai_spring26'
+from reference_support import REFERENCE
+REF=str(REFERENCE)
 
 
 def original(commit,path,keep=None):
@@ -46,6 +47,7 @@ def geometry(shape=(8,6,16)):
 
 
 class AdapterTests(unittest.TestCase):
+    @unittest.skipUnless(REFERENCE.is_dir(),'Pinned private source unavailable in public CI')
     def test_decode_matches_original_normalizer_including_floors_and_lorentz(self):
         geo=geometry();source=original('ebcc218','Fall26/common/normalizer.py',{'DataNormalizer'})
         source['CONFIG']={'floor_rho':1e-20,'floor_ug':1e-22,'ceiling_rho':1e5,'ceiling_ug':1e5,'max_gamma':50.}
@@ -58,6 +60,7 @@ class AdapterTests(unittest.TestCase):
         torch.testing.assert_close(port.inverse(value),normalizer.inverse(value),rtol=0,atol=0)
         self.assertEqual(int(port.lorentz_clamp_count()),int(normalizer.lorentz_clamp_count()))
 
+    @unittest.skipUnless(REFERENCE.is_dir(),'Pinned private source unavailable in public CI')
     def test_vit_adapter_matches_pinned_model_and_original_decode(self):
         geo=geometry((4,4,4));cfg={'patch':[2,2,2],'d_model':12,'depth':1,'n_heads':2,'mlp_ratio':2,'use_amp':False,'grad_checkpoint':False,'token_mode':'per_patch'}
         source=original('ebcc218','Fall26/vit/model.py')
@@ -74,6 +77,7 @@ class AdapterTests(unittest.TestCase):
             torch.testing.assert_close(actual,expected,rtol=0,atol=0)
             validate_output(actual,history,geo)
 
+    @unittest.skipUnless(REFERENCE.is_dir(),'Pinned private source unavailable in public CI')
     def test_tron_architecture_matches_pinned_state_dict_and_forward(self):
         from grmhd_validation.adapters._tron_model import TRON
         source=original('2667a5f','Fall26/tron/model.py')
@@ -84,6 +88,7 @@ class AdapterTests(unittest.TestCase):
         with torch.inference_mode():
             torch.testing.assert_close(port(value),reference(value),rtol=0,atol=0)
 
+    @unittest.skipUnless(REFERENCE.is_dir(),'Pinned private source unavailable in public CI')
     def test_eden_kernels_match_originals_and_wrappers_preserve_physical_units(self):
         geo=geometry();random=np.random.default_rng(42)
         state=random.normal(size=(8,*geo.shape)).astype(np.float32);state[:2]=np.abs(state[:2])+.01
