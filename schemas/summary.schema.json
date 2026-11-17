@@ -2398,7 +2398,24 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "rho_model_relative_error",
+        "rho_persistence_relative_error",
+        "ug_model_relative_error",
+        "ug_persistence_relative_error",
+        "utilde1_model_relative_error",
+        "utilde1_persistence_relative_error",
+        "utilde2_model_relative_error",
+        "utilde2_persistence_relative_error",
+        "utilde3_model_relative_error",
+        "utilde3_persistence_relative_error",
+        "B1_model_relative_error",
+        "B1_persistence_relative_error",
+        "B2_model_relative_error",
+        "B2_persistence_relative_error",
+        "B3_model_relative_error",
+        "B3_persistence_relative_error"
+       ],
        "maxProperties": 16
       },
       "ci95": {
@@ -2598,7 +2615,24 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "rho_model_relative_error",
+        "rho_persistence_relative_error",
+        "ug_model_relative_error",
+        "ug_persistence_relative_error",
+        "utilde1_model_relative_error",
+        "utilde1_persistence_relative_error",
+        "utilde2_model_relative_error",
+        "utilde2_persistence_relative_error",
+        "utilde3_model_relative_error",
+        "utilde3_persistence_relative_error",
+        "B1_model_relative_error",
+        "B1_persistence_relative_error",
+        "B2_model_relative_error",
+        "B2_persistence_relative_error",
+        "B3_model_relative_error",
+        "B3_persistence_relative_error"
+       ],
        "maxProperties": 16
       }
      },
@@ -2671,7 +2705,11 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "mean",
+        "std",
+        "skipped_draws"
+       ],
        "maxProperties": 3
       },
       "ci95": {
@@ -2715,7 +2753,11 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "mean",
+        "std",
+        "skipped_draws"
+       ],
        "maxProperties": 3
       }
      },
@@ -2788,7 +2830,11 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "parameters",
+        "warmup_steps",
+        "timed_steps"
+       ],
        "maxProperties": 3
       },
       "ci95": {
@@ -2832,7 +2878,11 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "parameters",
+        "warmup_steps",
+        "timed_steps"
+       ],
        "maxProperties": 3
       }
      },
@@ -3152,7 +3202,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -3184,7 +3237,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -3278,7 +3334,14 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "mass_drift_pred",
+        "mass_drift_truth",
+        "energy_drift_pred",
+        "energy_drift_truth",
+        "angular_drift_pred",
+        "angular_drift_truth"
+       ],
        "maxProperties": 6
       },
       "ci95": {
@@ -3358,7 +3421,14 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "mass_drift_pred",
+        "mass_drift_truth",
+        "energy_drift_pred",
+        "energy_drift_truth",
+        "angular_drift_pred",
+        "angular_drift_truth"
+       ],
        "maxProperties": 6
       }
      },
@@ -3494,7 +3564,20 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "pred_mass",
+        "pred_dmass_dt",
+        "pred_mdot_inner",
+        "pred_mdot_outer",
+        "pred_residual",
+        "truth_mass",
+        "truth_dmass_dt",
+        "truth_mdot_inner",
+        "truth_mdot_outer",
+        "truth_residual",
+        "resolved_radius_rg",
+        "resolved_coarse_ring"
+       ],
        "maxProperties": 12
       },
       "ci95": {
@@ -3622,7 +3705,18 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "pred_mass",
+        "pred_dmass_dt",
+        "pred_mdot_inner",
+        "pred_mdot_outer",
+        "pred_residual",
+        "truth_mass",
+        "truth_dmass_dt",
+        "truth_mdot_inner",
+        "truth_mdot_outer",
+        "truth_residual"
+       ],
        "maxProperties": 10
       }
      },
@@ -4244,7 +4338,12 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "max",
+        "max_step",
+        "max_p999",
+        "clamp_count"
+       ],
        "maxProperties": 4
       },
       "ci95": {
@@ -4300,7 +4399,12 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "max",
+        "max_step",
+        "max_p999",
+        "clamp_count"
+       ],
        "maxProperties": 4
       }
      },
@@ -4366,7 +4470,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -4398,7 +4505,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -4618,7 +4728,32 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "rho_js",
+        "rho_pred_mean",
+        "rho_true_mean",
+        "ug_js",
+        "ug_pred_mean",
+        "ug_true_mean",
+        "utilde1_js",
+        "utilde1_pred_mean",
+        "utilde1_true_mean",
+        "utilde2_js",
+        "utilde2_pred_mean",
+        "utilde2_true_mean",
+        "utilde3_js",
+        "utilde3_pred_mean",
+        "utilde3_true_mean",
+        "B1_js",
+        "B1_pred_mean",
+        "B1_true_mean",
+        "B2_js",
+        "B2_pred_mean",
+        "B2_true_mean",
+        "B3_js",
+        "B3_pred_mean",
+        "B3_true_mean"
+       ],
        "maxProperties": 24
       },
       "ci95": {
@@ -4914,7 +5049,32 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "rho_js",
+        "rho_pred_mean",
+        "rho_true_mean",
+        "ug_js",
+        "ug_pred_mean",
+        "ug_true_mean",
+        "utilde1_js",
+        "utilde1_pred_mean",
+        "utilde1_true_mean",
+        "utilde2_js",
+        "utilde2_pred_mean",
+        "utilde2_true_mean",
+        "utilde3_js",
+        "utilde3_pred_mean",
+        "utilde3_true_mean",
+        "B1_js",
+        "B1_pred_mean",
+        "B1_true_mean",
+        "B2_js",
+        "B2_pred_mean",
+        "B2_true_mean",
+        "B3_js",
+        "B3_pred_mean",
+        "B3_true_mean"
+       ],
        "maxProperties": 24
       }
      },
@@ -5190,7 +5350,16 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "rho_slope_pred",
+        "rho_slope_truth",
+        "rho_fit_r2_pred",
+        "rho_fit_r2_truth",
+        "B1_slope_pred",
+        "B1_slope_truth",
+        "B1_fit_r2_pred",
+        "B1_fit_r2_truth"
+       ],
        "maxProperties": 32
       },
       "ci95": {
@@ -5582,7 +5751,16 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "rho_slope_pred",
+        "rho_slope_truth",
+        "rho_fit_r2_pred",
+        "rho_fit_r2_truth",
+        "B1_slope_pred",
+        "B1_slope_truth",
+        "B1_fit_r2_pred",
+        "B1_fit_r2_truth"
+       ],
        "maxProperties": 32
       }
      },
@@ -5648,7 +5826,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -5680,7 +5861,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -5746,7 +5930,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -5778,7 +5965,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -5844,7 +6034,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -5876,7 +6069,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -6040,7 +6236,14 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "rho_s3_pred",
+        "rho_s3_truth",
+        "utilde3_s3_pred",
+        "utilde3_s3_truth",
+        "B1_s3_pred",
+        "B1_s3_truth"
+       ],
        "maxProperties": 16
       },
       "ci95": {
@@ -6240,7 +6443,14 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "rho_s3_pred",
+        "rho_s3_truth",
+        "utilde3_s3_pred",
+        "utilde3_s3_truth",
+        "B1_s3_pred",
+        "B1_s3_truth"
+       ],
        "maxProperties": 16
       }
      },
@@ -6306,7 +6516,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -6338,7 +6551,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -6404,7 +6620,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -6436,7 +6655,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -6502,7 +6724,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -6534,7 +6759,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -6600,7 +6828,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -6632,7 +6863,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -6698,7 +6932,10 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       },
       "ci95": {
@@ -6730,7 +6967,10 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
        "maxProperties": 2
       }
      },
@@ -7062,7 +7302,48 @@
          ]
         }
        },
-       "required": [],
+       "required": [
+        "rho_crossing_steps",
+        "rho_horizon_rg_c",
+        "rho_horizon_tau_c",
+        "rho_tau_c_rg_c",
+        "rho_never_crossed",
+        "ug_crossing_steps",
+        "ug_horizon_rg_c",
+        "ug_horizon_tau_c",
+        "ug_tau_c_rg_c",
+        "ug_never_crossed",
+        "utilde1_crossing_steps",
+        "utilde1_horizon_rg_c",
+        "utilde1_horizon_tau_c",
+        "utilde1_tau_c_rg_c",
+        "utilde1_never_crossed",
+        "utilde2_crossing_steps",
+        "utilde2_horizon_rg_c",
+        "utilde2_horizon_tau_c",
+        "utilde2_tau_c_rg_c",
+        "utilde2_never_crossed",
+        "utilde3_crossing_steps",
+        "utilde3_horizon_rg_c",
+        "utilde3_horizon_tau_c",
+        "utilde3_tau_c_rg_c",
+        "utilde3_never_crossed",
+        "B1_crossing_steps",
+        "B1_horizon_rg_c",
+        "B1_horizon_tau_c",
+        "B1_tau_c_rg_c",
+        "B1_never_crossed",
+        "B2_crossing_steps",
+        "B2_horizon_rg_c",
+        "B2_horizon_tau_c",
+        "B2_tau_c_rg_c",
+        "B2_never_crossed",
+        "B3_crossing_steps",
+        "B3_horizon_rg_c",
+        "B3_horizon_tau_c",
+        "B3_tau_c_rg_c",
+        "B3_never_crossed"
+       ],
        "maxProperties": 40
       },
       "ci95": {
@@ -7550,7 +7831,48 @@
          "maxItems": 2
         }
        },
-       "required": [],
+       "required": [
+        "rho_crossing_steps",
+        "rho_horizon_rg_c",
+        "rho_horizon_tau_c",
+        "rho_tau_c_rg_c",
+        "rho_never_crossed",
+        "ug_crossing_steps",
+        "ug_horizon_rg_c",
+        "ug_horizon_tau_c",
+        "ug_tau_c_rg_c",
+        "ug_never_crossed",
+        "utilde1_crossing_steps",
+        "utilde1_horizon_rg_c",
+        "utilde1_horizon_tau_c",
+        "utilde1_tau_c_rg_c",
+        "utilde1_never_crossed",
+        "utilde2_crossing_steps",
+        "utilde2_horizon_rg_c",
+        "utilde2_horizon_tau_c",
+        "utilde2_tau_c_rg_c",
+        "utilde2_never_crossed",
+        "utilde3_crossing_steps",
+        "utilde3_horizon_rg_c",
+        "utilde3_horizon_tau_c",
+        "utilde3_tau_c_rg_c",
+        "utilde3_never_crossed",
+        "B1_crossing_steps",
+        "B1_horizon_rg_c",
+        "B1_horizon_tau_c",
+        "B1_tau_c_rg_c",
+        "B1_never_crossed",
+        "B2_crossing_steps",
+        "B2_horizon_rg_c",
+        "B2_horizon_tau_c",
+        "B2_tau_c_rg_c",
+        "B2_never_crossed",
+        "B3_crossing_steps",
+        "B3_horizon_rg_c",
+        "B3_horizon_tau_c",
+        "B3_tau_c_rg_c",
+        "B3_never_crossed"
+       ],
        "maxProperties": 40
       }
      },

@@ -401,6 +401,8 @@ class RunnerTests(RunnerFixture):
         metric=path/'metrics/single_step.json'
         payload=json.loads(metric.read_text()); payload['per_channel']['rho']['nmae_model']*=1+1e-13
         metric.write_bytes(json_bytes(payload))
+        summary=json.loads((path/'summary.json').read_text());summary['metric_sha256']['single_step']=sha256(metric)
+        (path/'summary.json').write_bytes(json_bytes(summary))
         record=json.loads((path/'golden.json').read_text()); record['files']=result_files(path); record['result_fingerprint']=fingerprint(record['files'])
         (path/'golden.json').write_bytes(json_bytes(record))
         verdict=self.conform()

@@ -119,9 +119,9 @@ def compare_results(actual, expected, tolerance=None):
     for name in sorted(set(ours) & set(theirs)):
         if name.endswith(".json"):
             left, right = (json.loads((root / name).read_text()) for root in (Path(actual), Path(expected)))
-            if name=='summary.json' and tolerance is not None:
-                # Each artifact's hash binding is verified independently; hashes
-                # are not numeric values for GPU/cross-platform tolerance.
+            if name=='summary.json':
+                # Hash bytes determine differing_files; they are not numerical
+                # values for relative-difference diagnostics or tolerance.
                 left.pop('metric_sha256',None);right.pop('metric_sha256',None)
         else:
             def rows(root):
