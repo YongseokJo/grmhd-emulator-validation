@@ -7,5 +7,8 @@ No eligible completed runs.
 
 ## Excluded attempts
 
-None.
+| Attempt | Location | Reason |
+|---|---|---|
+| memory-5ecd495f6ea04a9da364adbb7dc340dc | staging | incomplete |
+| memory-e1736e43c4d443ba97f8bde07225181b | staging | incomplete |
 

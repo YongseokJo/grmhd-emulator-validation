@@ -1,0 +1,30 @@
+{
+ "attempts": [
+  {
+   "checkpoint_known": true,
+   "checkpoint_sha256": null,
+   "eligible": false,
+   "location": "staging",
+   "model": "persistence",
+   "reason": "incomplete",
+   "run_id": "memory-5ecd495f6ea04a9da364adbb7dc340dc",
+   "split": null,
+   "status": "incomplete",
+   "tier": null
+  },
+  {
+   "checkpoint_known": true,
+   "checkpoint_sha256": null,
+   "eligible": false,
+   "location": "staging",
+   "model": "persistence",
+   "reason": "incomplete",
+   "run_id": "memory-e1736e43c4d443ba97f8bde07225181b",
+   "split": null,
+   "status": "incomplete",
+   "tier": null
+  }
+ ],
+ "schema_version": 1,
+ "split_id": "5000run_v1"
+}
