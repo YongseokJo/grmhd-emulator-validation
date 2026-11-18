@@ -33,6 +33,9 @@ SharedStorage().require_owner()
 require_clean({},ROOT)
 receipt=json.loads(args.receipt.read_text()) if args.receipt.exists() else {'split_id':SPLIT,'partition':'validation','steps':[]}
 receipt.pop('deferred',None)
+protocol_sha=sha256(ROOT/'protocols/forecast_v1.json')
+if receipt.get('protocol_sha256',protocol_sha)!=protocol_sha:raise RuntimeError('Owner dry-run protocol changed')
+receipt['protocol_sha256']=protocol_sha
 
 def save():
     temporary=args.receipt.with_suffix('.tmp')
@@ -136,6 +139,8 @@ for model in args.model or ():
         if deadline-time.time()<(60 if tier=='full' else 15)*60:
             receipt['deferred']={'model':model,'tier':tier,'reason':'Use a fresh interactive allocation; preserve full coverage'};save();stop=True;break
         verdict=command(key,['evaluate','--request',str(request_path),'--split-id',SPLIT,'--split','validation','--tier',tier,'--device',device])
+        if model=='persistence' and verdict['result_fingerprint']!=done('conformance-'+tier)['verdict']['golden_fingerprint']:
+            raise RuntimeError('Persistence fingerprint changed from the verified golden')
         metadata=json.loads((Path(verdict['run_dir'])/'run.json').read_text())
         if metadata['repo_modified'] or not metadata['environment_locked'] or metadata['checkpoint_sha256']!=manifest[model]['checkpoint_sha256']:
             raise RuntimeError('Published run identity/state differs from approved inputs')
