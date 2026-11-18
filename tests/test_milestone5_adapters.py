@@ -121,6 +121,17 @@ class AdapterTests(unittest.TestCase):
         geo=geometry((8,6,4));geo.phi[0,0,1]+=.01
         with self.assertRaisesRegex(ValueError,'uniform'):Gemini(None,geo,'cpu',{})
 
+    def test_claude_preserves_source_index_reflection_on_asymmetric_theta(self):
+        geo=geometry((8,6,4));random=np.random.default_rng(42)
+        state=random.normal(size=(8,*geo.shape)).astype(np.float32);state[:2]=np.abs(state[:2])+.01
+        history=torch.from_numpy(state)[None,None]
+        expected=Claude(None,geo,'cpu',{}).step(history)
+        geo.theta.add_(.01)
+        theta=geo.theta[0,:,0].numpy()
+        self.assertFalse(np.allclose(theta+theta[::-1],np.pi))
+        actual=Claude(None,geo,'cpu',{}).step(history)
+        torch.testing.assert_close(actual,expected,rtol=0,atol=0)
+
     def test_signed_colourbar_ticks_are_two_decades_apart_plus_zero(self):
         from grmhd_validation.analyses._figures import color_map
         from matplotlib.figure import Figure

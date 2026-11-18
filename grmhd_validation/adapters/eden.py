@@ -40,11 +40,12 @@ class Eden(ModelAdapter):
             raise ValueError('Positive dump cadence required')
         if self.agent == 'claude':
             radial = self.geo['r'][:, 0, 0]
-            theta = self.geo['h'][0, :, 0]
             if len(radial) < 2 or not np.allclose(np.diff(np.log(radial)), self.geo['dx'][0], rtol=1e-4, atol=1e-6):
                 raise ValueError('Claude method requires uniform x1=log(r) spacing')
-            if not np.allclose(theta, np.pi-theta[::-1], atol=1e-5):
-                raise ValueError('Claude method requires an equator-symmetric theta grid')
+            # The source reverses theta *indices*. It never reads h and is
+            # defined on rc300's actual grid, whose centres are not precisely
+            # reflection-symmetric. Do not add a physical-angle precondition
+            # or resample the input to make that index operation symmetric.
             if not 0 < float(geometry.spin) < 1:
                 raise ValueError('Claude orbital cap requires 0 < spin < 1')
         self.kernel = importlib.import_module('._eden_'+self.agent, __package__)
