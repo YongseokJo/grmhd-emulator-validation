@@ -249,7 +249,11 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
     if tier not in {'quick','full'}:
         raise ValueError('Tier must be quick or full')
     storage = SharedStorage() if storage is None else storage
-    request = read_request(request_path)
+    # Bootstrap the namespace from the user request before consulting any
+    # protected schema; even a broken schema edit must leave a dirty attempt.
+    request = json.loads(Path(request_path).read_text())
+    if not isinstance(request, dict) or not {'model', 'version', 'checkpoint'} <= request.keys():
+        raise ValueError('Request needs model, version and checkpoint to record an attempt')
     identifier(split_id)
     if partition not in {"validation", "test"}:
         raise ValueError("Evaluation requires validation or test")
@@ -261,6 +265,7 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
             "split_id": split_id, "start_time": now(), "end_time": None, "status": "failed", **inspect_repository(repo)}
     try:
         require_clean(info, repo)
+        schema_validate(request, 'request.schema.json')
         split = read_split(Path(repo) / "splits" / (split_id + ".json"), data_root)
         if sha256(storage.root / "splits" / (split_id + ".json")) != split.sha256:
             raise ValueError("Shared frozen split differs from repository")

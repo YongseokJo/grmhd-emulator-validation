@@ -38,7 +38,7 @@ class RepositoryStateTests(RunnerFixture):
 
     def test_dirty_evaluation_records_failure_without_loading_adapter(self):
         (self.repo/'prompts').mkdir();(self.repo/'prompts/probe.txt').write_text('shell edit')
-        with patch('grmhd_validation.runner.adapter_source',side_effect=AssertionError('Dirty run must not load model')):
+        with patch('grmhd_validation.runner.adapter_source',side_effect=AssertionError('Dirty run must not load model')), patch('grmhd_validation.runner.schema_validate',side_effect=AssertionError('Dirty run must not read protected schemas')):
             result=self.run_eval()
         self.assertFalse(result['ok']);path=Path(result['run_dir'])
         info=json.loads((path/'run.json').read_text());self.assertTrue(info['repo_modified'])
