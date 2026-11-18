@@ -1,0 +1,67 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "type": "object",
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {
+   "const": 1
+  },
+  "groups": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+       "split_id": {
+        "type": "string"
+       },
+       "protocol_id": {
+        "type": "string"
+       },
+       "protocol_sha256": {
+        "type": "string"
+       },
+       "split": {
+        "type": "string"
+       },
+       "tier": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "split_id",
+       "protocol_id",
+       "protocol_sha256",
+       "split",
+       "tier"
+      ]
+     },
+     "data_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+     },
+     "files": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}$"
+      }
+     }
+    },
+    "required": [
+     "group",
+     "data_sha256",
+     "files"
+    ]
+   }
+  }
+ },
+ "required": [
+  "schema_version",
+  "groups"
+ ]
+}

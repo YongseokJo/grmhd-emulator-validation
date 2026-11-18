@@ -12,7 +12,7 @@ from .splits import relative_path
 from .validation import schema_validate
 
 
-def _verify_bundle(path, repo=None):
+def _verify_bundle(path, repo=None, allow_historical_protocol=False):
     path = Path(path).absolute()
     if path.is_symlink() or not path.is_dir():
         raise ValueError("Run root must be a real directory")
@@ -43,22 +43,34 @@ def _verify_bundle(path, repo=None):
         raise ValueError("run.json does not mark completion")
     split_file = repo / "splits" / (info["split_id"] + ".json")
     protocol_file = repo / "protocols" / (info["protocol_id"] + ".json")
-    if sha256(split_file) != info["split_file_sha256"] or sha256(protocol_file) != info["protocol_sha256"]:
-        raise ValueError("Bundle split/protocol identity differs from repository")
-    schema_validate(json.loads((path / "summary.json").read_text()), "summary.schema.json")
-    protocol, _ = read_protocol(protocol_file)
+    if sha256(split_file) != info["split_file_sha256"]:
+        raise ValueError("Bundle split identity differs from repository")
+    if sha256(protocol_file) != info["protocol_sha256"]:
+        if not allow_historical_protocol:raise ValueError("Bundle protocol identity differs from repository")
+        from .report import protocol_blob
+        protocol=protocol_blob(repo,info['protocol_id'],info['protocol_sha256'])
+    else:protocol,_=read_protocol(protocol_file)
+    from .summary import validate as validate_summary
+    summary=json.loads((path / "summary.json").read_text())
+    validate_summary(summary,legacy=True)
     for name in protocol["tiers"][info["tier"]]:
         schema_validate(json.loads((path / "metrics" / (name + ".json")).read_text()), name + ".schema.json")
-    result = fingerprint(result_files(path))
+    content=result_files(path)
+    if summary.get('schema_version')==2:
+        if info.get('summary_format_version')!=2 or info.get('result_content_sha256')!=content:
+            raise ValueError('Compact summary run hash bindings differ from actual result files')
+        if any(content.get('metrics/'+name+'.json')!=digest for name,digest in summary['metric_sha256'].items()):
+            raise ValueError('Compact summary metric hashes differ from actual metric files')
+    result = fingerprint(content)
     if result != info["result_fingerprint"] or (path / "COMPLETE").read_text().strip() != result:
         raise ValueError("Result fingerprint/completion marker mismatch")
     unsealed = bool(path.stat().st_mode & 0o222)
     return {"ok": not unsealed, "unsealed": unsealed,
-            "next": "gval seal " + str(path) if unsealed else "Review this verified run; use gval report after reporting is implemented",
+            "next": "gval seal " + str(path) if unsealed else "Review this verified run; the owner may publish it with gval report",
             "run_dir": str(path), "result_fingerprint": result, "data_verified": info["data_verified"]}
 
 
-def verify_run(path, repo=None):
+def verify_run(path, repo=None, allow_historical_protocol=False):
     """An unsealed COMPLETE run is not eligible for comparison or reporting."""
     path=Path(path)
     if (path/'NOT_EVALUATED').is_file():
@@ -67,7 +79,7 @@ def verify_run(path, repo=None):
         info=json.loads((path/'run.json').read_text())
         return {'ok':False,'preview':True,'run_dir':str(path),'reason':info.get('preview_reason'),
                 'next':'Preview is excluded from publication and leaderboard comparison'}
-    return _verify_bundle(path, repo)
+    return _verify_bundle(path, repo, allow_historical_protocol)
 
 
 def seal_run(path, repo=None):

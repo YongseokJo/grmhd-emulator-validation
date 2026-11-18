@@ -427,6 +427,19 @@
     "type": "string"
    },
    "type": "object"
+  },
+  "summary_format_version": {
+   "const": 2
+  },
+  "result_content_sha256": {
+   "type": "object",
+   "additionalProperties": {
+    "type": "string",
+    "pattern": "^[0-9a-f]{64}$"
+   }
+  },
+  "summary_format_correction": {
+   "type": "object"
   }
  },
  "required": [

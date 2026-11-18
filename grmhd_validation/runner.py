@@ -188,23 +188,26 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
                     writer.json('metrics/'+name+'.json', summary[name])
                     continue
                 with measure(memory,name):
-                    summary[name] = analyses[name].run(ctx)
+                    analyses[name].run(ctx)
                 writer.json('logs/memory.json',memory)
                 import gc
                 gc.collect()
             if ctx.full is not None:ctx.full.cleanup()
             if truth_cache is None and ctx.truth_cache is not None:ctx.truth_cache.close()
-            schema_validate(summary, "summary.schema.json")
+            from .summary import from_metrics
+            summary=from_metrics(writer.root,protocol,tier,split.dt_dump)
             writer.json("summary.json", summary)
-            for name in summary:
+            for name in protocol["tiers"][tier]:
                 result = json.loads((writer.root / "metrics" / (name + ".json")).read_text())
                 schema_validate(result, name + ".schema.json")
             if predictions is not None:
                 info['not_evaluated'] = unavailable
-                writer.json('coverage.json', {'analyses': {name: {'status':'not evaluated', 'reason':unavailable[name]} if name in unavailable else {'status':'evaluated'} for name in summary},
+                writer.json('coverage.json', {'analyses': {name: {'status':'not evaluated', 'reason':unavailable[name]} if name in unavailable else {'status':'evaluated'} for name in protocol["tiers"][tier]},
                                               'coverage':predictions.coverage})
             info["data_verified"] = verify_data
-            info["result_fingerprint"] = fingerprint(result_files(writer.root))
+            info['summary_format_version']=2
+            info['result_content_sha256']=result_files(writer.root)
+            info["result_fingerprint"] = fingerprint(info['result_content_sha256'])
             info["end_time"] = now()
             writer.json("run.json", info)
             schema_validate(info, "run.schema.json")

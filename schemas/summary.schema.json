@@ -1,4 +1,5 @@
 {
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
  "$defs": {
   "fields_flag_nmae_at_max_steps_sigma": {
    "additionalProperties": false,
@@ -1924,216 +1925,17 @@
    "additionalProperties": false
   }
  },
- "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "x-maxSerializedBytes": 1000000,
+ "description": "Format 2: fixed scalar headlines only; canonical JSON hard-limited to 1,000,000 bytes.",
+ "type": "object",
  "additionalProperties": false,
  "properties": {
-  "rollout_curve": {
-   "additionalProperties": false,
-   "properties": {
-    "at_steps": {
-     "additionalProperties": {
-      "additionalProperties": false,
-      "properties": {
-       "mean_nmae": {
-        "type": [
-         "number",
-         "null"
-        ]
-       },
-       "mean_persist": {
-        "type": [
-         "number",
-         "null"
-        ]
-       },
-       "per_channel": {
-        "additionalProperties": false,
-        "properties": {
-         "B1": {
-          "type": [
-           "number",
-           "null"
-          ]
-         },
-         "B2": {
-          "type": [
-           "number",
-           "null"
-          ]
-         },
-         "B3": {
-          "type": [
-           "number",
-           "null"
-          ]
-         },
-         "rho": {
-          "type": [
-           "number",
-           "null"
-          ]
-         },
-         "ug": {
-          "type": [
-           "number",
-           "null"
-          ]
-         },
-         "utilde1": {
-          "type": [
-           "number",
-           "null"
-          ]
-         },
-         "utilde2": {
-          "type": [
-           "number",
-           "null"
-          ]
-         },
-         "utilde3": {
-          "type": [
-           "number",
-           "null"
-          ]
-         }
-        },
-        "required": [
-         "rho",
-         "ug",
-         "utilde1",
-         "utilde2",
-         "utilde3",
-         "B1",
-         "B2",
-         "B3"
-        ],
-        "type": "object"
-       },
-       "skill": {
-        "type": [
-         "number",
-         "null"
-        ]
-       },
-       "skill_ci": {
-        "items": {
-         "type": [
-          "number",
-          "null"
-         ]
-        },
-        "maxItems": 2,
-        "minItems": 2,
-        "type": "array"
-       },
-       "std_nmae": {
-        "type": [
-         "number",
-         "null"
-        ]
-       },
-       "time_rg_c": {
-        "type": [
-         "number",
-         "null"
-        ]
-       }
-      },
-      "required": [
-       "time_rg_c",
-       "mean_nmae",
-       "std_nmae",
-       "mean_persist",
-       "skill",
-       "skill_ci",
-       "per_channel"
-      ],
-      "type": "object"
-     },
-     "minProperties": 1,
-     "type": "object"
-    },
-    "attractor": {
-     "additionalProperties": false,
-     "properties": {
-      "B1": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      },
-      "B2": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      },
-      "B3": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      },
-      "rho": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      },
-      "ug": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      },
-      "utilde1": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      },
-      "utilde2": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      },
-      "utilde3": {
-       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
-      }
-     },
-     "required": [
-      "rho",
-      "ug",
-      "utilde1",
-      "utilde2",
-      "utilde3",
-      "B1",
-      "B2",
-      "B3"
-     ],
-     "type": "object"
-    },
-    "n_starts": {
-     "minimum": 1,
-     "type": "integer"
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "type": "object",
-   "oneOf": [
-    {
-     "required": [
-      "n_starts",
-      "at_steps",
-      "attractor"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
   "single_step": {
    "additionalProperties": false,
    "properties": {
     "ci_method": {
-     "const": "chunk_block_bootstrap"
+     "const": "chunk_block_bootstrap",
+     "maxLength": 128
     },
     "fluid": {
      "$ref": "#/$defs/fields_nmae_model_nmae_persist"
@@ -2260,309 +2062,177 @@
     }
    ]
   },
-  "accretion_diagnostics": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
+  "rollout_curve": {
+   "additionalProperties": false,
    "properties": {
-    "analysis": {
-     "const": "accretion_diagnostics"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
+    "at_steps": {
+     "additionalProperties": {
+      "additionalProperties": false,
+      "properties": {
+       "mean_nmae": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "mean_persist": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "per_channel": {
+        "additionalProperties": false,
         "properties": {
-         "start": {
-          "type": "integer"
+         "B1": {
+          "type": [
+           "number",
+           "null"
+          ]
          },
-         "values": {
-          "$ref": "#/$defs/accretion_diagnostics__values"
+         "B2": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "B3": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "rho": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "ug": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "utilde1": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "utilde2": {
+          "type": [
+           "number",
+           "null"
+          ]
+         },
+         "utilde3": {
+          "type": [
+           "number",
+           "null"
+          ]
          }
         },
         "required": [
-         "start",
-         "values"
+         "rho",
+         "ug",
+         "utilde1",
+         "utilde2",
+         "utilde3",
+         "B1",
+         "B2",
+         "B3"
         ],
-        "additionalProperties": false
+        "type": "object"
        },
-       "minItems": 1
+       "skill": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "skill_ci": {
+        "items": {
+         "type": [
+          "number",
+          "null"
+         ]
+        },
+        "maxItems": 2,
+        "minItems": 2,
+        "type": "array"
+       },
+       "std_nmae": {
+        "type": [
+         "number",
+         "null"
+        ]
+       },
+       "time_rg_c": {
+        "type": [
+         "number",
+         "null"
+        ]
+       }
       },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/accretion_diagnostics__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/accretion_diagnostics__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/accretion_diagnostics__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/accretion_diagnostics__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/accretion_diagnostics__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/accretion_diagnostics__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/accretion_diagnostics__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
       "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "azimuthal_spectra": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "azimuthal_spectra"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
+       "time_rg_c",
+       "mean_nmae",
+       "std_nmae",
+       "mean_persist",
+       "skill",
+       "skill_ci",
+       "per_channel"
+      ],
+      "type": "object"
      },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+     "minProperties": 1,
      "type": "object",
+     "maxProperties": 4
+    },
+    "attractor": {
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/azimuthal_spectra__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "B1": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
       },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/azimuthal_spectra__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/azimuthal_spectra__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/azimuthal_spectra__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/azimuthal_spectra__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
+      "B2": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
       },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/azimuthal_spectra__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/azimuthal_spectra__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/azimuthal_spectra__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
+      "B3": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "rho": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "ug": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "utilde1": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "utilde2": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
+      },
+      "utilde3": {
+       "$ref": "#/$defs/fields_flag_nmae_at_max_steps_sigma"
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
+      "rho",
+      "ug",
+      "utilde1",
+      "utilde2",
+      "utilde3",
+      "B1",
+      "B2",
+      "B3"
      ],
-     "additionalProperties": false
+     "type": "object"
+    },
+    "n_starts": {
+     "minimum": 1,
+     "type": "integer"
     },
     "status": {
      "const": "not evaluated"
@@ -2572,1022 +2242,13 @@
      "minLength": 1
     }
    },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "bias_analysis": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
    "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "bias_analysis"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/bias_analysis__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/bias_analysis__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/bias_analysis__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/bias_analysis__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/bias_analysis__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/bias_analysis__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/bias_analysis__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/bias_analysis__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
    "oneOf": [
     {
      "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "coherence": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "coherence"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/coherence__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/coherence__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/coherence__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/coherence__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/coherence__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/coherence__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/coherence__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/coherence__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "conditional_error": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "conditional_error"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/conditional_error__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/conditional_error__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/conditional_error__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/conditional_error__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/conditional_error__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/conditional_error__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/conditional_error__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/conditional_error__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "conservation_closure": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "conservation_closure"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/conservation_closure__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/conservation_closure__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/conservation_closure__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/conservation_closure__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/conservation_closure__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/conservation_closure__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/conservation_closure__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/conservation_closure__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "correlation_times": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "correlation_times"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/correlation_times__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/correlation_times__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/correlation_times__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/correlation_times__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/correlation_times__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/correlation_times__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/correlation_times__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/correlation_times__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "cost": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "cost"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/cost__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/cost__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/cost__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/cost__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/cost__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/cost__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/cost__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/cost__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
+      "n_starts",
+      "at_steps",
+      "attractor"
      ],
      "not": {
       "required": [
@@ -3605,2529 +2266,5468 @@
    ]
   },
   "error_correlation": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "error_correlation"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+   "oneOf": [
+    {
      "type": "object",
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/error_correlation__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
       },
-      "aggregate": {
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "mean": {
-         "$ref": "#/$defs/error_correlation__values"
+        "rho_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "lower": {
-         "$ref": "#/$defs/error_correlation__values"
+        "rho_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "upper": {
-         "$ref": "#/$defs/error_correlation__values"
+        "ug_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
+        "ug_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
+        "utilde1_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/error_correlation__value"
-         }
+        "utilde1_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_model_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_persistence_relative_error": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         }
        },
        "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
+        "rho_model_relative_error",
+        "rho_persistence_relative_error",
+        "ug_model_relative_error",
+        "ug_persistence_relative_error",
+        "utilde1_model_relative_error",
+        "utilde1_persistence_relative_error",
+        "utilde2_model_relative_error",
+        "utilde2_persistence_relative_error",
+        "utilde3_model_relative_error",
+        "utilde3_persistence_relative_error",
+        "B1_model_relative_error",
+        "B1_persistence_relative_error",
+        "B2_model_relative_error",
+        "B2_persistence_relative_error",
+        "B3_model_relative_error",
+        "B3_persistence_relative_error"
        ],
-       "additionalProperties": false
+       "maxProperties": 16
       },
-      "time": {
+      "ci95": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "steps": {
-         "$ref": "#/$defs/error_correlation__value"
+        "rho_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "rg_c": {
-         "$ref": "#/$defs/error_correlation__value"
+        "rho_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "tau_c": {
-         "$ref": "#/$defs/error_correlation__value"
+        "ug_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_model_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_persistence_relative_error": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         }
        },
        "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
+        "rho_model_relative_error",
+        "rho_persistence_relative_error",
+        "ug_model_relative_error",
+        "ug_persistence_relative_error",
+        "utilde1_model_relative_error",
+        "utilde1_persistence_relative_error",
+        "utilde2_model_relative_error",
+        "utilde2_persistence_relative_error",
+        "utilde3_model_relative_error",
+        "utilde3_persistence_relative_error",
+        "B1_model_relative_error",
+        "B1_persistence_relative_error",
+        "B2_model_relative_error",
+        "B2_persistence_relative_error",
+        "B3_model_relative_error",
+        "B3_persistence_relative_error"
        ],
-       "additionalProperties": false
+       "maxProperties": 16
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
+      "n_starts",
       "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "lorentz": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "lorentz"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
+      "headlines",
+      "ci95"
      ]
     },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+    {
      "type": "object",
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/lorentz__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "status": {
+       "const": "not evaluated"
       },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/lorentz__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/lorentz__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/lorentz__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/lorentz__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/lorentz__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/lorentz__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/lorentz__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
       "status",
       "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "mdot": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "mdot"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
      ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/mdot__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/mdot__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/mdot__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/mdot__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/mdot__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/mdot__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/mdot__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/mdot__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "mean_profiles": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "mean_profiles"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/mean_profiles__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/mean_profiles__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/mean_profiles__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/mean_profiles__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/mean_profiles__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/mean_profiles__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/mean_profiles__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/mean_profiles__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "meridional_slice": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "meridional_slice"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/meridional_slice__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/meridional_slice__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/meridional_slice__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/meridional_slice__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/meridional_slice__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/meridional_slice__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/meridional_slice__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/meridional_slice__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "physics_table": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "physics_table"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/physics_table__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/physics_table__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/physics_table__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/physics_table__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/physics_table__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/physics_table__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/physics_table__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/physics_table__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "rollout_evolution": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "rollout_evolution"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/rollout_evolution__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/rollout_evolution__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/rollout_evolution__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/rollout_evolution__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/rollout_evolution__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/rollout_evolution__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/rollout_evolution__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/rollout_evolution__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "shell_profiles": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "shell_profiles"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/shell_profiles__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/shell_profiles__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/shell_profiles__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/shell_profiles__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/shell_profiles__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/shell_profiles__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/shell_profiles__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/shell_profiles__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "spatial_error": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "spatial_error"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/spatial_error__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/spatial_error__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/spatial_error__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/spatial_error__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/spatial_error__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/spatial_error__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/spatial_error__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/spatial_error__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
-    }
-   ]
-  },
-  "spectrum": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "spectrum"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
-     "type": "object",
-     "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/spectrum__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
-      },
-      "aggregate": {
-       "type": "object",
-       "properties": {
-        "mean": {
-         "$ref": "#/$defs/spectrum__values"
-        },
-        "lower": {
-         "$ref": "#/$defs/spectrum__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/spectrum__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/spectrum__value"
-         }
-        }
-       },
-       "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
-       ],
-       "additionalProperties": false
-      },
-      "time": {
-       "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/spectrum__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/spectrum__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/spectrum__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
-      }
-     },
-     "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
-      "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
-    },
-    {
-     "required": [
-      "status",
-      "reason"
-     ],
-     "maxProperties": 2
     }
    ]
   },
   "stability": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "stability"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+   "oneOf": [
+    {
      "type": "object",
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/stability__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
       },
-      "aggregate": {
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
         "mean": {
-         "$ref": "#/$defs/stability__values"
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "lower": {
-         "$ref": "#/$defs/stability__values"
+        "std": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "upper": {
-         "$ref": "#/$defs/stability__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/stability__value"
-         }
+        "skipped_draws": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         }
        },
        "required": [
         "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
+        "std",
+        "skipped_draws"
        ],
-       "additionalProperties": false
+       "maxProperties": 3
       },
-      "time": {
+      "ci95": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "steps": {
-         "$ref": "#/$defs/stability__value"
+        "mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "rg_c": {
-         "$ref": "#/$defs/stability__value"
+        "std": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "tau_c": {
-         "$ref": "#/$defs/stability__value"
+        "skipped_draws": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         }
        },
        "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
+        "mean",
+        "std",
+        "skipped_draws"
        ],
-       "additionalProperties": false
+       "maxProperties": 3
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
+      "n_starts",
       "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
+      "headlines",
+      "ci95"
+     ]
     },
     {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
      "required": [
       "status",
       "reason"
-     ],
-     "maxProperties": 2
+     ]
     }
    ]
   },
-  "statistical_props": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "statistical_props"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+  "cost": {
+   "oneOf": [
+    {
      "type": "object",
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/statistical_props__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
       },
-      "aggregate": {
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "mean": {
-         "$ref": "#/$defs/statistical_props__values"
+        "parameters": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "lower": {
-         "$ref": "#/$defs/statistical_props__values"
+        "warmup_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "upper": {
-         "$ref": "#/$defs/statistical_props__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/statistical_props__value"
-         }
+        "timed_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         }
        },
        "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
+        "parameters",
+        "warmup_steps",
+        "timed_steps"
        ],
-       "additionalProperties": false
+       "maxProperties": 3
       },
-      "time": {
+      "ci95": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "steps": {
-         "$ref": "#/$defs/statistical_props__value"
+        "parameters": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "rg_c": {
-         "$ref": "#/$defs/statistical_props__value"
+        "warmup_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "tau_c": {
-         "$ref": "#/$defs/statistical_props__value"
+        "timed_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         }
        },
        "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
+        "parameters",
+        "warmup_steps",
+        "timed_steps"
        ],
-       "additionalProperties": false
+       "maxProperties": 3
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
+      "n_starts",
       "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
+      "headlines",
+      "ci95"
+     ]
     },
     {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
      "required": [
       "status",
       "reason"
-     ],
-     "maxProperties": 2
+     ]
+    }
+   ]
+  },
+  "physics_table": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": [],
+       "patternProperties": {
+        "^step_(?:[1-9]|[1-4][0-9]|50)_mass_error$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_energy_error$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_angular_error$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_divb_pred$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_divb_truth$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_normalized_divb_pred$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_normalized_divb_truth$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_flux_pred$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_flux_truth$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_gamma_max$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "maxProperties": 200,
+       "minProperties": 1
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": [],
+       "patternProperties": {
+        "^step_(?:[1-9]|[1-4][0-9]|50)_mass_error$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_energy_error$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_angular_error$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_divb_pred$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_divb_truth$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_normalized_divb_pred$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_normalized_divb_truth$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_flux_pred$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_flux_truth$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_gamma_max$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "maxProperties": 200,
+       "minProperties": 1
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "shell_profiles": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
     }
    ]
   },
   "temporal_consistency": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "temporal_consistency"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+   "oneOf": [
+    {
      "type": "object",
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/temporal_consistency__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
       },
-      "aggregate": {
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "mean": {
-         "$ref": "#/$defs/temporal_consistency__values"
+        "mass_drift_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "lower": {
-         "$ref": "#/$defs/temporal_consistency__values"
+        "mass_drift_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "upper": {
-         "$ref": "#/$defs/temporal_consistency__values"
+        "energy_drift_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
+        "energy_drift_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
+        "angular_drift_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/temporal_consistency__value"
-         }
+        "angular_drift_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         }
        },
        "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
+        "mass_drift_pred",
+        "mass_drift_truth",
+        "energy_drift_pred",
+        "energy_drift_truth",
+        "angular_drift_pred",
+        "angular_drift_truth"
        ],
-       "additionalProperties": false
+       "maxProperties": 6
       },
-      "time": {
+      "ci95": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "steps": {
-         "$ref": "#/$defs/temporal_consistency__value"
+        "mass_drift_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "rg_c": {
-         "$ref": "#/$defs/temporal_consistency__value"
+        "mass_drift_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "tau_c": {
-         "$ref": "#/$defs/temporal_consistency__value"
+        "energy_drift_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "energy_drift_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "angular_drift_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "angular_drift_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         }
        },
        "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
+        "mass_drift_pred",
+        "mass_drift_truth",
+        "energy_drift_pred",
+        "energy_drift_truth",
+        "angular_drift_pred",
+        "angular_drift_truth"
        ],
-       "additionalProperties": false
+       "maxProperties": 6
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
+      "n_starts",
       "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
+      "headlines",
+      "ci95"
+     ]
     },
     {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
      "required": [
       "status",
       "reason"
-     ],
-     "maxProperties": 2
+     ]
+    }
+   ]
+  },
+  "conservation_closure": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "pred_mass": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "pred_dmass_dt": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "pred_mdot_inner": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "pred_mdot_outer": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "pred_residual": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "truth_mass": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "truth_dmass_dt": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "truth_mdot_inner": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "truth_mdot_outer": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "truth_residual": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "resolved_radius_rg": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "resolved_coarse_ring": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "pred_mass",
+        "pred_dmass_dt",
+        "pred_mdot_inner",
+        "pred_mdot_outer",
+        "pred_residual",
+        "truth_mass",
+        "truth_dmass_dt",
+        "truth_mdot_inner",
+        "truth_mdot_outer",
+        "truth_residual",
+        "resolved_radius_rg",
+        "resolved_coarse_ring"
+       ],
+       "maxProperties": 12
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "pred_mass": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "pred_dmass_dt": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "pred_mdot_inner": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "pred_mdot_outer": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "pred_residual": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "truth_mass": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "truth_dmass_dt": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "truth_mdot_inner": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "truth_mdot_outer": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "truth_residual": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "required": [
+        "pred_mass",
+        "pred_dmass_dt",
+        "pred_mdot_inner",
+        "pred_mdot_outer",
+        "pred_residual",
+        "truth_mass",
+        "truth_dmass_dt",
+        "truth_mdot_inner",
+        "truth_mdot_outer",
+        "truth_residual"
+       ],
+       "maxProperties": 10
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "accretion_diagnostics": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "resolved_radius_rg": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "resolved_coarse_ring": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [],
+       "patternProperties": {
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_mdot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_edot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_ldot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_p_jet$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_eta$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_eta_jet$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_magnetic_flux$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_phi_normalized$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_mdot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_edot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_ldot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_p_jet$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_eta$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_eta_jet$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_magnetic_flux$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_phi_normalized$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_eta_reason$": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "maxLength": 128
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_eta_jet_reason$": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "maxLength": 128
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_phi_normalized_reason$": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "maxLength": 128
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_eta_reason$": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "maxLength": 128
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_eta_jet_reason$": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "maxLength": 128
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_phi_normalized_reason$": {
+         "type": [
+          "string",
+          "null"
+         ],
+         "maxLength": 128
+        }
+       },
+       "maxProperties": 200,
+       "minProperties": 1
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": [],
+       "patternProperties": {
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_mdot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_edot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_ldot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_p_jet$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_eta$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_eta_jet$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_magnetic_flux$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_phi_normalized$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_mdot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_edot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_ldot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_p_jet$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_eta$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_eta_jet$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_magnetic_flux$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_phi_normalized$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "maxProperties": 200,
+       "minProperties": 1
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "mdot": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "resolved_radius_rg": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "resolved_coarse_ring": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [],
+       "patternProperties": {
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_mdot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_mdot$": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "maxProperties": 200,
+       "minProperties": 1
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": [],
+       "patternProperties": {
+        "^step_(?:[1-9]|[1-4][0-9]|50)_pred_mdot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "^step_(?:[1-9]|[1-4][0-9]|50)_truth_mdot$": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "maxProperties": 200,
+       "minProperties": 1
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "lorentz": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "max": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "max_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "max_p999": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "clamp_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "max",
+        "max_step",
+        "max_p999",
+        "clamp_count"
+       ],
+       "maxProperties": 4
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "max": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "max_step": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "max_p999": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "clamp_count": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "required": [
+        "max",
+        "max_step",
+        "max_p999",
+        "clamp_count"
+       ],
+       "maxProperties": 4
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "mean_profiles": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "statistical_props": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rho_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_js": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_pred_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_true_mean": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "rho_js",
+        "rho_pred_mean",
+        "rho_true_mean",
+        "ug_js",
+        "ug_pred_mean",
+        "ug_true_mean",
+        "utilde1_js",
+        "utilde1_pred_mean",
+        "utilde1_true_mean",
+        "utilde2_js",
+        "utilde2_pred_mean",
+        "utilde2_true_mean",
+        "utilde3_js",
+        "utilde3_pred_mean",
+        "utilde3_true_mean",
+        "B1_js",
+        "B1_pred_mean",
+        "B1_true_mean",
+        "B2_js",
+        "B2_pred_mean",
+        "B2_true_mean",
+        "B3_js",
+        "B3_pred_mean",
+        "B3_true_mean"
+       ],
+       "maxProperties": 24
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rho_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_js": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_pred_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_true_mean": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "required": [
+        "rho_js",
+        "rho_pred_mean",
+        "rho_true_mean",
+        "ug_js",
+        "ug_pred_mean",
+        "ug_true_mean",
+        "utilde1_js",
+        "utilde1_pred_mean",
+        "utilde1_true_mean",
+        "utilde2_js",
+        "utilde2_pred_mean",
+        "utilde2_true_mean",
+        "utilde3_js",
+        "utilde3_pred_mean",
+        "utilde3_true_mean",
+        "B1_js",
+        "B1_pred_mean",
+        "B1_true_mean",
+        "B2_js",
+        "B2_pred_mean",
+        "B2_true_mean",
+        "B3_js",
+        "B3_pred_mean",
+        "B3_true_mean"
+       ],
+       "maxProperties": 24
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "spectrum": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rho_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_slope_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_slope_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_fit_r2_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_fit_r2_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "rho_slope_pred",
+        "rho_slope_truth",
+        "rho_fit_r2_pred",
+        "rho_fit_r2_truth",
+        "B1_slope_pred",
+        "B1_slope_truth",
+        "B1_fit_r2_pred",
+        "B1_fit_r2_truth"
+       ],
+       "maxProperties": 32
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rho_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_slope_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_slope_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_fit_r2_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_fit_r2_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "required": [
+        "rho_slope_pred",
+        "rho_slope_truth",
+        "rho_fit_r2_pred",
+        "rho_fit_r2_truth",
+        "B1_slope_pred",
+        "B1_slope_truth",
+        "B1_fit_r2_pred",
+        "B1_fit_r2_truth"
+       ],
+       "maxProperties": 32
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "azimuthal_spectra": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "coherence": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
     }
    ]
   },
   "temporal_spectrum": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "temporal_spectrum"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+   "oneOf": [
+    {
      "type": "object",
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/temporal_spectrum__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
       },
-      "aggregate": {
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "mean": {
-         "$ref": "#/$defs/temporal_spectrum__values"
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "lower": {
-         "$ref": "#/$defs/temporal_spectrum__values"
-        },
-        "upper": {
-         "$ref": "#/$defs/temporal_spectrum__values"
-        },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
-        },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
-        },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/temporal_spectrum__value"
-         }
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         }
        },
        "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
+        "final_step",
+        "sample_count"
        ],
-       "additionalProperties": false
+       "maxProperties": 2
       },
-      "time": {
+      "ci95": {
        "type": "object",
-       "properties": {
-        "steps": {
-         "$ref": "#/$defs/temporal_spectrum__value"
-        },
-        "rg_c": {
-         "$ref": "#/$defs/temporal_spectrum__value"
-        },
-        "tau_c": {
-         "$ref": "#/$defs/temporal_spectrum__value"
-        }
-       },
-       "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
-       ],
-       "additionalProperties": false
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
+      "n_starts",
       "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
+      "headlines",
+      "ci95"
+     ]
     },
     {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
      "required": [
       "status",
       "reason"
-     ],
-     "maxProperties": 2
+     ]
     }
    ]
   },
   "turbulence_stats": {
-   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "type": "object",
-   "properties": {
-    "analysis": {
-     "const": "turbulence_stats"
-    },
-    "space": {
-     "enum": [
-      "loss",
-      "physical"
-     ]
-    },
-    "starts": {
-     "type": "array",
-     "items": {
-      "type": "integer"
-     },
-     "minItems": 1,
-     "uniqueItems": true
-    },
-    "data": {
+   "oneOf": [
+    {
      "type": "object",
+     "additionalProperties": false,
      "properties": {
-      "per_start": {
-       "type": "array",
-       "items": {
-        "type": "object",
-        "properties": {
-         "start": {
-          "type": "integer"
-         },
-         "values": {
-          "$ref": "#/$defs/turbulence_stats__values"
-         }
-        },
-        "required": [
-         "start",
-         "values"
-        ],
-        "additionalProperties": false
-       },
-       "minItems": 1
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
       },
-      "aggregate": {
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "mean": {
-         "$ref": "#/$defs/turbulence_stats__values"
+        "rho_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "lower": {
-         "$ref": "#/$defs/turbulence_stats__values"
+        "rho_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "upper": {
-         "$ref": "#/$defs/turbulence_stats__values"
+        "ug_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "n_starts": {
-         "type": "integer",
-         "minimum": 1
+        "ug_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "bootstrap": {
-         "type": "object",
-         "properties": {
-          "method": {
-           "const": "chunk_block_bootstrap"
-          },
-          "block_length": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "n_blocks": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "resamples": {
-           "type": "integer",
-           "minimum": 1
-          },
-          "seed": {
-           "type": "integer"
-          }
-         },
-         "required": [
-          "method",
-          "block_length",
-          "n_blocks",
-          "resamples",
-          "seed"
-         ],
-         "additionalProperties": false
+        "utilde1_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         },
-        "valid_counts": {
-         "type": "object",
-         "additionalProperties": {
-          "$ref": "#/$defs/turbulence_stats__value"
-         }
+        "utilde1_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_s3_pred": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_s3_truth": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
         }
        },
        "required": [
-        "mean",
-        "lower",
-        "upper",
-        "n_starts",
-        "bootstrap",
-        "valid_counts"
+        "rho_s3_pred",
+        "rho_s3_truth",
+        "utilde3_s3_pred",
+        "utilde3_s3_truth",
+        "B1_s3_pred",
+        "B1_s3_truth"
        ],
-       "additionalProperties": false
+       "maxProperties": 16
       },
-      "time": {
+      "ci95": {
        "type": "object",
+       "additionalProperties": false,
        "properties": {
-        "steps": {
-         "$ref": "#/$defs/turbulence_stats__value"
+        "rho_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "rg_c": {
-         "$ref": "#/$defs/turbulence_stats__value"
+        "rho_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         },
-        "tau_c": {
-         "$ref": "#/$defs/turbulence_stats__value"
+        "ug_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_s3_pred": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_s3_truth": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
         }
        },
        "required": [
-        "steps",
-        "rg_c",
-        "tau_c"
+        "rho_s3_pred",
+        "rho_s3_truth",
+        "utilde3_s3_pred",
+        "utilde3_s3_truth",
+        "B1_s3_pred",
+        "B1_s3_truth"
        ],
-       "additionalProperties": false
+       "maxProperties": 16
       }
      },
      "required": [
-      "per_start",
-      "aggregate",
-      "time"
-     ],
-     "additionalProperties": false
-    },
-    "status": {
-     "const": "not evaluated"
-    },
-    "reason": {
-     "type": "string",
-     "minLength": 1
-    }
-   },
-   "additionalProperties": false,
-   "oneOf": [
-    {
-     "required": [
-      "analysis",
+      "n_starts",
       "space",
-      "starts",
-      "data"
-     ],
-     "not": {
-      "required": [
-       "status"
-      ]
-     }
+      "headlines",
+      "ci95"
+     ]
     },
     {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
      "required": [
       "status",
       "reason"
-     ],
-     "maxProperties": 2
+     ]
     }
    ]
+  },
+  "conditional_error": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "bias_analysis": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "spatial_error": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "meridional_slice": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "rollout_evolution": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "final_step": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "sample_count": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "final_step",
+        "sample_count"
+       ],
+       "maxProperties": 2
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {},
+       "required": []
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "correlation_times": {
+   "oneOf": [
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "n_starts": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "space": {
+       "enum": [
+        "loss",
+        "physical"
+       ]
+      },
+      "headlines": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rho_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "rho_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "ug_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde1_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde2_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "utilde3_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B1_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B2_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_crossing_steps": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_horizon_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_horizon_tau_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_tau_c_rg_c": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        },
+        "B3_never_crossed": {
+         "type": [
+          "number",
+          "boolean",
+          "null"
+         ]
+        }
+       },
+       "required": [
+        "rho_crossing_steps",
+        "rho_horizon_rg_c",
+        "rho_horizon_tau_c",
+        "rho_tau_c_rg_c",
+        "rho_never_crossed",
+        "ug_crossing_steps",
+        "ug_horizon_rg_c",
+        "ug_horizon_tau_c",
+        "ug_tau_c_rg_c",
+        "ug_never_crossed",
+        "utilde1_crossing_steps",
+        "utilde1_horizon_rg_c",
+        "utilde1_horizon_tau_c",
+        "utilde1_tau_c_rg_c",
+        "utilde1_never_crossed",
+        "utilde2_crossing_steps",
+        "utilde2_horizon_rg_c",
+        "utilde2_horizon_tau_c",
+        "utilde2_tau_c_rg_c",
+        "utilde2_never_crossed",
+        "utilde3_crossing_steps",
+        "utilde3_horizon_rg_c",
+        "utilde3_horizon_tau_c",
+        "utilde3_tau_c_rg_c",
+        "utilde3_never_crossed",
+        "B1_crossing_steps",
+        "B1_horizon_rg_c",
+        "B1_horizon_tau_c",
+        "B1_tau_c_rg_c",
+        "B1_never_crossed",
+        "B2_crossing_steps",
+        "B2_horizon_rg_c",
+        "B2_horizon_tau_c",
+        "B2_tau_c_rg_c",
+        "B2_never_crossed",
+        "B3_crossing_steps",
+        "B3_horizon_rg_c",
+        "B3_horizon_tau_c",
+        "B3_tau_c_rg_c",
+        "B3_never_crossed"
+       ],
+       "maxProperties": 40
+      },
+      "ci95": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "rho_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "rho_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "ug_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde1_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde2_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "utilde3_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B1_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B2_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_crossing_steps": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_horizon_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_horizon_tau_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_tau_c_rg_c": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "B3_never_crossed": {
+         "type": "array",
+         "items": {
+          "type": [
+           "number",
+           "boolean",
+           "null"
+          ]
+         },
+         "minItems": 2,
+         "maxItems": 2
+        }
+       },
+       "required": [
+        "rho_crossing_steps",
+        "rho_horizon_rg_c",
+        "rho_horizon_tau_c",
+        "rho_tau_c_rg_c",
+        "rho_never_crossed",
+        "ug_crossing_steps",
+        "ug_horizon_rg_c",
+        "ug_horizon_tau_c",
+        "ug_tau_c_rg_c",
+        "ug_never_crossed",
+        "utilde1_crossing_steps",
+        "utilde1_horizon_rg_c",
+        "utilde1_horizon_tau_c",
+        "utilde1_tau_c_rg_c",
+        "utilde1_never_crossed",
+        "utilde2_crossing_steps",
+        "utilde2_horizon_rg_c",
+        "utilde2_horizon_tau_c",
+        "utilde2_tau_c_rg_c",
+        "utilde2_never_crossed",
+        "utilde3_crossing_steps",
+        "utilde3_horizon_rg_c",
+        "utilde3_horizon_tau_c",
+        "utilde3_tau_c_rg_c",
+        "utilde3_never_crossed",
+        "B1_crossing_steps",
+        "B1_horizon_rg_c",
+        "B1_horizon_tau_c",
+        "B1_tau_c_rg_c",
+        "B1_never_crossed",
+        "B2_crossing_steps",
+        "B2_horizon_rg_c",
+        "B2_horizon_tau_c",
+        "B2_tau_c_rg_c",
+        "B2_never_crossed",
+        "B3_crossing_steps",
+        "B3_horizon_rg_c",
+        "B3_horizon_tau_c",
+        "B3_tau_c_rg_c",
+        "B3_never_crossed"
+       ],
+       "maxProperties": 40
+      }
+     },
+     "required": [
+      "n_starts",
+      "space",
+      "headlines",
+      "ci95"
+     ]
+    },
+    {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "status": {
+       "const": "not evaluated"
+      },
+      "reason": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 512
+      }
+     },
+     "required": [
+      "status",
+      "reason"
+     ]
+    }
+   ]
+  },
+  "schema_version": {
+   "const": 2
+  },
+  "metric_sha256": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "single_step": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "rollout_curve": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "error_correlation": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "stability": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "cost": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "physics_table": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "shell_profiles": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "temporal_consistency": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "conservation_closure": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "accretion_diagnostics": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "mdot": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "lorentz": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "mean_profiles": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "statistical_props": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "spectrum": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "azimuthal_spectra": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "coherence": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "temporal_spectrum": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "turbulence_stats": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "conditional_error": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "bias_analysis": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "spatial_error": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "meridional_slice": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "rollout_evolution": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    },
+    "correlation_times": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{64}$"
+    }
+   },
+   "required": []
   }
  },
  "required": [
+  "schema_version",
+  "metric_sha256",
   "single_step",
   "rollout_curve"
- ],
- "type": "object"
+ ]
 }

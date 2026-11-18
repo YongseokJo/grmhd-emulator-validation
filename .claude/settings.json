@@ -1,0 +1,10 @@
+{
+ "permissions": {
+  "deny": [
+   "Edit(/splits/**)", "Write(/splits/**)",
+   "Edit(/protocols/**)", "Write(/protocols/**)",
+   "Edit(/grmhd_validation/**)", "Write(/grmhd_validation/**)",
+   "Edit(/references/**)", "Write(/references/**)"
+  ]
+ }
+}

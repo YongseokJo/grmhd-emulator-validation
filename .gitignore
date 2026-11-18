@@ -9,3 +9,6 @@ gval-*.log
 *.pth
 *.mp4
 staging/
+# Derived report plots stay on shared storage or in ignored local replay outputs.
+/reports/**/*.png
+/reports/**/figures.json

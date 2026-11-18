@@ -1,0 +1,81 @@
+{
+ "adapter_repo_commit": "690e0103a9257c8856be3ecd5453947bb4f79818",
+ "adapter_sha256": "e3007636e8a40dab54fa67f643731e0fcc9edea977e5795f3071f5afec686b92",
+ "attempt": 2,
+ "checkpoint": null,
+ "checkpoint_sha256": null,
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-17T19:50:27.733859+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "6d8ecd5d35dcd85c89796e25fddb53bffcc55611f26f833c2168da0fcb815ec6",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "6d8ecd5d35dcd85c89796e25fddb53bffcc55611f26f833c2168da0fcb815ec6"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cpu",
+ "end_time": "2026-11-17T19:55:46.051850+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": null,
+ "history_length": 1,
+ "host": "gh019.hsn.cm.delta.internal.ncsa.edu",
+ "model": "persistence",
+ "model_provenance": null,
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "690e0103a9257c8856be3ecd5453947bb4f79818",
+ "request": {
+  "adapter": "persistence",
+  "checkpoint": null,
+  "model": "persistence",
+  "notes": "",
+  "options": {},
+  "training_record": null,
+  "version": "v1"
+ },
+ "result_fingerprint": "6d8ecd5d35dcd85c89796e25fddb53bffcc55611f26f833c2168da0fcb815ec6",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a2",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-17T19:50:39.387725+00:00",
+ "status": "complete",
+ "tier": "quick",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "reason": "No training record supplied",
+  "record_sha256": null,
+  "trained_on_this_split": "unknown"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

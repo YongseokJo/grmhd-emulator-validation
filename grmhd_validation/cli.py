@@ -38,6 +38,7 @@ def main(argv=None):
     command.add_argument("--split", choices=("validation","test"), default="validation")
     command.add_argument("--tier", choices=("quick","full"), default="quick")
     command.add_argument("--device", choices=("cpu",), default="cpu")
+    command.add_argument("--rebuild-summary",action="store_true")
     command.add_argument("--data-root")
     command = sub.add_parser("conformance", help="Check persistence against the platform golden on Slurm CPU")
     command.add_argument("--split-id", required=True)
@@ -69,6 +70,12 @@ def main(argv=None):
     command.add_argument('adapter');command.add_argument('--checkpoint')
     command.add_argument('--split-id',required=True);command.add_argument('--options',default='{}')
     command.add_argument('--device',choices=('cpu','cuda'),default='cpu');command.add_argument('--data-root')
+    command = sub.add_parser('report',help='Owner report snapshots or portable committed-result replay')
+    command.add_argument('--split-id',required=True)
+    command.add_argument('--from-results',action='store_true')
+    command.add_argument('--export-results',metavar='REPO_ROOT')
+    command.add_argument('--repo',default=str(Path(__file__).resolve().parents[1]))
+    command.add_argument('--check',action='store_true')
     try:
         args = parser.parse_args(argv)
         if args.command == "doctor":
@@ -94,8 +101,15 @@ def main(argv=None):
         elif args.command == 'check-adapter':
             from .check_adapter import check_adapter
             verdict=check_adapter(args.adapter,args.checkpoint,args.split_id,json.loads(args.options),args.device,args.data_root)
+        elif args.command == 'report':
+            from .report import report
+            verdict=report(args.split_id,args.from_results,args.export_results,args.check,Path(args.repo))
         elif args.command == "reference":
-            if args.adapter=='channel-scales':
+            if args.rebuild_summary:
+                if args.adapter!='persistence':raise ValueError('--rebuild-summary is only for persistence')
+                from .summary_correction import rebuild
+                verdict=rebuild(args.split_id,args.tier)
+            elif args.adapter=='channel-scales':
                 from .channel_scales import generate
                 verdict=generate(args.split_id,data_root=args.data_root)
             else:

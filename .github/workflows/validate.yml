@@ -1,0 +1,40 @@
+name: Validation contract
+on:
+  pull_request:
+  push:
+    branches: [main]
+concurrency:
+  group: validation-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        numpy: ['numpy==1.24.4', 'numpy>=2']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Install CPU test environment
+        run: |
+          python -m pip install 'torch>=2.3' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install '${{ matrix.numpy }}' 'scipy>=1.10' 'matplotlib>=3.7' 'jsonschema>=4.18'
+          python -m pip install --no-deps -e .
+      - name: Check generated agent instructions
+        run: python scripts/sync_agent_instructions.py --check
+      - name: Run tests that need no Delta data
+        env:
+          OMP_NUM_THREADS: '1'
+          OPENBLAS_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: python -m unittest discover -s tests -v
+      - name: Validate exported schemas and exact committed leaderboards
+        run: |
+          gval report --from-results --split-id rc300_reduced_v1 --check
+          gval report --from-results --split-id 5000run_v1 --check
