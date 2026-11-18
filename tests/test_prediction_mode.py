@@ -21,6 +21,7 @@ class PredictionTests(RunnerFixture):
         super().setUp()
         shutil.copytree(REPO/'prompts',self.repo/'prompts')
         shutil.copytree(REPO/'schemas',self.repo/'schemas')
+        self.commit_fixture()
         scheduling=patch('grmhd_validation.slurm.require_compute');scheduling.start();self.addCleanup(scheduling.stop)
         self.task=self.base/'host-task'
         self.bundle=self.base/'bundle'
