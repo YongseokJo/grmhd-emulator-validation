@@ -101,6 +101,14 @@ if args.prepare:
 if args.preflight:
     command('doctor',['doctor'])
     for tier in ('quick','full'):command('conformance-'+tier,['conformance','--split-id',SPLIT,'--tier',tier])
+    # Catch unsupported geometry/checkpoint/device issues for every model before
+    # spending an allocation on the long forecast analyses.
+    for model in MODELS:
+        request=json.loads((INPUTS/(model+'.json')).read_text())
+        argv=['check-adapter',model,'--split-id',SPLIT,'--device','cuda' if model in ('tron','vit') else 'cpu']
+        if request['checkpoint']:argv+=['--checkpoint',request['checkpoint']]
+        if request['options']:argv+=['--options',json.dumps(request['options'])]
+        command('check-adapter-'+model,argv)
 
 end=os.environ.get('SLURM_JOB_END_TIME')
 if end and end.isdigit():deadline=float(end)
