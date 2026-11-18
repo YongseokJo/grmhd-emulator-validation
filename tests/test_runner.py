@@ -91,6 +91,13 @@ class RunnerFixture(unittest.TestCase):
         self.compute.start(); self.addCleanup(self.compute.stop)
         self.compute2 = patch('grmhd_validation.conformance.require_compute')
         self.compute2.start(); self.addCleanup(self.compute2.stop)
+        self.commit_fixture()
+
+    def commit_fixture(self):
+        import subprocess
+        subprocess.run(['git','init','-q',str(self.repo)],check=True)
+        subprocess.run(['git','-C',str(self.repo),'add','.'],check=True)
+        subprocess.run(['git','-C',str(self.repo),'-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','Synthetic fixture','--allow-empty'],check=True)
 
     def cleanup(self):
         for parent, dirs, _ in os.walk(self.base):

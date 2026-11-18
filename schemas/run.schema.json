@@ -440,6 +440,15 @@
   },
   "summary_format_correction": {
    "type": "object"
+  },
+  "repo_modified": {
+   "type": "boolean"
+  },
+  "repo_status": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
   }
  },
  "required": [
@@ -488,6 +497,18 @@
    "then": {
     "required": [
      "preview_reason"
+    ]
+   }
+  },
+  {
+   "if": {
+    "required": [
+     "repo_modified"
+    ]
+   },
+   "then": {
+    "required": [
+     "repo_status"
     ]
    }
   }

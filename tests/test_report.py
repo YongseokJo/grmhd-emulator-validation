@@ -120,7 +120,7 @@ class ReportTests(RunnerFixture):
         result=self.run_eval()
         subprocess.run(['git','init','-q',str(self.repo)],check=True)
         subprocess.run(['git','-C',str(self.repo),'add','protocols/forecast_v1.json'],check=True)
-        subprocess.run(['git','-C',str(self.repo),'-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','Original protocol'],check=True)
+        subprocess.run(['git','-C',str(self.repo),'-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','Original protocol','--allow-empty'],check=True)
         protocol=copy.deepcopy(self.protocol);protocol['seed']=43
         current=self.repo/'protocols/forecast_v1.json';current.write_bytes(json_bytes(protocol));before=current.read_bytes()
         self.run_report(export_results=self.export)

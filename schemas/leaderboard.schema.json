@@ -277,6 +277,12 @@
            "nmae"
           ]
          }
+        },
+        "repo_modified": {
+         "type": [
+          "boolean",
+          "null"
+         ]
         }
        },
        "required": [
@@ -304,7 +310,8 @@
         "environment_locked",
         "prediction_attestation",
         "flags",
-        "rollout"
+        "rollout",
+        "repo_modified"
        ]
       }
      }
@@ -375,6 +382,12 @@
      "reason": {
       "type": [
        "string",
+       "null"
+      ]
+     },
+     "repo_modified": {
+      "type": [
+       "boolean",
        "null"
       ]
      }

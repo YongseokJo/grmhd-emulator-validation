@@ -37,6 +37,7 @@
      "prediction_attestation": "not applicable",
      "protocol_id": "forecast_v1",
      "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": null,
      "report_step": 50,
      "rollout": [
       {
@@ -118,6 +119,7 @@
      "prediction_attestation": "not applicable",
      "protocol_id": "forecast_v1",
      "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": null,
      "report_step": 50,
      "rollout": [
       {
@@ -199,6 +201,7 @@
      "prediction_attestation": "not applicable",
      "protocol_id": "forecast_v1",
      "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": null,
      "report_step": 50,
      "rollout": [
       {

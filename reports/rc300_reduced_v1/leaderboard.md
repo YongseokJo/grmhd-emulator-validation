@@ -7,11 +7,11 @@ Every row is one sealed artifact-verified run. Training evidence is an operator 
 
 Protocol SHA256: `74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2`. Headline scores use the final report step.
 
-| Model | Run | Skill | nMAE | Test attempts | Data verified | Training label | Flags |
-|---|---|---:|---:|---:|---|---|---|
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | 0 | 0.11021 | 0 | yes | unknown | — |
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a2 | 0 | 0.11021 | 0 | yes | unknown | — |
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3 | 0 | 0.11021 | 0 | yes | unknown | — |
+| Model | Run | Skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |
+|---|---|---:|---:|---:|---|---|---|---|
+| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
+| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a2 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
+| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
 
 Physical relative L1 (per channel):
 

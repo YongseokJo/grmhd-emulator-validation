@@ -59,6 +59,7 @@ class FullFixture(RunnerFixture):
         (self.shared/'checksums/synthetic_v1.sha256').write_bytes(checksum_bytes(self.split,1))
         with patch('grmhd_validation.channel_scales.require_compute'):
             generate('synthetic_v1',storage=self.storage(),repo=self.repo)
+        self.commit_fixture()
 
     def context(self):
         storage=self.storage()

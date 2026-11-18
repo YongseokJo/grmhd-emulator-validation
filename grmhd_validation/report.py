@@ -116,7 +116,8 @@ def scan(storage,split_id,repo):
         if path.name in seen:raise ValueError('Duplicate attempt ID across staging/runs: '+path.name)
         seen.add(path.name)
         reason=None;eligible=False
-        if (path/'NOT_EVALUATED').exists():reason='not evaluated'
+        if info is not None and info.get('repo_modified') is True:reason='repository modified'
+        elif (path/'NOT_EVALUATED').exists():reason='not evaluated'
         elif (path/'FAILED').exists():reason='failed'
         elif (path/'PREVIEW').exists():reason='preview'
         elif info is None:reason='missing or invalid run.json'
@@ -145,7 +146,7 @@ def scan(storage,split_id,repo):
                  'split':info.get('split') if info else (suffix[1] if suffix else None),
                  'tier':info.get('tier') if info else (suffix[2] if suffix else None),
                  'status':info.get('status','incomplete') if info else 'unknown','location':location,
-                 'eligible':eligible,'reason':reason}
+                 'eligible':eligible,'reason':reason,'repo_modified':info.get('repo_modified') if info else None}
         attempts.append(attempt)
     ledger={'schema_version':1,'split_id':split_id,'attempts':sorted(attempts,key=lambda a:a['run_id'])}
     schema_validate(ledger,'attempts.schema.json')
@@ -160,6 +161,7 @@ def record_row(info,summary,ledger,protocol):
     if not info['environment_locked']:flags.append('unlocked')
     if attestation=='unattested':flags.append('unattested')
     if not info['data_verified']:flags.append('data unverified')
+    if info.get('repo_modified') is True:flags.append('repository modified')
     tests=[a for a in ledger['attempts'] if a['split']=='test' and a['model']==info['model'] and a['checkpoint_known'] and a['checkpoint_sha256']==info['checkpoint_sha256']]
     unknown=[a['run_id'] for a in ledger['attempts'] if a['split']=='test' and not a['checkpoint_known']]
     if unknown:flags.append('unattributed test attempts present')
@@ -176,7 +178,7 @@ def record_row(info,summary,ledger,protocol):
             'test_attempts':len(tests),'unattributed_test_attempts':unknown,'data_verified':info['data_verified'],
             'training_label':training.get('label',training.get('trained_on_this_split','unknown')),
             'training_evidence':training.get('evidence','unknown'),'environment_locked':info['environment_locked'],
-            'prediction_attestation':attestation,'flags':flags,
+            'prediction_attestation':attestation,'repo_modified':info.get('repo_modified'),'flags':flags,
             'rollout':[{'step':int(k),'time_rg_c':v['time_rg_c'],'skill':v['skill'],'skill_ci':v['skill_ci'],'nmae':v['mean_nmae']} for k,v in sorted(curve.items(),key=lambda p:int(p[0]))]}
 
 
@@ -209,11 +211,11 @@ def markdown(report):
     for group in report['groups']:
         lines+=['## '+group['split']+' / '+group['tier']+' / '+group['protocol_id'], '',
                 'Protocol SHA256: `'+group['protocol_sha256']+'`. Headline scores use the final report step.','',
-                '| Model | Run | Skill | nMAE | Test attempts | Data verified | Training label | Flags |',
-                '|---|---|---:|---:|---:|---|---|---|']
+                '| Model | Run | Skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |',
+                '|---|---|---:|---:|---:|---|---|---|---|']
         for row in group['rows']:
             values=[row['model'],row['run_id'],fmt(row['skill']),fmt(row['nmae']),row['test_attempts'],
-                    'yes' if row['data_verified'] else 'no',row['training_label'],', '.join(row['flags']) or '—']
+                    'yes' if row['data_verified'] else 'no', 'unknown' if row['repo_modified'] is None else 'yes' if row['repo_modified'] else 'no',row['training_label'],', '.join(row['flags']) or '—']
             lines+=['| '+' | '.join(cell(v) for v in values)+' |']
         lines+=['','Physical relative L1 (per channel):','', '| Run | '+' | '.join(CHANNELS)+' |','|---|'+'---:|'*8]
         for row in group['rows']:lines+=['| '+cell(row['run_id'])+' | '+' | '.join(fmt(row['physical_rel_l1'][c]) for c in CHANNELS)+' |']

@@ -36,6 +36,14 @@ For "validate the persistence adapter on rc300 validation", execute this exact
 workflow on CPU, with the existing persistence request, through published quick
 validation and verification. No training record or checkpoint is needed.
 
+Evaluation checks Git status for `splits/`, `protocols/`, `grmhd_validation/`,
+`schemas/` and `prompts/`, including staged and untracked files. Modified
+protected paths produce a failed staging attempt with `repo_modified: true`;
+they cannot publish. Shell and Codex edits are covered by this check too.
+Changes to your request/adapter workspace outside those paths are allowed.
+Do not commit changes to protected benchmark files to bypass participant rules;
+pipeline maintenance belongs to the owner-reviewed branch/PR workflow.
+
 ### DeltaAI compute setup
 
 Never load torch, render, hash large data, run tests, check-adapter, conformance
