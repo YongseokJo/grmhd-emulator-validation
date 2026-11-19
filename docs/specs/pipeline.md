@@ -1124,7 +1124,9 @@ and tier; never overlay validation and test. Sort groups lexically and rows by
 model then run_id. This refines the comparison identity without changing any
 metric. The headline columns are rollout skill and channel-mean nMAE at the last
 protocol report step; physical rel_l1 comes from single_step per_channel. Also
-include single-step mean skill/nMAE. Full-tier key physics errors are the final
+include single-step mean skill/nMAE. Display single-step skill next to the
+rollout skill labelled with its report step, and label the physical relative L1
+table as single-step. Full-tier key physics errors are the final
 physics_table mass/energy/angular errors. Missing quantities remain null.
 Display floats with six significant digits (undefined = em dash); JSON retains
 original float precision, and CSV uses repr floats. Escape Markdown cells.
@@ -1136,7 +1138,13 @@ establish a full checkpoint identity are listed as unattributed, with a visible
 flag; do not guess a SHA256 from its eight-character run-ID prefix.
 A completed validation row shows that checkpoint's total test attempts too.
 Read the computed training label from the record embedded in run.json and expose
-its operator-declaration status. Missing training evidence is unknown. Show
+its operator-declaration status. Also list its training and checkpoint selection
+boundary violations in Flags, with the affected partitions and dump counts,
+and show the normalization flag when the record declares it. Show method type
+from recorded evidence: persistence is the baseline, checkpoint-backed or
+documented trained methods are trained, and checkpoint-free agent methods are
+zero-shot agent methods. Leave the type unknown when the record lacks evidence.
+Missing training evidence is unknown. Show
 unlocked environments and unattested prediction imports as flags. Ordinary
 adapters have prediction attestation not applicable; no blind claim is inferred.
 
