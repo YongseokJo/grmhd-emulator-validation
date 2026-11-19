@@ -1,0 +1,502 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "d6757c5cc16bb5840998ccd39b7ec59bbd238139ac36f42aea18d0635e221595",
+ "analysis_runtime": {
+  "cost": {
+   "all_start_statistics": {
+    "bootstrap": {
+     "block_length": 10,
+     "method": "chunk_block_bootstrap",
+     "n_blocks": 3,
+     "resamples": 1000,
+     "seed": 42
+    },
+    "lower": {
+     "milliseconds_per_step": 12.208645587503497
+    },
+    "mean": {
+     "milliseconds_per_step": 12.221451629170588
+    },
+    "n_starts": 12,
+    "upper": {
+     "milliseconds_per_step": 12.234605687501698
+    },
+    "valid_counts": {}
+   },
+   "milliseconds_per_step": 12.250878300005752,
+   "parameters": 63545344,
+   "timed_steps": 20
+  }
+ },
+ "attempt": 1,
+ "channel_scales_sha256": "3fcb682ba38a9c6d64e4c1c2599f7fbd82d9324e99ec6ec319538c8e1e1f96d9",
+ "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/best.pth",
+ "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:32:34.787411+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cuda",
+ "end_time": "2026-11-19T01:17:34.288148+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": "NVIDIA GH200 120GB",
+ "history_length": 1,
+ "host": "gh046.hsn.cm.delta.internal.ncsa.edu",
+ "model": "vit",
+ "model_provenance": {
+  "architecture": "vit",
+  "config": {
+   "batch_size": 8,
+   "curriculum_ramp_epochs": 20,
+   "d_model": 512,
+   "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+   "depth": 12,
+   "description": "ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.",
+   "early_stop_patience": 20,
+   "epochs": 100,
+   "experiment": "vit_rc300_v1",
+   "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+   "grad_checkpoint": false,
+   "grad_clip": 1.0,
+   "learning_rate": 0.0005,
+   "min_lr": 1e-06,
+   "mlp_ratio": 8,
+   "n_heads": 8,
+   "patch": [
+    4,
+    4,
+    4
+   ],
+   "recon_only_epochs": 10,
+   "seed": 0,
+   "stable_epoch": 30,
+   "token_mode": "per_patch",
+   "unroll_steps": 1,
+   "use_amp": true,
+   "val_frac": 0.11116236162361623,
+   "warmup_epochs": 5,
+   "weight_decay": 0.05,
+   "world_size": 4
+  },
+  "normalization": "Kevin main@ebcc218 fixed log10/arcsinh; exact gamma<=50 decode",
+  "source_sha256": {
+   "_tron_model.py": "db04e58c783dd7301bb52f7a570445923f394ee9098a50f415173a003aafad3d",
+   "_vit_model.py": "1dd178b9ca6315d9953dea208d0beda65d714f4e3b76020eb088870f0389e48b"
+  },
+  "use_amp": true
+ },
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "vit",
+  "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/best.pth",
+  "model": "vit",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required.",
+  "options": {
+   "config": {
+    "batch_size": 8,
+    "curriculum_ramp_epochs": 20,
+    "d_model": 512,
+    "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+    "depth": 12,
+    "description": "ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.",
+    "early_stop_patience": 20,
+    "epochs": 100,
+    "experiment": "vit_rc300_v1",
+    "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+    "grad_checkpoint": false,
+    "grad_clip": 1.0,
+    "learning_rate": 0.0005,
+    "min_lr": 1e-06,
+    "mlp_ratio": 8,
+    "n_heads": 8,
+    "patch": [
+     4,
+     4,
+     4
+    ],
+    "recon_only_epochs": 10,
+    "seed": 0,
+    "stable_epoch": 30,
+    "token_mode": "per_patch",
+    "unroll_steps": 1,
+    "use_amp": true,
+    "val_frac": 0.11116236162361623,
+    "warmup_epochs": 5,
+    "weight_decay": 0.05,
+    "world_size": 4
+   }
+  },
+  "training_record": "/work/nvme/bgun/share/validation/training_records/vit/6ebddd83.json",
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/accretion_diagnostics.json": "376988a2056759e1909dcb99ba64b5bfec7686f7a208ce423c49312c25dad858",
+  "metrics/azimuthal_spectra.json": "e349a5cba0f6d738601a987c124ad15d39582531842d3fb40d0a21eaa7447121",
+  "metrics/bias_analysis.json": "a01453c07d991c632b9f92f551774dfa5a8edb343e8332d0992fccd381364351",
+  "metrics/coherence.json": "17d784f5df34cc4687bfc9da869665042ca79245afd4bf1a11c338418e566a21",
+  "metrics/conditional_error.json": "a59963bf61e23ef6aeda27084dad9ec6c4ad7110bf04a0cf342dbcba4bc2c20e",
+  "metrics/conservation_closure.json": "846d8ead6f5dfcd5c6524c85c9234f6fe15a543b98c4b8388f26ba9dfe90b656",
+  "metrics/correlation_times.json": "7f9dfe7c27f314f48b1368b1be0cfafdc839e6bf4509013e01e672e3d1d9ae4d",
+  "metrics/cost.json": "7cf1aa162cca212f9f11a2f5a06f10b6754e130465249a0ff3ef68116bb6a29c",
+  "metrics/error_correlation.json": "5b0c16c4a64c2ca77b36c865e3f9b4557438c5eaa95d30b05058bc885a39429d",
+  "metrics/lorentz.json": "e8b2366505c371e52b93a5a00a7342da8480790a852a936473618918b71193d1",
+  "metrics/mdot.json": "1ef55e49a1b740f63ec685fbb20db6c58dbdf682ee3a67be7aff77c639ed58dc",
+  "metrics/mean_profiles.json": "d1f9e53259b0ff25f6771c5b092e85d317a8b532bb9c94a36d847c84d245b048",
+  "metrics/meridional_slice.json": "51251318cd05c89d561c4527156b8f32c081270239d0e77a4cde722300516576",
+  "metrics/physics_table.json": "fe5edbb2d13ea66a9a64eff733dcddb9b55893a79f4de0fa537558a4ac24491a",
+  "metrics/rollout_curve.json": "9a194f2ca148e06047326e80a0f4797f598abdebc2493a61fa86824866068a37",
+  "metrics/rollout_evolution.json": "f345931d537262c1d228791ab69f004974ffc71bbe64264f2be5a64e583247b7",
+  "metrics/shell_profiles.json": "09e5f29579c6505043dc0dbad648430e84283f68cf8e9b1f5fd57bb6b0fb96ac",
+  "metrics/single_step.json": "c39d6da444c009784d1f188bb9c6f463cb413c86d825f965f049315d4d6ceda4",
+  "metrics/spatial_error.json": "feafaf894fca4ad53d4fb3aa2ef653cad95c86fc02cef51c12e94fcd8b23f1ed",
+  "metrics/spectrum.json": "0bfebc8f00849e7bf4ebb9b9e90e2ba1a1b88871cb341f9cd468e4dd8849f32c",
+  "metrics/stability.json": "12076af3dd055d83a86e9aee94878d48d4304e047bb49f31ef37be36031f05ed",
+  "metrics/statistical_props.json": "ea1730cb0dbaf70e47d5d524e119a16b3da61c4cdafdbffd385854765cbe7cc3",
+  "metrics/temporal_consistency.json": "4b963f411f480aed840fa4b33169d236df1acd84f29b57b119e3377ef92906fe",
+  "metrics/temporal_spectrum.json": "4ec8b898c272437ea8521677842fcf52711837ff8e493964f4aaaea21b45de96",
+  "metrics/turbulence_stats.json": "7b336593472cefd7462412902c3740934bbb201d13ec3a16b8e98b061b4462da",
+  "summary.json": "cfb09badee9876851c55862eb70a444c7e1e495f709e1282e44670928d884189",
+  "tables/accretion_diagnostics.csv": "ccfd1dbaab6262628c253f4652350ffe93cd79d6ad94b28b95df519e532ffab7",
+  "tables/azimuthal_spectra.csv": "705bec70973540a106e0f19cf12983ab10df7d6c297c9a6f83de0238dd94e8d8",
+  "tables/bias_analysis.csv": "4825240eafe597bac445f1debfa5df00509651aa8168ade3bb43f012d7aa50d2",
+  "tables/coherence.csv": "8e0a6270a24a7125a7bf1665399a4b9656fedca63410910b00f60e1d6ad6bc7a",
+  "tables/conditional_error.csv": "6556d032b4877a447ed3770b54a5a1514404eeda5998f663019564a15abaccc9",
+  "tables/conservation_closure.csv": "97da28c0ce3020d46127e6d7d23dbbc36fdba0b215de97da6132892da54817ce",
+  "tables/correlation_times.csv": "792d33d01d3cb8ea98563988c804eb63f3b5c5842e8017e96a6d5b502d5f45a2",
+  "tables/cost.csv": "da9b99160b4285ccc8ad24450eefced9b9a6af6478b8ed65360523d2666c9e10",
+  "tables/error_correlation.csv": "0a83517a7308db31e553f4bb8b195d85f64d0f516930bc1241fd2836e688384b",
+  "tables/lorentz.csv": "d0b3ab5a01991d4895149a6f5dd12380ea37275d0e49b0b4c4d7bce7820c3af0",
+  "tables/mdot.csv": "78c372e95af0825d7552c7d05b000fc2f1f61b7b683f90c84631c17e50bda3bc",
+  "tables/mean_profiles.csv": "eb35d63645ee7c55a9176a831c9a4dde7515e760c8b6dfed650bf93b1c8c2341",
+  "tables/meridional_slice.csv": "27cd231cf2d1f8c3e77b7f5b2a48abfec5e84eac85a113f70866742c46365800",
+  "tables/physics_table.csv": "5accbc296057a242173787d786c13884b7d64c6d125c6c7157c8e55ad77899ee",
+  "tables/rollout_curve.csv": "ad60fd8117a818c362748e0cd1a51776b2025ef225e04903f906fd77c56170dd",
+  "tables/rollout_evolution.csv": "41e69744d51e2c1673ed71f7cdff3d20abaa7e69b4372a7bb5db3e804a0bd9b8",
+  "tables/shell_profiles.csv": "80979809a174dfad104a7407e934b528df41cbce343c078bed563203dcb17eee",
+  "tables/single_step.csv": "d77825c247758cb165a2860eeffd2469c85a96db45aa1a9bc7fbda21583fe380",
+  "tables/spatial_error.csv": "e12ee76fb9bce4d70836feb415809467978aeb09842cf01ea2f4714e47cfae31",
+  "tables/spectrum.csv": "8fe8d991b0a17050efa59a6ac4ff0c74e7efe9d7e1973887d74e38d626038f78",
+  "tables/stability.csv": "03abcc92c5f3869e969057f6f82acaf6a0756daf827fb3aaea1f26a3952fd4e6",
+  "tables/statistical_props.csv": "2c305e24fb62dbaf08a8a5b60aa5c8f750696695729e3047853dd716a0124f7a",
+  "tables/temporal_consistency.csv": "18a7ed4e1b082b10797a39d6dc01d5270ffcb4952a6e83bf7a50ead8a204ec65",
+  "tables/temporal_spectrum.csv": "0692419604696a4cdcc5ad6fc80afb43696a5b6422842ca5e4358ecec85cc241",
+  "tables/turbulence_stats.csv": "c623769c96a70a83a13d376125f3de58442c489922ff58b8f321f5fa2d4e4aae"
+ },
+ "result_fingerprint": "c0f7cd92a88ae4bcf05769866f79a2f862452b7b48deeb7e8a75d4e79c56661d",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-19T00:54:20.071484+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "full",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "chunk_counts": {
+   "selection": {
+    "excluded_1": 0,
+    "excluded_10": 0,
+    "excluded_11": 10,
+    "excluded_12": 10,
+    "excluded_2": 0,
+    "excluded_3": 0,
+    "excluded_4": 0,
+    "excluded_5": 0,
+    "excluded_6": 0,
+    "excluded_7": 0,
+    "excluded_8": 0,
+    "excluded_9": 0,
+    "test_1": 0,
+    "test_2": 0,
+    "test_3": 475,
+    "train_1": 0,
+    "train_2": 0,
+    "train_3": 0,
+    "train_4": 0,
+    "train_5": 0,
+    "train_6": 235,
+    "train_7": 234,
+    "validation_1": 0,
+    "validation_2": 0,
+    "validation_3": 0
+   },
+   "training": {
+    "excluded_1": 10,
+    "excluded_10": 10,
+    "excluded_11": 0,
+    "excluded_12": 0,
+    "excluded_2": 10,
+    "excluded_3": 10,
+    "excluded_4": 10,
+    "excluded_5": 10,
+    "excluded_6": 10,
+    "excluded_7": 10,
+    "excluded_8": 10,
+    "excluded_9": 10,
+    "test_1": 476,
+    "test_2": 476,
+    "test_3": 0,
+    "train_1": 1197,
+    "train_2": 853,
+    "train_3": 853,
+    "train_4": 854,
+    "train_5": 853,
+    "train_6": 619,
+    "train_7": 0,
+    "validation_1": 476,
+    "validation_2": 476,
+    "validation_3": 475
+   }
+  },
+  "evidence": "operator declaration",
+  "label": "no, overlaps validation/test (2379 dumps)",
+  "normalization_flagged": true,
+  "outside_split_counts": {
+   "selection": 0,
+   "training": 0
+  },
+  "partition_counts": {
+   "selection": {
+    "excluded": 20,
+    "test": 475,
+    "train": 469,
+    "validation": 0
+   },
+   "training": {
+    "excluded": 100,
+    "test": 952,
+    "train": 5229,
+    "validation": 1427
+   }
+  },
+  "ranges": {
+   "selection": [
+    [
+     10708,
+     11671
+    ]
+   ],
+   "training": [
+    [
+     3000,
+     10707
+    ]
+   ]
+  },
+  "reasons": [
+   "training_outside_train",
+   "selection_outside_validation",
+   "normalization_not_train"
+  ],
+  "record": {
+   "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+   "computed": {
+    "chunk_counts": {
+     "selection": {
+      "excluded_1": 0,
+      "excluded_10": 0,
+      "excluded_11": 10,
+      "excluded_12": 10,
+      "excluded_2": 0,
+      "excluded_3": 0,
+      "excluded_4": 0,
+      "excluded_5": 0,
+      "excluded_6": 0,
+      "excluded_7": 0,
+      "excluded_8": 0,
+      "excluded_9": 0,
+      "test_1": 0,
+      "test_2": 0,
+      "test_3": 475,
+      "train_1": 0,
+      "train_2": 0,
+      "train_3": 0,
+      "train_4": 0,
+      "train_5": 0,
+      "train_6": 235,
+      "train_7": 234,
+      "validation_1": 0,
+      "validation_2": 0,
+      "validation_3": 0
+     },
+     "training": {
+      "excluded_1": 10,
+      "excluded_10": 10,
+      "excluded_11": 0,
+      "excluded_12": 0,
+      "excluded_2": 10,
+      "excluded_3": 10,
+      "excluded_4": 10,
+      "excluded_5": 10,
+      "excluded_6": 10,
+      "excluded_7": 10,
+      "excluded_8": 10,
+      "excluded_9": 10,
+      "test_1": 476,
+      "test_2": 476,
+      "test_3": 0,
+      "train_1": 1197,
+      "train_2": 853,
+      "train_3": 853,
+      "train_4": 854,
+      "train_5": 853,
+      "train_6": 619,
+      "train_7": 0,
+      "validation_1": 476,
+      "validation_2": 476,
+      "validation_3": 475
+     }
+    },
+    "label": "no, overlaps validation/test (2379 dumps)",
+    "normalization_flagged": true,
+    "outside_split_counts": {
+     "selection": 0,
+     "training": 0
+    },
+    "partition_counts": {
+     "selection": {
+      "excluded": 20,
+      "test": 475,
+      "train": 469,
+      "validation": 0
+     },
+     "training": {
+      "excluded": 100,
+      "test": 952,
+      "train": 5229,
+      "validation": 1427
+     }
+    },
+    "ranges": {
+     "selection": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "training": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "reasons": [
+     "training_outside_train",
+     "selection_outside_validation",
+     "normalization_not_train"
+    ],
+    "trained_on_this_split": "no"
+   },
+   "config": {
+    "batch_size": 8,
+    "curriculum_ramp_epochs": 20,
+    "d_model": 512,
+    "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+    "depth": 12,
+    "description": "ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.",
+    "early_stop_patience": 20,
+    "epochs": 100,
+    "experiment": "vit_rc300_v1",
+    "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+    "grad_checkpoint": false,
+    "grad_clip": 1.0,
+    "learning_rate": 0.0005,
+    "min_lr": 1e-06,
+    "mlp_ratio": 8,
+    "n_heads": 8,
+    "patch": [
+     4,
+     4,
+     4
+    ],
+    "provenance": {
+     "known_prior_data_exposure": "Historical checkpoint trained/selected on Kevin 80/10/10 data, overlapping the frozen benchmark. Existing best_blind evaluation artifacts; no blind claim.",
+     "normalization_split": "fixed_transform_no_fit",
+     "original_config_path": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/config.json",
+     "original_config_sha256": "5c6fdb7767d0c3a6430ccf7bbec2b4845112745cf6829fb7d75cd41a3d2d6a93",
+     "prior_data_exposure": [
+      "kevin_fall26_80_10_10 training/selection",
+      "historical best_blind evaluation artifacts"
+     ],
+     "selection_dump_ranges": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "source_split": "kevin_fall26_80_10_10",
+     "training_code_commit": "ae8d0403c0a4b96068e4a369682d270eb90964a2",
+     "training_dump_ranges": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "recon_only_epochs": 10,
+    "seed": 0,
+    "stable_epoch": 30,
+    "token_mode": "per_patch",
+    "unroll_steps": 1,
+    "use_amp": true,
+    "val_frac": 0.11116236162361623,
+    "warmup_epochs": 5,
+    "weight_decay": 0.05,
+    "world_size": 4
+   },
+   "config_sha256": "25c80d4067c5573fa3e03028fed87eddc6eef99d399ace2a706ff9a86e4c06f3",
+   "evidence": "operator declaration",
+   "log_sha256": "aa9d9bd29577ee44ef6bc0be4c6d2fb645e764272c287ca92baf63538fba5fd3",
+   "model": "vit",
+   "schema_version": 1,
+   "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+   "split_id": "rc300_reduced_v1",
+   "verified": false,
+   "version": "v1"
+  },
+  "record_sha256": "5e8c25b03ea2d2f2c1425348756f5676b2c65b2c6dd791a88a0bc2931e6a4f80",
+  "trained_on_this_split": "no"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

@@ -1,0 +1,9 @@
+{
+ "adapter": "persistence",
+ "checkpoint": null,
+ "model": "persistence",
+ "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required.",
+ "options": {},
+ "training_record": null,
+ "version": "v1"
+}

@@ -1,0 +1,102 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "f2cd9660836e53028f70fb396e103a697e9d5942f2fbae50c80095ab347c8079",
+ "attempt": 1,
+ "checkpoint": null,
+ "checkpoint_sha256": null,
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:08:41.761928+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cpu",
+ "end_time": "2026-11-19T02:06:42.131851+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": null,
+ "history_length": 1,
+ "host": "gh046.hsn.cm.delta.internal.ncsa.edu",
+ "model": "eden-gpt",
+ "model_provenance": {
+  "author": "Eden Growney",
+  "known_prior_data_exposure": "Developed in Eden rc300 start-11672 pilot; blindness to current split is not established",
+  "originating_agent": "gpt",
+  "protocol": "A",
+  "source_commit": "f8cd379a562e9b0fc6f96ee36d5f9855ddc1d27a",
+  "source_sha256": {
+   "_eden_claude.py": "e373edef9bb2230b17ae599a0a1d0171c9ca7e42ae11536f385282a57793fbf3",
+   "_eden_gemini.py": "a125e22ee9a954ae5372a617a424acdae79fcd35d2a2dff7b873a5e0a665949c",
+   "_eden_gpt.py": "32d68c3883f32534cd4831af1ac03b60478460ef0827ade9dcf3679c222d1c54"
+  }
+ },
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "eden-gpt",
+  "checkpoint": null,
+  "model": "eden-gpt",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required. Protocol A, credited Eden start-11672 method; known pilot exposure, not a blind development claim.",
+  "options": {},
+  "training_record": null,
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/rollout_curve.json": "04f33944f2a112e6d897c90d337ed4709bfab769cd87bdd46799096e2a46af19",
+  "metrics/single_step.json": "3bf0e54e826d9f4ab639acf1c6c29c0c42123fcfb067a6560749cc981e74df38",
+  "summary.json": "44b54b1822efa5be5e0174f4d77b7229559bf3be7d08ec52cd9d5dcb7b2160c1",
+  "tables/rollout_curve.csv": "00fbd841c41050403efda656113c6616bf471194e3acc1c426f639ff7f50d15e",
+  "tables/single_step.csv": "8750339309edc87c403baefcd5e6aa387ecaa0efa3d88c18df5bbcceae3b5cdd"
+ },
+ "result_fingerprint": "c51b13dca1586617156606bd578965362e55ca9bed125d42ae04acde3cffbb2f",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-19T01:55:56.786343+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "quick",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "reason": "No training record supplied",
+  "record_sha256": null,
+  "trained_on_this_split": "unknown"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

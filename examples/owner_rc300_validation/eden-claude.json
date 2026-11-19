@@ -1,0 +1,9 @@
+{
+ "adapter": "eden-claude",
+ "checkpoint": null,
+ "model": "eden-claude",
+ "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required. Protocol A, credited Eden start-11672 method; known pilot exposure, not a blind development claim.",
+ "options": {},
+ "training_record": null,
+ "version": "v1"
+}
