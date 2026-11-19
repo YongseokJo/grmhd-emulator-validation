@@ -116,7 +116,8 @@ def scan(storage,split_id,repo):
         if path.name in seen:raise ValueError('Duplicate attempt ID across staging/runs: '+path.name)
         seen.add(path.name)
         reason=None;eligible=False
-        if (path/'NOT_EVALUATED').exists():reason='not evaluated'
+        if info is not None and info.get('repo_modified') is True:reason='repository modified'
+        elif (path/'NOT_EVALUATED').exists():reason='not evaluated'
         elif (path/'FAILED').exists():reason='failed'
         elif (path/'PREVIEW').exists():reason='preview'
         elif info is None:reason='missing or invalid run.json'
@@ -145,11 +146,52 @@ def scan(storage,split_id,repo):
                  'split':info.get('split') if info else (suffix[1] if suffix else None),
                  'tier':info.get('tier') if info else (suffix[2] if suffix else None),
                  'status':info.get('status','incomplete') if info else 'unknown','location':location,
-                 'eligible':eligible,'reason':reason}
+                 'eligible':eligible,'reason':reason,'repo_modified':info.get('repo_modified') if info else None}
         attempts.append(attempt)
     ledger={'schema_version':1,'split_id':split_id,'attempts':sorted(attempts,key=lambda a:a['run_id'])}
     schema_validate(ledger,'attempts.schema.json')
     return records,ledger
+
+
+def method_type(info, training):
+    if info.get('request', {}).get('adapter') == 'persistence' and info['model'] == 'persistence':
+        return 'baseline'
+    if info['checkpoint_sha256'] is not None or training.get('ranges', {}).get('training'):
+        return 'trained'
+    provenance = info.get('model_provenance') or {}
+    predictions = info.get('predictions') or {}
+    if provenance.get('originating_agent') or predictions.get('protocol') in ('A', 'B'):
+        return 'zero-shot agent method'
+    return None
+
+
+def training_flags(training):
+    partitions = training.get('partition_counts', {})
+    outside = training.get('outside_split_counts', {})
+    labels = {'training': 'training', 'selection': 'checkpoint selection'}
+    flags = []
+    for reason in training.get('reasons', []):
+        if reason == 'normalization_not_train':
+            flags.append('normalization not train')
+            continue
+        role, _, boundary = reason.partition('_outside_')
+        if role in labels and boundary == 'frozen_split':
+            count = outside.get(role)
+            if count:
+                flags.append(f'{labels[role]} outside frozen split ({count} dumps)')
+                continue
+        if role in labels and boundary in ('train', 'validation'):
+            counts = partitions.get(role, {})
+            overlaps = [
+                f'{labels[role]} overlaps {partition} ({counts[partition]} dumps)'
+                for partition in ('train', 'validation', 'test', 'excluded')
+                if partition != boundary and counts.get(partition)
+            ]
+            if overlaps:
+                flags.extend(overlaps)
+                continue
+        flags.append(reason.replace('_', ' '))
+    return flags
 
 
 def record_row(info,summary,ledger,protocol):
@@ -160,23 +202,26 @@ def record_row(info,summary,ledger,protocol):
     if not info['environment_locked']:flags.append('unlocked')
     if attestation=='unattested':flags.append('unattested')
     if not info['data_verified']:flags.append('data unverified')
+    if info.get('repo_modified') is True:flags.append('repository modified')
     tests=[a for a in ledger['attempts'] if a['split']=='test' and a['model']==info['model'] and a['checkpoint_known'] and a['checkpoint_sha256']==info['checkpoint_sha256']]
     unknown=[a['run_id'] for a in ledger['attempts'] if a['split']=='test' and not a['checkpoint_known']]
     if unknown:flags.append('unattributed test attempts present')
+    flags.extend(training_flags(training))
     physics={'mass':None,'energy':None,'angular':None}
     values=summary.get('physics_table',{}).get('data',{}).get('aggregate',{}).get('mean',{})
     samples=values.get('samples',[])
     final=next((s for s in samples if int(s['step'])==step),{})
     compact=summary.get('physics_table',{}).get('headlines',{})
     physics.update({name:compact.get('step_'+str(step)+'_'+name+'_error',final.get(name+'_error')) for name in physics})
-    return {**{key:info[key] for key in GROUP_FIELDS},'model':info['model'],'version':info['version'],'run_id':info['run_id'],
-            'checkpoint_sha256':info['checkpoint_sha256'],'report_step':step,'skill':headline['skill'],'nmae':headline['mean_nmae'],
-            'single_step_skill':single['mean']['skill'],'single_step_nmae':single['mean']['nmae_model'],
+    return {**{key:info[key] for key in GROUP_FIELDS},'model':info['model'],'method_type':method_type(info, training),
+            'version':info['version'],'run_id':info['run_id'],
+            'checkpoint_sha256':info['checkpoint_sha256'],'report_step':step,'skill':headline['skill'],
+            'single_step_skill':single['mean']['skill'],'nmae':headline['mean_nmae'],'single_step_nmae':single['mean']['nmae_model'],
             'physical_rel_l1':{name:single['per_channel'][name]['rel_l1'] for name in CHANNELS},'physics_errors':physics,
             'test_attempts':len(tests),'unattributed_test_attempts':unknown,'data_verified':info['data_verified'],
             'training_label':training.get('label',training.get('trained_on_this_split','unknown')),
             'training_evidence':training.get('evidence','unknown'),'environment_locked':info['environment_locked'],
-            'prediction_attestation':attestation,'flags':flags,
+            'prediction_attestation':attestation,'repo_modified':info.get('repo_modified'),'flags':flags,
             'rollout':[{'step':int(k),'time_rg_c':v['time_rg_c'],'skill':v['skill'],'skill_ci':v['skill_ci'],'nmae':v['mean_nmae']} for k,v in sorted(curve.items(),key=lambda p:int(p[0]))]}
 
 
@@ -207,15 +252,18 @@ def markdown(report):
            'Every row is one sealed artifact-verified run. Training evidence is an operator declaration; host attestation does not independently prove blindness.','']
     if not report['groups']:lines+=['No eligible completed runs.','']
     for group in report['groups']:
+        steps={row['report_step'] for row in group['rows']}
+        skill_header=f'Skill @ step {next(iter(steps))}' if len(steps)==1 else 'Final-step skill'
         lines+=['## '+group['split']+' / '+group['tier']+' / '+group['protocol_id'], '',
-                'Protocol SHA256: `'+group['protocol_sha256']+'`. Headline scores use the final report step.','',
-                '| Model | Run | Skill | nMAE | Test attempts | Data verified | Training label | Flags |',
-                '|---|---|---:|---:|---:|---|---|---|']
+                'Protocol SHA256: `'+group['protocol_sha256']+'`. Rollout skill and nMAE use the final report step.','',
+                f'| Model | Method type | Run | {skill_header} | Single-step skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |',
+                '|---|---|---|---:|---:|---:|---:|---|---|---|---|']
         for row in group['rows']:
-            values=[row['model'],row['run_id'],fmt(row['skill']),fmt(row['nmae']),row['test_attempts'],
-                    'yes' if row['data_verified'] else 'no',row['training_label'],', '.join(row['flags']) or '—']
+            values=[row['model'],row['method_type'] or 'unknown',row['run_id'],fmt(row['skill']),
+                    fmt(row['single_step_skill']),fmt(row['nmae']),row['test_attempts'],
+                    'yes' if row['data_verified'] else 'no', 'unknown' if row['repo_modified'] is None else 'yes' if row['repo_modified'] else 'no',row['training_label'],', '.join(row['flags']) or '—']
             lines+=['| '+' | '.join(cell(v) for v in values)+' |']
-        lines+=['','Physical relative L1 (per channel):','', '| Run | '+' | '.join(CHANNELS)+' |','|---|'+'---:|'*8]
+        lines+=['','Single-step physical relative L1 by channel','', '| Run | '+' | '.join(CHANNELS)+' |','|---|'+'---:|'*8]
         for row in group['rows']:lines+=['| '+cell(row['run_id'])+' | '+' | '.join(fmt(row['physical_rel_l1'][c]) for c in CHANNELS)+' |']
         lines+=['','Final-step physics errors (undefined for quick):','', '| Run | Mass | Energy | Angular momentum |','|---|---:|---:|---:|']
         for row in group['rows']:lines+=['| '+cell(row['run_id'])+' | '+' | '.join(fmt(row['physics_errors'][c]) for c in ('mass','energy','angular'))+' |']
@@ -284,7 +332,7 @@ def artifacts(report,repo,render=True):
         result.update(images)
         presentation.append({'group':{k:group[k] for k in GROUP_FIELDS},'data_sha256':hashlib.sha256(json_bytes(group)).hexdigest(),
                              'files':{name:hashlib.sha256(value).hexdigest() for name,value in images.items()}})
-    fields=list(rows[0]) if rows else ['split_id','protocol_id','protocol_sha256','split','tier','model','run_id','skill','nmae','test_attempts']
+    fields=list(rows[0]) if rows else ['split_id','protocol_id','protocol_sha256','split','tier','model','method_type','run_id','skill','single_step_skill','nmae','test_attempts']
     result['leaderboard.csv']=csv_bytes(rows,fields)
     if render:result['figures.json']=json_bytes({'schema_version':1,'groups':presentation})
     return result

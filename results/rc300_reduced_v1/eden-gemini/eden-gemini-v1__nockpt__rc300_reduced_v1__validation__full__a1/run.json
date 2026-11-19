@@ -1,0 +1,176 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "f2cd9660836e53028f70fb396e103a697e9d5942f2fbae50c80095ab347c8079",
+ "analysis_runtime": {
+  "cost": {
+   "all_start_statistics": {
+    "bootstrap": {
+     "block_length": 10,
+     "method": "chunk_block_bootstrap",
+     "n_blocks": 3,
+     "resamples": 1000,
+     "seed": 42
+    },
+    "lower": {
+     "milliseconds_per_step": 75.59112941253261
+    },
+    "mean": {
+     "milliseconds_per_step": 75.87308177089653
+    },
+    "n_starts": 12,
+    "upper": {
+     "milliseconds_per_step": 76.11163581268556
+    },
+    "valid_counts": {}
+   },
+   "milliseconds_per_step": 76.31354930017551,
+   "parameters": 0,
+   "timed_steps": 20
+  }
+ },
+ "attempt": 1,
+ "channel_scales_sha256": "3fcb682ba38a9c6d64e4c1c2599f7fbd82d9324e99ec6ec319538c8e1e1f96d9",
+ "checkpoint": null,
+ "checkpoint_sha256": null,
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:32:34.787411+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cpu",
+ "end_time": "2026-11-19T03:18:53.358351+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": null,
+ "history_length": 1,
+ "host": "gh151.hsn.cm.delta.internal.ncsa.edu",
+ "model": "eden-gemini",
+ "model_provenance": {
+  "author": "Eden Growney",
+  "known_prior_data_exposure": "Developed in Eden rc300 start-11672 pilot; blindness to current split is not established",
+  "originating_agent": "gemini",
+  "protocol": "A",
+  "source_commit": "f8cd379a562e9b0fc6f96ee36d5f9855ddc1d27a",
+  "source_sha256": {
+   "_eden_claude.py": "e373edef9bb2230b17ae599a0a1d0171c9ca7e42ae11536f385282a57793fbf3",
+   "_eden_gemini.py": "a125e22ee9a954ae5372a617a424acdae79fcd35d2a2dff7b873a5e0a665949c",
+   "_eden_gpt.py": "32d68c3883f32534cd4831af1ac03b60478460ef0827ade9dcf3679c222d1c54"
+  }
+ },
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "eden-gemini",
+  "checkpoint": null,
+  "model": "eden-gemini",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required. Protocol A, credited Eden start-11672 method; known pilot exposure, not a blind development claim.",
+  "options": {},
+  "training_record": null,
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/accretion_diagnostics.json": "83f98b6706c955a79025eeb9cb77a4513f8b0a6fd262812f4033574abb16417b",
+  "metrics/azimuthal_spectra.json": "c9e2123cdf00c97f087c4115d626e2d77f0a8e2fe342e3e14d43177fd8695d84",
+  "metrics/bias_analysis.json": "fc60fda9dd5de0efe5f9a860c0acec9c91fc8d5d3424f440bce42ef49b63549a",
+  "metrics/coherence.json": "4fe7dee8004825e6d2419bc7c9940539aedea5d3c7e5db2bd886aa7f1b4d0751",
+  "metrics/conditional_error.json": "80e4d8f7ced758ca15d16e510736b69022c60d6a520ed8c7ed0119774726265f",
+  "metrics/conservation_closure.json": "8a909920755caaaccf7cdaea2d2da51a3612c7de74530fc6263a66e04e4bb16c",
+  "metrics/correlation_times.json": "4ff4094e65a7f12ed813660534baf5bcb41d087b16dd4d8c5a9a05fb96210b45",
+  "metrics/cost.json": "eb3e081f3195217bbe328c52daaf5c84aa36a66a3eb8c16b06b792a2ac07becb",
+  "metrics/error_correlation.json": "475b4f70fc0cf4ab949e04f5b631109bd906634e4095357e197b3b9dfd73c813",
+  "metrics/lorentz.json": "1f015bf6064f1054438a714c76fb56fbb46b9dd92d0cd4d7c515ef300577cd20",
+  "metrics/mdot.json": "edabe15e36997683e4759ce810bf12e426c84dd1ccb9ce7ae8527c771c6e9d82",
+  "metrics/mean_profiles.json": "28f8414ae26db97562d96db9790a0f2c66f6cd8dc435f83018944d01bdbf5f7a",
+  "metrics/meridional_slice.json": "f26207426d50045572db2ec17d67a54b626cba396cb63d16109bd3bc1f96a246",
+  "metrics/physics_table.json": "d35c3d9becfee0406341e86789e94e02b52106315c63f0750c245607f9a82a87",
+  "metrics/rollout_curve.json": "a951faf30a0f25a12e1986216f2d3a048bea802e8da4d888343879a87b693131",
+  "metrics/rollout_evolution.json": "bd5e5d75757e29fcde21d0fde11e2f416673e8ab63e8b74d4ee88b6bc3a36b3b",
+  "metrics/shell_profiles.json": "c6b3a8bf1803b8a7d98540277dcbc1199413582afa01aa0b7c86a13179477da2",
+  "metrics/single_step.json": "5a4f9d8332f8d1ddfad5ac33326c5380600de1ff5ce45d367e80514cc1698cde",
+  "metrics/spatial_error.json": "5b0369158e433756e4c9d895352ff6b2a5c4338457d3be7377bdb620bc216c6a",
+  "metrics/spectrum.json": "07ff09f721b77af6d4771a11919250a12ed69c2e80c90a7413b19220aa6e13c2",
+  "metrics/stability.json": "7e9c9fe0c505bce1ab6abb28443cc006e5975710617632b25d140e5e849c846d",
+  "metrics/statistical_props.json": "f663dc1657d089a58e628fb128840d8b29268f1bcec28316ea0825662e03edeb",
+  "metrics/temporal_consistency.json": "5cf38a317395d2f8fad111da52bf804b5a802b082525e96d601b05c975b5c61e",
+  "metrics/temporal_spectrum.json": "34ee8b196bf272826c29a29f1aa15b56b0086a7245e45e6fda1743d24be43c08",
+  "metrics/turbulence_stats.json": "f688ef027c6fdf9fcefc1cd45d980680d0e2c76e6a0d550c8e20692e8d520d40",
+  "summary.json": "8a385e63ff37b89ea25abac087ca603e9f39ec26b7331905b594b47275888e2e",
+  "tables/accretion_diagnostics.csv": "40ee2256940ef6f0dbe28e9ff6c42acbcbf3454120138b9a6f382b20d6bda385",
+  "tables/azimuthal_spectra.csv": "164efe364fe7f4e83fe1673a9837df1ac9b10af141679f4c09e45a7adbe84ea3",
+  "tables/bias_analysis.csv": "177fbf225272fa0caef15c95b4eaf769774ac57bde136b75fe69cdb984686c0c",
+  "tables/coherence.csv": "d33aa69789ee37345cadc0aff5dfd77bc6fa90d5a435091dbe330d3fb7ebed4e",
+  "tables/conditional_error.csv": "13597df1ade9076bf671743535c80fbc1a381a1cfa4d875707ff88102ba8d0cc",
+  "tables/conservation_closure.csv": "929d54ea69028f34368cf0f563db69ec8a04d282e226fab707724bcafb861a75",
+  "tables/correlation_times.csv": "38c888a094a71e85e62a20705b5c3aa6d819450a2d7b8ea39259f04fafcb941f",
+  "tables/cost.csv": "3c1304cad0b2a47e0dc1d2f94114a147e7659539f25d7245e47e3b1f49e36d4e",
+  "tables/error_correlation.csv": "193638938b61072b01c8ba4abd9ca124f6dc08ae5cbdfdb5d891ca8c076e35a2",
+  "tables/lorentz.csv": "44a45517417cc750445b9e624f7753070fcef2d2f0a2c2e92147bceef5ce95c6",
+  "tables/mdot.csv": "5d3a687897bc4e46d573c0741196c723edb95d5dabb2c04219d1edc145e435d4",
+  "tables/mean_profiles.csv": "a5d83281d6d9fe2efd2b9a2b7f0822fef17ae994ee32b1dfd51b483f9f22d83e",
+  "tables/meridional_slice.csv": "9bd9c8af8d700f9720d62102fda76b693f0936a0863c85bc5f7dbb517adefc62",
+  "tables/physics_table.csv": "2bd113b76c6fe7f73c2e0c5785cc8928e0b9f1d3cdcc1d3b43ea5c4c08e3709f",
+  "tables/rollout_curve.csv": "a8d4fdae41d87216e216613a005d766fa09b471280b9ee7aba475c1013d444ba",
+  "tables/rollout_evolution.csv": "b71f4daef7947578aa0f6eae7d0ef02037e08fc6558bbed70bbd36638b0a00f0",
+  "tables/shell_profiles.csv": "095f0ca291d7582ca5ffa72f69f01aad56d057fd503d4270441bd23de035e855",
+  "tables/single_step.csv": "bf9e31f6794f414c1bf66487cb73f209991ee04c3a36d159eb66abf70d46654f",
+  "tables/spatial_error.csv": "53a3c713f4ab2155d5f603e1d854042f3fb8cdee19c6d8f00b518021a293eda9",
+  "tables/spectrum.csv": "34ecba260e060099cabea51ba16e4906c76bb75276c4decbad38e02aca2eae02",
+  "tables/stability.csv": "5086a4b1fc9cdf0fa83e68bca3beef8e1fe81906ad93b4c85dbd96c47c9cb149",
+  "tables/statistical_props.csv": "04c88fd3bc25488b6736da2fcfcc856e690fd75aa5a873a2a92dccbfe8bccbed",
+  "tables/temporal_consistency.csv": "4654fa60992c0373d1a9a5ba0ce11c100861b363887015b9fdc364a78f16a464",
+  "tables/temporal_spectrum.csv": "403b96109300af8a826ab106170598fd963b823c66e46baf584f1b8059bff916",
+  "tables/turbulence_stats.csv": "e6f6fbb82b49cfc3912d0c0c8669608d565f698f78bb376203e26bf145f0e11f"
+ },
+ "result_fingerprint": "6c12848b6dfa598061fc12cfc1ecbec4617100ec6d3956c81c7c75972f1849d0",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-19T02:52:24.267859+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "full",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "reason": "No training record supplied",
+  "record_sha256": null,
+  "trained_on_this_split": "unknown"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

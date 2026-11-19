@@ -1,0 +1,1934 @@
+{
+ "common_quick_full_metrics": {
+  "eden-claude/rollout_curve": {
+   "full_sha256": "171eb601acfe46540085601ee1afb6a260d82f64a9434c0902008cc73ea89d4c",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "171eb601acfe46540085601ee1afb6a260d82f64a9434c0902008cc73ea89d4c",
+   "tolerance": 0
+  },
+  "eden-claude/single_step": {
+   "full_sha256": "e81d41ad70b71252dca97b78ca43055ac11a6ff3a6afd8ed0c39db5a23ed9691",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "e81d41ad70b71252dca97b78ca43055ac11a6ff3a6afd8ed0c39db5a23ed9691",
+   "tolerance": 0
+  },
+  "eden-gemini/rollout_curve": {
+   "full_sha256": "a951faf30a0f25a12e1986216f2d3a048bea802e8da4d888343879a87b693131",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "a951faf30a0f25a12e1986216f2d3a048bea802e8da4d888343879a87b693131",
+   "tolerance": 0
+  },
+  "eden-gemini/single_step": {
+   "full_sha256": "5a4f9d8332f8d1ddfad5ac33326c5380600de1ff5ce45d367e80514cc1698cde",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "5a4f9d8332f8d1ddfad5ac33326c5380600de1ff5ce45d367e80514cc1698cde",
+   "tolerance": 0
+  },
+  "eden-gpt/rollout_curve": {
+   "full_sha256": "04f33944f2a112e6d897c90d337ed4709bfab769cd87bdd46799096e2a46af19",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "04f33944f2a112e6d897c90d337ed4709bfab769cd87bdd46799096e2a46af19",
+   "tolerance": 0
+  },
+  "eden-gpt/single_step": {
+   "full_sha256": "3bf0e54e826d9f4ab639acf1c6c29c0c42123fcfb067a6560749cc981e74df38",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "3bf0e54e826d9f4ab639acf1c6c29c0c42123fcfb067a6560749cc981e74df38",
+   "tolerance": 0
+  },
+  "persistence/rollout_curve": {
+   "full_sha256": "9d32e4530e2059858e9b1948e2912f443c10b85cf07ae5b2e1e854fc32126281",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "9d32e4530e2059858e9b1948e2912f443c10b85cf07ae5b2e1e854fc32126281",
+   "tolerance": 0
+  },
+  "persistence/single_step": {
+   "full_sha256": "a4340d1790d5b62ae42dffc647503e660080fc0d238786bca2bc12f99cf3fbf6",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "a4340d1790d5b62ae42dffc647503e660080fc0d238786bca2bc12f99cf3fbf6",
+   "tolerance": 0
+  },
+  "tron/rollout_curve": {
+   "full_sha256": "6f5b1a422fc22c9ade0d215132cc0d1fc20c6079c4f4413c270752dc1ddd5203",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "6f5b1a422fc22c9ade0d215132cc0d1fc20c6079c4f4413c270752dc1ddd5203",
+   "tolerance": 0.0001
+  },
+  "tron/single_step": {
+   "full_sha256": "c81a247385bc617c8f903b14cce056abca633d8732fb1c2b2318c04ffbfe2265",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "c81a247385bc617c8f903b14cce056abca633d8732fb1c2b2318c04ffbfe2265",
+   "tolerance": 0.0001
+  },
+  "vit/rollout_curve": {
+   "full_sha256": "9a194f2ca148e06047326e80a0f4797f598abdebc2493a61fa86824866068a37",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "9a194f2ca148e06047326e80a0f4797f598abdebc2493a61fa86824866068a37",
+   "tolerance": 0.0001
+  },
+  "vit/single_step": {
+   "full_sha256": "c39d6da444c009784d1f188bb9c6f463cb413c86d825f965f049315d4d6ceda4",
+   "largest_relative_difference": 0.0,
+   "ok": true,
+   "quick_sha256": "c39d6da444c009784d1f188bb9c6f463cb413c86d825f965f049315d4d6ceda4",
+   "tolerance": 0.0001
+  }
+ },
+ "partition": "validation",
+ "pipeline_receipt": {
+  "all_models_complete": true,
+  "inputs": {
+   "eden-claude": {
+    "checkpoint": null,
+    "checkpoint_sha256": null,
+    "request_sha256": "f9b9b17821b5219b43f6ad4ae01d40578fb826460035e7c39cc65bc711aeb5e1"
+   },
+   "eden-gemini": {
+    "checkpoint": null,
+    "checkpoint_sha256": null,
+    "request_sha256": "d49352afeab86edfdfbe9e885881dca589f46781c275353b0418e6d87ccb36b9"
+   },
+   "eden-gpt": {
+    "checkpoint": null,
+    "checkpoint_sha256": null,
+    "request_sha256": "50575f222c644fa9c7f6aa23fe143fa08f4acb343cb3a0b4fcaf086dc050dacb"
+   },
+   "persistence": {
+    "checkpoint": null,
+    "checkpoint_sha256": null,
+    "request_sha256": "560838f3831c4a4d7b30bb6219af6bdaa6678310399f19d64cadcf65b54b4dd0"
+   },
+   "tron": {
+    "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+    "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+    "request_sha256": "413092dcd0d9e12eaeb8bd89affac72d8bcded0ad84616d0918236acb89c3029",
+    "source_config_sha256": "7541e8dcfc583fc318a0cb5d3752c4801e175145ecb97298324f9cbff35d52c5",
+    "training_log_sha256": "b4eab92c499e62df1301c65e77ddb43d552c98dc36f3f38b0322b3de4502d023"
+   },
+   "vit": {
+    "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/best.pth",
+    "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+    "request_sha256": "8a4c1db702b5e6f40292d47fcbd54e3c7f8a5fd42c5b1e75feca5fc2131a35f9",
+    "source_config_sha256": "5c6fdb7767d0c3a6430ccf7bbec2b4845112745cf6829fb7d75cd41a3d2d6a93",
+    "training_log_sha256": "aa9d9bd29577ee44ef6bc0be4c6d2fb645e764272c287ca92baf63538fba5fd3"
+   }
+  },
+  "partition": "validation",
+  "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+  "split_id": "rc300_reduced_v1",
+  "steps": [
+   {
+    "command": [
+     "record-training",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/tron.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--config",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/tron_training_config.json",
+     "--log",
+     "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/train.log"
+    ],
+    "job_id": "3627615",
+    "operation": "record-training-tron",
+    "returncode": 0,
+    "seconds": 3.842440947999421,
+    "verdict": {
+     "chunk_counts": {
+      "selection": {
+       "excluded_1": 0,
+       "excluded_10": 0,
+       "excluded_11": 10,
+       "excluded_12": 10,
+       "excluded_2": 0,
+       "excluded_3": 0,
+       "excluded_4": 0,
+       "excluded_5": 0,
+       "excluded_6": 0,
+       "excluded_7": 0,
+       "excluded_8": 0,
+       "excluded_9": 0,
+       "test_1": 0,
+       "test_2": 0,
+       "test_3": 475,
+       "train_1": 0,
+       "train_2": 0,
+       "train_3": 0,
+       "train_4": 0,
+       "train_5": 0,
+       "train_6": 235,
+       "train_7": 234,
+       "validation_1": 0,
+       "validation_2": 0,
+       "validation_3": 0
+      },
+      "training": {
+       "excluded_1": 10,
+       "excluded_10": 10,
+       "excluded_11": 0,
+       "excluded_12": 0,
+       "excluded_2": 10,
+       "excluded_3": 10,
+       "excluded_4": 10,
+       "excluded_5": 10,
+       "excluded_6": 10,
+       "excluded_7": 10,
+       "excluded_8": 10,
+       "excluded_9": 10,
+       "test_1": 476,
+       "test_2": 476,
+       "test_3": 0,
+       "train_1": 1197,
+       "train_2": 853,
+       "train_3": 853,
+       "train_4": 854,
+       "train_5": 853,
+       "train_6": 619,
+       "train_7": 0,
+       "validation_1": 476,
+       "validation_2": 476,
+       "validation_3": 475
+      }
+     },
+     "evidence": "operator declaration",
+     "label": "no, overlaps validation/test (2379 dumps)",
+     "next": "Set request.training_record to /work/nvme/bgun/share/validation/training_records/tron/a81d05b4.json; then gval check-adapter",
+     "normalization_flagged": true,
+     "ok": true,
+     "outside_split_counts": {
+      "selection": 0,
+      "training": 0
+     },
+     "partition_counts": {
+      "selection": {
+       "excluded": 20,
+       "test": 475,
+       "train": 469,
+       "validation": 0
+      },
+      "training": {
+       "excluded": 100,
+       "test": 952,
+       "train": 5229,
+       "validation": 1427
+      }
+     },
+     "ranges": {
+      "selection": [
+       [
+        10708,
+        11671
+       ]
+      ],
+      "training": [
+       [
+        3000,
+        10707
+       ]
+      ]
+     },
+     "reasons": [
+      "training_outside_train",
+      "selection_outside_validation",
+      "normalization_not_train"
+     ],
+     "reused": false,
+     "sha256": "276550965e022f8d3a7f5f6bb01af96638fff0e9cb8a33f6a050122bebec0efe",
+     "trained_on_this_split": "no",
+     "training_record": "/work/nvme/bgun/share/validation/training_records/tron/a81d05b4.json"
+    }
+   },
+   {
+    "command": [
+     "record-training",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/vit.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--config",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/vit_training_config.json",
+     "--log",
+     "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/train.log"
+    ],
+    "job_id": "3627615",
+    "operation": "record-training-vit",
+    "returncode": 0,
+    "seconds": 3.040106749998813,
+    "verdict": {
+     "chunk_counts": {
+      "selection": {
+       "excluded_1": 0,
+       "excluded_10": 0,
+       "excluded_11": 10,
+       "excluded_12": 10,
+       "excluded_2": 0,
+       "excluded_3": 0,
+       "excluded_4": 0,
+       "excluded_5": 0,
+       "excluded_6": 0,
+       "excluded_7": 0,
+       "excluded_8": 0,
+       "excluded_9": 0,
+       "test_1": 0,
+       "test_2": 0,
+       "test_3": 475,
+       "train_1": 0,
+       "train_2": 0,
+       "train_3": 0,
+       "train_4": 0,
+       "train_5": 0,
+       "train_6": 235,
+       "train_7": 234,
+       "validation_1": 0,
+       "validation_2": 0,
+       "validation_3": 0
+      },
+      "training": {
+       "excluded_1": 10,
+       "excluded_10": 10,
+       "excluded_11": 0,
+       "excluded_12": 0,
+       "excluded_2": 10,
+       "excluded_3": 10,
+       "excluded_4": 10,
+       "excluded_5": 10,
+       "excluded_6": 10,
+       "excluded_7": 10,
+       "excluded_8": 10,
+       "excluded_9": 10,
+       "test_1": 476,
+       "test_2": 476,
+       "test_3": 0,
+       "train_1": 1197,
+       "train_2": 853,
+       "train_3": 853,
+       "train_4": 854,
+       "train_5": 853,
+       "train_6": 619,
+       "train_7": 0,
+       "validation_1": 476,
+       "validation_2": 476,
+       "validation_3": 475
+      }
+     },
+     "evidence": "operator declaration",
+     "label": "no, overlaps validation/test (2379 dumps)",
+     "next": "Set request.training_record to /work/nvme/bgun/share/validation/training_records/vit/6ebddd83.json; then gval check-adapter",
+     "normalization_flagged": true,
+     "ok": true,
+     "outside_split_counts": {
+      "selection": 0,
+      "training": 0
+     },
+     "partition_counts": {
+      "selection": {
+       "excluded": 20,
+       "test": 475,
+       "train": 469,
+       "validation": 0
+      },
+      "training": {
+       "excluded": 100,
+       "test": 952,
+       "train": 5229,
+       "validation": 1427
+      }
+     },
+     "ranges": {
+      "selection": [
+       [
+        10708,
+        11671
+       ]
+      ],
+      "training": [
+       [
+        3000,
+        10707
+       ]
+      ]
+     },
+     "reasons": [
+      "training_outside_train",
+      "selection_outside_validation",
+      "normalization_not_train"
+     ],
+     "reused": false,
+     "sha256": "5e8c25b03ea2d2f2c1425348756f5676b2c65b2c6dd791a88a0bc2931e6a4f80",
+     "trained_on_this_split": "no",
+     "training_record": "/work/nvme/bgun/share/validation/training_records/vit/6ebddd83.json"
+    }
+   },
+   {
+    "command": [
+     "doctor"
+    ],
+    "job_id": "3627615",
+    "operation": "doctor",
+    "returncode": 0,
+    "seconds": 7.69253618500079,
+    "verdict": {
+     "checks": {
+      "environment": {
+       "environment_locked": true,
+       "lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+       "mismatches": [],
+       "platform": "deltaai-aarch64",
+       "status": "pass"
+      },
+      "protocol": {
+       "protocol_id": "forecast_v1",
+       "sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+       "status": "pass"
+      },
+      "splits": [
+       {
+        "checksums_sha256": "a2f651a52f438854a43d625bc4e1062a7fad14f38623a925dcb3f6de28b80ff2",
+        "file": "/u/gkerex/project/grmhd-emulator-validation/splits/5000run_v1.json",
+        "sha256": "2db2b032bdc27372e6ab6c3ab3547063b95f0d4fafb27ce2936bbaad421cf506",
+        "split_id": "5000run_v1",
+        "status": "pass"
+       },
+       {
+        "checksums_sha256": "5d9da7ba1c85f45d21911db528d5b8ff09886bae828d2fd235f44f193fd284e8",
+        "file": "/u/gkerex/project/grmhd-emulator-validation/splits/rc300_reduced_v1.json",
+        "sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+        "split_id": "rc300_reduced_v1",
+        "status": "pass"
+       }
+      ],
+      "storage": {
+       "acl_subprocesses": 9,
+       "errors": [],
+       "group": "delta_bgun",
+       "group_unreadable_files": [],
+       "root": "/work/nvme/bgun/share/validation",
+       "scan_duration_seconds": 3.5134843550040387,
+       "scanned_entries": 4722,
+       "status": "pass",
+       "unfinished_reference_candidates": []
+      }
+     },
+     "environment_locked": true,
+     "next": "gval conformance",
+     "ok": true,
+     "status": "pass"
+    }
+   },
+   {
+    "command": [
+     "conformance",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--tier",
+     "quick"
+    ],
+    "job_id": "3627615",
+    "operation": "conformance-quick",
+    "returncode": 0,
+    "seconds": 358.51991737700155,
+    "verdict": {
+     "cross_platform": false,
+     "differing_files": [],
+     "end_time": "2026-11-18T23:08:41.761928+00:00",
+     "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+     "golden_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+     "largest_relative_difference": 0.0,
+     "next": "gval new-adapter <dir>",
+     "ok": true,
+     "output_dir": "/work/nvme/bgun/share/validation/staging/gkerex/conformance/deltaai-aarch64__19",
+     "platform": "deltaai-aarch64",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+     "split_id": "rc300_reduced_v1",
+     "status": "pass",
+     "summary_format_version": 2,
+     "tier": "quick"
+    }
+   },
+   {
+    "command": [
+     "conformance",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--tier",
+     "full"
+    ],
+    "job_id": "3627615",
+    "operation": "conformance-full",
+    "returncode": 0,
+    "seconds": 1433.876207633999,
+    "verdict": {
+     "cross_platform": false,
+     "differing_files": [],
+     "end_time": "2026-11-18T23:32:34.787411+00:00",
+     "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+     "golden_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+     "largest_relative_difference": 0.0,
+     "next": "gval new-adapter <dir>",
+     "ok": true,
+     "output_dir": "/work/nvme/bgun/share/validation/staging/gkerex/conformance/deltaai-aarch64__20",
+     "platform": "deltaai-aarch64",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+     "split_id": "rc300_reduced_v1",
+     "status": "pass",
+     "summary_format_version": 2,
+     "tier": "full"
+    }
+   },
+   {
+    "command": [
+     "check-adapter",
+     "persistence",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3627615",
+    "operation": "check-adapter-persistence",
+    "returncode": 0,
+    "seconds": 6.2216357340003015,
+    "verdict": {
+     "cuda_peak_bytes": null,
+     "history_length": 1,
+     "next": "gval evaluate --tier quick --split validation --request <request> --split-id rc300_reduced_v1",
+     "ok": true,
+     "seconds_per_step": [
+      0.008692802999576088,
+      0.009583655999449547,
+      0.00927816100011114
+     ],
+     "source": {
+      "repo_commit": "7b5884efe8b5207ebde14bcabe9b71121d5b5dd5",
+      "source_sha256": "e3007636e8a40dab54fa67f643731e0fcc9edea977e5795f3071f5afec686b92"
+     }
+    }
+   },
+   {
+    "command": [
+     "check-adapter",
+     "tron",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--device",
+     "cuda",
+     "--checkpoint",
+     "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth"
+    ],
+    "job_id": "3627615",
+    "operation": "check-adapter-tron",
+    "returncode": 0,
+    "seconds": 10.221233602998836,
+    "verdict": {
+     "cuda_peak_bytes": 1403906048,
+     "history_length": 1,
+     "next": "gval evaluate --tier quick --split validation --request <request> --split-id rc300_reduced_v1",
+     "ok": true,
+     "seconds_per_step": [
+      2.083877133001806,
+      0.027653174998704344,
+      0.027673590993799735
+     ],
+     "source": {
+      "repo_commit": "7b5884efe8b5207ebde14bcabe9b71121d5b5dd5",
+      "source_sha256": "d6757c5cc16bb5840998ccd39b7ec59bbd238139ac36f42aea18d0635e221595"
+     }
+    }
+   },
+   {
+    "command": [
+     "check-adapter",
+     "vit",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--device",
+     "cuda",
+     "--checkpoint",
+     "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/best.pth",
+     "--options",
+     "{\"config\": {\"batch_size\": 8, \"curriculum_ramp_epochs\": 20, \"d_model\": 512, \"data_dir\": \"/work/nvme/bgun/kfortune/rc300_reduced\", \"depth\": 12, \"description\": \"ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.\", \"early_stop_patience\": 20, \"epochs\": 100, \"experiment\": \"vit_rc300_v1\", \"geometry_file\": \"/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz\", \"grad_checkpoint\": false, \"grad_clip\": 1.0, \"learning_rate\": 0.0005, \"min_lr\": 1e-06, \"mlp_ratio\": 8, \"n_heads\": 8, \"patch\": [4, 4, 4], \"recon_only_epochs\": 10, \"seed\": 0, \"stable_epoch\": 30, \"token_mode\": \"per_patch\", \"unroll_steps\": 1, \"use_amp\": true, \"val_frac\": 0.11116236162361623, \"warmup_epochs\": 5, \"weight_decay\": 0.05, \"world_size\": 4}}"
+    ],
+    "job_id": "3627615",
+    "operation": "check-adapter-vit",
+    "returncode": 0,
+    "seconds": 7.253307179998956,
+    "verdict": {
+     "cuda_peak_bytes": 613957120,
+     "history_length": 1,
+     "next": "gval evaluate --tier quick --split validation --request <request> --split-id rc300_reduced_v1",
+     "ok": true,
+     "seconds_per_step": [
+      0.2785535649964004,
+      0.012079648004146293,
+      0.011893061004229821
+     ],
+     "source": {
+      "repo_commit": "7b5884efe8b5207ebde14bcabe9b71121d5b5dd5",
+      "source_sha256": "d6757c5cc16bb5840998ccd39b7ec59bbd238139ac36f42aea18d0635e221595"
+     }
+    }
+   },
+   {
+    "command": [
+     "check-adapter",
+     "eden-claude",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3627615",
+    "operation": "check-adapter-eden-claude",
+    "returncode": 1,
+    "seconds": 4.174302409002848,
+    "verdict": {
+     "error": "Claude method requires an equator-symmetric theta grid",
+     "next": "Resolve the reported error and rerun the command; consult docs/milestone_2.md",
+     "ok": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/persistence.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "quick",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3627865",
+    "operation": "evaluate-persistence-quick",
+    "returncode": 0,
+    "seconds": 286.78778884499934,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+     "ok": true,
+     "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+     "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4"
+    ],
+    "job_id": "3627865",
+    "operation": "verify-persistence-quick",
+    "returncode": 0,
+    "seconds": 1.4690394230001402,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/persistence.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "full",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3627865",
+    "operation": "evaluate-persistence-full",
+    "returncode": 0,
+    "seconds": 1470.8063615969995,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "ok": true,
+     "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3627865",
+    "operation": "verify-persistence-full",
+    "returncode": 0,
+    "seconds": 75.60800197500066,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/tron.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "quick",
+     "--device",
+     "cuda"
+    ],
+    "job_id": "3627865",
+    "operation": "evaluate-tron-quick",
+    "returncode": 0,
+    "seconds": 311.3183467939998,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+     "ok": true,
+     "result_fingerprint": "6fb6fc98512f6e261f14cc64086a08c048b71b2e04b66f9dcc392736b6c01981",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+     "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3627865",
+    "operation": "verify-tron-quick",
+    "returncode": 0,
+    "seconds": 1.5047436479999305,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "6fb6fc98512f6e261f14cc64086a08c048b71b2e04b66f9dcc392736b6c01981",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/tron.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "full",
+     "--device",
+     "cuda"
+    ],
+    "job_id": "3627865",
+    "operation": "evaluate-tron-full",
+    "returncode": 0,
+    "seconds": 1467.7546487119998,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+     "ok": true,
+     "result_fingerprint": "48eb9bf79ab76b4247ef878ea4a1924925050012a665efcdcd13acb92fd012e0",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+     "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3627865",
+    "operation": "verify-tron-full",
+    "returncode": 0,
+    "seconds": 75.78974444100095,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "48eb9bf79ab76b4247ef878ea4a1924925050012a665efcdcd13acb92fd012e0",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/vit.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "quick",
+     "--device",
+     "cuda"
+    ],
+    "job_id": "3627865",
+    "operation": "evaluate-vit-quick",
+    "returncode": 0,
+    "seconds": 279.8167949840008,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+     "ok": true,
+     "result_fingerprint": "b2215e6cb75070ec6b2422cd7cf6c843df31d6e45ef6b12750f8e4d72e5a5e71",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+     "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3627865",
+    "operation": "verify-vit-quick",
+    "returncode": 0,
+    "seconds": 1.4757770779997372,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "b2215e6cb75070ec6b2422cd7cf6c843df31d6e45ef6b12750f8e4d72e5a5e71",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-persistence-quick",
+    "returncode": 0,
+    "seconds": 1.5527225270000145,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-persistence-full",
+    "returncode": 0,
+    "seconds": 76.2197841709999,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-tron-quick",
+    "returncode": 0,
+    "seconds": 1.4445256859999063,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "6fb6fc98512f6e261f14cc64086a08c048b71b2e04b66f9dcc392736b6c01981",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-tron-full",
+    "returncode": 0,
+    "seconds": 75.00037233900002,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "48eb9bf79ab76b4247ef878ea4a1924925050012a665efcdcd13acb92fd012e0",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-vit-quick",
+    "returncode": 0,
+    "seconds": 1.4597653109999555,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "b2215e6cb75070ec6b2422cd7cf6c843df31d6e45ef6b12750f8e4d72e5a5e71",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/vit.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "full",
+     "--device",
+     "cuda"
+    ],
+    "job_id": "3628349",
+    "operation": "evaluate-vit-full",
+    "returncode": 0,
+    "seconds": 1401.296218735,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+     "ok": true,
+     "result_fingerprint": "c0f7cd92a88ae4bcf05769866f79a2f862452b7b48deeb7e8a75d4e79c56661d",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+     "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-vit-full",
+    "returncode": 0,
+    "seconds": 74.61763269499988,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "c0f7cd92a88ae4bcf05769866f79a2f862452b7b48deeb7e8a75d4e79c56661d",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "check-adapter",
+     "eden-claude",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628349",
+    "operation": "check-adapter-eden-claude",
+    "returncode": 0,
+    "seconds": 7.486196151000058,
+    "verdict": {
+     "cuda_peak_bytes": null,
+     "history_length": 1,
+     "next": "gval evaluate --tier quick --split validation --request <request> --split-id rc300_reduced_v1",
+     "ok": true,
+     "seconds_per_step": [
+      0.10830555400025332,
+      0.10517815999992308,
+      0.10367097400012426
+     ],
+     "source": {
+      "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+      "source_sha256": "f2cd9660836e53028f70fb396e103a697e9d5942f2fbae50c80095ab347c8079"
+     }
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/eden-claude.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "quick",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628349",
+    "operation": "evaluate-eden-claude-quick",
+    "returncode": 0,
+    "seconds": 492.1649298350003,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "ok": true,
+     "result_fingerprint": "8835375694940e89c608a0cdfeebd31a5aef7d1d95f8f32112defaedd3f221d7",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "run_id": "eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-eden-claude-quick",
+    "returncode": 0,
+    "seconds": 1.6780122230002235,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "8835375694940e89c608a0cdfeebd31a5aef7d1d95f8f32112defaedd3f221d7",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/eden-claude.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "full",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628349",
+    "operation": "evaluate-eden-claude-full",
+    "returncode": 0,
+    "seconds": 1639.082125553,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "ok": true,
+     "result_fingerprint": "92d5d388d5bacae8ea533d1be68aacf0c282ceb7044fdb96d17dfc407dbbd139",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "run_id": "eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-eden-claude-full",
+    "returncode": 0,
+    "seconds": 74.3207593950001,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "92d5d388d5bacae8ea533d1be68aacf0c282ceb7044fdb96d17dfc407dbbd139",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "check-adapter",
+     "eden-gpt",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628349",
+    "operation": "check-adapter-eden-gpt",
+    "returncode": 0,
+    "seconds": 7.03760426899953,
+    "verdict": {
+     "cuda_peak_bytes": null,
+     "history_length": 1,
+     "next": "gval evaluate --tier quick --split validation --request <request> --split-id rc300_reduced_v1",
+     "ok": true,
+     "seconds_per_step": [
+      0.20970832600050926,
+      0.19676093900034175,
+      0.19566874700012704
+     ],
+     "source": {
+      "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+      "source_sha256": "f2cd9660836e53028f70fb396e103a697e9d5942f2fbae50c80095ab347c8079"
+     }
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/eden-gpt.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "quick",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628349",
+    "operation": "evaluate-eden-gpt-quick",
+    "returncode": 0,
+    "seconds": 650.8695650929994,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "ok": true,
+     "result_fingerprint": "c51b13dca1586617156606bd578965362e55ca9bed125d42ae04acde3cffbb2f",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "run_id": "eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628349",
+    "operation": "verify-eden-gpt-quick",
+    "returncode": 0,
+    "seconds": 1.6450941559996863,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "c51b13dca1586617156606bd578965362e55ca9bed125d42ae04acde3cffbb2f",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-persistence-quick",
+    "returncode": 0,
+    "seconds": 1.4258714329989743,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-persistence-full",
+    "returncode": 0,
+    "seconds": 74.26779990200157,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-tron-quick",
+    "returncode": 0,
+    "seconds": 1.4894632499999716,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "6fb6fc98512f6e261f14cc64086a08c048b71b2e04b66f9dcc392736b6c01981",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-tron-full",
+    "returncode": 0,
+    "seconds": 73.78110969300178,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "48eb9bf79ab76b4247ef878ea4a1924925050012a665efcdcd13acb92fd012e0",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-vit-quick",
+    "returncode": 0,
+    "seconds": 1.5051738359979936,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "b2215e6cb75070ec6b2422cd7cf6c843df31d6e45ef6b12750f8e4d72e5a5e71",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-vit-full",
+    "returncode": 0,
+    "seconds": 73.89200590299879,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "c0f7cd92a88ae4bcf05769866f79a2f862452b7b48deeb7e8a75d4e79c56661d",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-eden-claude-quick",
+    "returncode": 0,
+    "seconds": 1.4719678979963646,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "8835375694940e89c608a0cdfeebd31a5aef7d1d95f8f32112defaedd3f221d7",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-eden-claude-full",
+    "returncode": 0,
+    "seconds": 73.89555462799763,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "92d5d388d5bacae8ea533d1be68aacf0c282ceb7044fdb96d17dfc407dbbd139",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-eden-gpt-quick",
+    "returncode": 0,
+    "seconds": 1.4960179749978124,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "c51b13dca1586617156606bd578965362e55ca9bed125d42ae04acde3cffbb2f",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/eden-gpt.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "full",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628726",
+    "operation": "evaluate-eden-gpt-full",
+    "returncode": 0,
+    "seconds": 1890.4427496120043,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "ok": true,
+     "result_fingerprint": "392f30db887d21a2bd7a70d8fffc3aeb7a1353992e8f9f4904c2577185d51fd6",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "run_id": "eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-eden-gpt-full",
+    "returncode": 0,
+    "seconds": 74.06744917600008,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "392f30db887d21a2bd7a70d8fffc3aeb7a1353992e8f9f4904c2577185d51fd6",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "check-adapter",
+     "eden-gemini",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628726",
+    "operation": "check-adapter-eden-gemini",
+    "returncode": 0,
+    "seconds": 6.426555534999352,
+    "verdict": {
+     "cuda_peak_bytes": null,
+     "history_length": 1,
+     "next": "gval evaluate --tier quick --split validation --request <request> --split-id rc300_reduced_v1",
+     "ok": true,
+     "seconds_per_step": [
+      0.0695029769995017,
+      0.06439140199654503,
+      0.06357990900141886
+     ],
+     "source": {
+      "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+      "source_sha256": "f2cd9660836e53028f70fb396e103a697e9d5942f2fbae50c80095ab347c8079"
+     }
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/eden-gemini.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "quick",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628726",
+    "operation": "evaluate-eden-gemini-quick",
+    "returncode": 0,
+    "seconds": 406.22431007699925,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "ok": true,
+     "result_fingerprint": "4c01252fcecf20c29b8f27f9c511db85296615623873ff6caded24409bdb4009",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "run_id": "eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-eden-gemini-quick",
+    "returncode": 0,
+    "seconds": 1.7217327519974788,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "4c01252fcecf20c29b8f27f9c511db85296615623873ff6caded24409bdb4009",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "evaluate",
+     "--request",
+     "/u/gkerex/project/grmhd-emulator-validation/examples/owner_rc300_validation/eden-gemini.json",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--split",
+     "validation",
+     "--tier",
+     "full",
+     "--device",
+     "cpu"
+    ],
+    "job_id": "3628726",
+    "operation": "evaluate-eden-gemini-full",
+    "returncode": 0,
+    "seconds": 1595.0097589379948,
+    "verdict": {
+     "data_verified": true,
+     "next": "gval verify /work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "ok": true,
+     "result_fingerprint": "6c12848b6dfa598061fc12cfc1ecbec4617100ec6d3956c81c7c75972f1849d0",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "run_id": "eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    }
+   },
+   {
+    "command": [
+     "verify",
+     "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1"
+    ],
+    "job_id": "3628726",
+    "operation": "verify-eden-gemini-full",
+    "returncode": 0,
+    "seconds": 74.21261958799732,
+    "verdict": {
+     "data_verified": true,
+     "next": "Review this verified run; the owner may publish it with gval report",
+     "ok": true,
+     "result_fingerprint": "6c12848b6dfa598061fc12cfc1ecbec4617100ec6d3956c81c7c75972f1849d0",
+     "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "unsealed": false
+    }
+   },
+   {
+    "command": [
+     "report",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--export-results",
+     "/u/gkerex/project/grmhd-emulator-validation"
+    ],
+    "job_id": "3628726",
+    "operation": "report-rc300_reduced_v1",
+    "returncode": 0,
+    "seconds": 461.6706546170026,
+    "verdict": {
+     "checked": false,
+     "excluded_attempts": 0,
+     "groups": 2,
+     "next": "Review generated reports and export through an owner PR",
+     "ok": true,
+     "runs": 15,
+     "split_id": "rc300_reduced_v1"
+    }
+   },
+   {
+    "command": [
+     "report",
+     "--from-results",
+     "--split-id",
+     "rc300_reduced_v1",
+     "--check"
+    ],
+    "job_id": "3628726",
+    "operation": "replay-rc300_reduced_v1",
+    "returncode": 0,
+    "seconds": 6.014089495998633,
+    "verdict": {
+     "checked": true,
+     "excluded_attempts": 0,
+     "groups": 2,
+     "next": "Review generated reports and export through an owner PR",
+     "ok": true,
+     "runs": 15,
+     "split_id": "rc300_reduced_v1"
+    }
+   },
+   {
+    "command": [
+     "report",
+     "--split-id",
+     "5000run_v1",
+     "--export-results",
+     "/u/gkerex/project/grmhd-emulator-validation"
+    ],
+    "job_id": "3628726",
+    "operation": "report-5000run_v1",
+    "returncode": 0,
+    "seconds": 1.1752131690009264,
+    "verdict": {
+     "checked": false,
+     "excluded_attempts": 2,
+     "groups": 0,
+     "next": "Review generated reports and export through an owner PR",
+     "ok": true,
+     "runs": 0,
+     "split_id": "5000run_v1"
+    }
+   },
+   {
+    "command": [
+     "report",
+     "--from-results",
+     "--split-id",
+     "5000run_v1",
+     "--check"
+    ],
+    "job_id": "3628726",
+    "operation": "replay-5000run_v1",
+    "returncode": 0,
+    "seconds": 1.1130365760036511,
+    "verdict": {
+     "checked": true,
+     "excluded_attempts": 2,
+     "groups": 0,
+     "next": "Review generated reports and export through an owner PR",
+     "ok": true,
+     "runs": 0,
+     "split_id": "5000run_v1"
+    }
+   }
+  ]
+ },
+ "protection_trace_sha256": "46ead18b903dc887990b47c4a620d265a66c7eb55000392ba67c530a79158fa8",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "runs": [
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 286.78778884499934,
+   "job_id": "3627865",
+   "model": "persistence",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+   "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+   "summary_bytes": 5328,
+   "tier": "quick",
+   "training_label": "unknown"
+  },
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 1470.8063615969995,
+   "job_id": "3627865",
+   "model": "persistence",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/persistence/persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "summary_bytes": 38906,
+   "tier": "full",
+   "training_label": "unknown"
+  },
+  {
+   "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+   "evaluation_seconds": 311.3183467939998,
+   "job_id": "3627865",
+   "model": "tron",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "6fb6fc98512f6e261f14cc64086a08c048b71b2e04b66f9dcc392736b6c01981",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+   "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+   "summary_bytes": 5914,
+   "tier": "quick",
+   "training_label": "no, overlaps validation/test (2379 dumps)"
+  },
+  {
+   "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+   "evaluation_seconds": 1467.7546487119998,
+   "job_id": "3627865",
+   "model": "tron",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "48eb9bf79ab76b4247ef878ea4a1924925050012a665efcdcd13acb92fd012e0",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/tron/tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+   "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+   "summary_bytes": 39719,
+   "tier": "full",
+   "training_label": "no, overlaps validation/test (2379 dumps)"
+  },
+  {
+   "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+   "evaluation_seconds": 279.8167949840008,
+   "job_id": "3627865",
+   "model": "vit",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "b2215e6cb75070ec6b2422cd7cf6c843df31d6e45ef6b12750f8e4d72e5a5e71",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+   "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+   "summary_bytes": 5904,
+   "tier": "quick",
+   "training_label": "no, overlaps validation/test (2379 dumps)"
+  },
+  {
+   "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+   "evaluation_seconds": 1401.296218735,
+   "job_id": "3628349",
+   "model": "vit",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "c0f7cd92a88ae4bcf05769866f79a2f862452b7b48deeb7e8a75d4e79c56661d",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/vit/vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+   "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+   "summary_bytes": 39798,
+   "tier": "full",
+   "training_label": "no, overlaps validation/test (2379 dumps)"
+  },
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 492.1649298350003,
+   "job_id": "3628349",
+   "model": "eden-claude",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "8835375694940e89c608a0cdfeebd31a5aef7d1d95f8f32112defaedd3f221d7",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+   "run_id": "eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+   "summary_bytes": 5915,
+   "tier": "quick",
+   "training_label": "unknown"
+  },
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 1639.082125553,
+   "job_id": "3628349",
+   "model": "eden-claude",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "92d5d388d5bacae8ea533d1be68aacf0c282ceb7044fdb96d17dfc407dbbd139",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-claude/eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "run_id": "eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "summary_bytes": 39807,
+   "tier": "full",
+   "training_label": "unknown"
+  },
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 650.8695650929994,
+   "job_id": "3628349",
+   "model": "eden-gpt",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "c51b13dca1586617156606bd578965362e55ca9bed125d42ae04acde3cffbb2f",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+   "run_id": "eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+   "summary_bytes": 5909,
+   "tier": "quick",
+   "training_label": "unknown"
+  },
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 1890.4427496120043,
+   "job_id": "3628726",
+   "model": "eden-gpt",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "392f30db887d21a2bd7a70d8fffc3aeb7a1353992e8f9f4904c2577185d51fd6",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gpt/eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "run_id": "eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "summary_bytes": 39737,
+   "tier": "full",
+   "training_label": "unknown"
+  },
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 406.22431007699925,
+   "job_id": "3628726",
+   "model": "eden-gemini",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "4c01252fcecf20c29b8f27f9c511db85296615623873ff6caded24409bdb4009",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+   "run_id": "eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+   "summary_bytes": 5944,
+   "tier": "quick",
+   "training_label": "unknown"
+  },
+  {
+   "checkpoint_sha256": null,
+   "evaluation_seconds": 1595.0097589379948,
+   "job_id": "3628726",
+   "model": "eden-gemini",
+   "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+   "repo_modified": false,
+   "result_fingerprint": "6c12848b6dfa598061fc12cfc1ecbec4617100ec6d3956c81c7c75972f1849d0",
+   "run_dir": "/work/nvme/bgun/share/validation/runs/rc300_reduced_v1/eden-gemini/eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "run_id": "eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+   "summary_bytes": 39697,
+   "tier": "full",
+   "training_label": "unknown"
+  }
+ ],
+ "slurm": [
+  {
+   "elapsed": "00:02:14",
+   "exit_code": "0:0",
+   "job_id": "3627497",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:02:14",
+   "exit_code": "0:0",
+   "job_id": "3627497.extern",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:02:12",
+   "exit_code": "0:0",
+   "job_id": "3627497.0",
+   "maxrss": "1381440K",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:09:39",
+   "exit_code": "1:0",
+   "job_id": "3627554",
+   "maxrss": "",
+   "state": "FAILED"
+  },
+  {
+   "elapsed": "00:09:40",
+   "exit_code": "0:0",
+   "job_id": "3627554.extern",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:09:34",
+   "exit_code": "1:0",
+   "job_id": "3627554.0",
+   "maxrss": "3545984K",
+   "state": "FAILED"
+  },
+  {
+   "elapsed": "00:32:11",
+   "exit_code": "1:0",
+   "job_id": "3627615",
+   "maxrss": "",
+   "state": "FAILED"
+  },
+  {
+   "elapsed": "00:32:11",
+   "exit_code": "0:0",
+   "job_id": "3627615.extern",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:32:09",
+   "exit_code": "1:0",
+   "job_id": "3627615.0",
+   "maxrss": "4682624K",
+   "state": "FAILED"
+  },
+  {
+   "elapsed": "00:01:48",
+   "exit_code": "0:0",
+   "job_id": "3627615.1",
+   "maxrss": "1061824K",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:00:27",
+   "exit_code": "0:0",
+   "job_id": "3627851",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:00:27",
+   "exit_code": "0:0",
+   "job_id": "3627851.extern",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "00:00:23",
+   "exit_code": "0:0",
+   "job_id": "3627851.0",
+   "maxrss": "1641408K",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:06:55",
+   "exit_code": "0:0",
+   "job_id": "3627865",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:06:55",
+   "exit_code": "0:0",
+   "job_id": "3627865.extern",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:06:50",
+   "exit_code": "0:0",
+   "job_id": "3627865.0",
+   "maxrss": "6406272K",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:15:54",
+   "exit_code": "0:0",
+   "job_id": "3628349",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:15:54",
+   "exit_code": "0:0",
+   "job_id": "3628349.extern",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:15:52",
+   "exit_code": "0:0",
+   "job_id": "3628349.0",
+   "maxrss": "7120640K",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:21:12",
+   "exit_code": "0:0",
+   "job_id": "3628726",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:21:12",
+   "exit_code": "0:0",
+   "job_id": "3628726.extern",
+   "maxrss": "",
+   "state": "COMPLETED"
+  },
+  {
+   "elapsed": "01:21:10",
+   "exit_code": "0:0",
+   "job_id": "3628726.0",
+   "maxrss": "6360M",
+   "state": "COMPLETED"
+  }
+ ],
+ "tests": {
+  "native_eden_source": {
+   "count": 7,
+   "ok": true,
+   "seconds": 6.259
+  },
+  "native_final_guard_runner": {
+   "count": 20,
+   "ok": true,
+   "seconds": 89.438
+  },
+  "native_fixed_fixtures": {
+   "count": 25,
+   "ok": true,
+   "seconds": 75.236
+  },
+  "source_ci_7b5884e": {
+   "numpy_1_24_4_seconds": 974.616,
+   "numpy_2_seconds": 660.836,
+   "run_id": 44417310606,
+   "skips": 8,
+   "tests": 156
+  },
+  "source_ci_e143076": {
+   "numpy_1_24_4_seconds": 840.29,
+   "numpy_2_seconds": 885.211,
+   "ok": true,
+   "run_id": 44422455388,
+   "skips": 8,
+   "tests": 157
+  }
+ }
+}

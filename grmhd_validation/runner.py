@@ -29,6 +29,7 @@ from .slurm import require_compute
 from .splits import CHANNELS, identifier, read_split
 from .windows import select_starts
 from .validation import schema_validate
+from .repo_state import inspect as inspect_repository, require_clean
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -112,7 +113,7 @@ def metadata(request, split, protocol, protocol_sha, checkpoint_sha, device, env
             "split_id": split.split_id, "split_file_sha256": split.sha256,
             "protocol_id": protocol["protocol_id"], "protocol_sha256": protocol_sha,
             "data_verified": False, "start_time": now(), "end_time": None,
-            "result_fingerprint": None, "runner_autocast": False}
+            "result_fingerprint": None, "runner_autocast": False, **inspect_repository(repo)}
 
 
 def execute(request, split, protocol, protocol_sha, partition, writer, device, verify_data, repo=REPO, run_info=None, tier='quick',truth_cache=None,predictions=None):
@@ -123,6 +124,7 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
     checkpoint_sha = sha256(request["checkpoint"]) if request["checkpoint"] is not None else None
     info = metadata(request, split, protocol, protocol_sha, checkpoint_sha, device, environment, repo) if run_info is None else run_info
     writer.json("run.json", info)
+    require_clean(info, repo)
     for directory in ("metrics", "tables", "figures", "logs"):
         writer.folder(directory)
     with writer.open("logs/evaluate.log") as raw_log:
@@ -209,6 +211,7 @@ def execute(request, split, protocol, protocol_sha, partition, writer, device, v
             info['result_content_sha256']=result_files(writer.root)
             info["result_fingerprint"] = fingerprint(info['result_content_sha256'])
             info["end_time"] = now()
+            require_clean(info, repo)
             writer.json("run.json", info)
             schema_validate(info, "run.schema.json")
             # Human-readable output is rendered from the structured results only.
@@ -224,6 +227,8 @@ def bundle_checksums(writer, complete=True):
 
 
 def record_failure(writer, info, error):
+    if hasattr(error, 'state'):
+        info.update(error.state)
     # A rename can fail after freezing; only this invocation's inodes may be restored.
     writer.storage.restore_created_modes(writer.root)
     marker = writer.root / "COMPLETE"
@@ -244,24 +249,32 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
     if tier not in {'quick','full'}:
         raise ValueError('Tier must be quick or full')
     storage = SharedStorage() if storage is None else storage
-    request = read_request(request_path)
+    # Bootstrap the namespace from the user request before consulting any
+    # protected schema; even a broken schema edit must leave a dirty attempt.
+    request = json.loads(Path(request_path).read_text())
+    if not isinstance(request, dict) or not {'model', 'version', 'checkpoint'} <= request.keys():
+        raise ValueError('Request needs model, version and checkpoint to record an attempt')
     identifier(split_id)
     if partition not in {"validation", "test"}:
         raise ValueError("Evaluation requires validation or test")
-    split = read_split(Path(repo) / "splits" / (split_id + ".json"), data_root)
-    if sha256(storage.root / "splits" / (split_id + ".json")) != split.sha256:
-        raise ValueError("Shared frozen split differs from repository")
-    protocol, protocol_sha = read_protocol(Path(repo) / "protocols/forecast_v1.json")
     checkpoint_sha = sha256(request["checkpoint"]) if request["checkpoint"] is not None else None
     root, run_id, attempt = reserve(storage, request["model"], request["version"], checkpoint_sha, split_id, partition, tier)
     writer = Writer(storage, root)
     info = {"request": request, "run_id": run_id, "attempt": attempt, "split": partition, "tier": tier,
-            "start_time": now(), "end_time": None, "status": "failed"}
+            "model": request['model'], "version": request['version'], "checkpoint_sha256": checkpoint_sha,
+            "split_id": split_id, "start_time": now(), "end_time": None, "status": "failed", **inspect_repository(repo)}
     try:
+        require_clean(info, repo)
+        schema_validate(request, 'request.schema.json')
+        split = read_split(Path(repo) / "splits" / (split_id + ".json"), data_root)
+        if sha256(storage.root / "splits" / (split_id + ".json")) != split.sha256:
+            raise ValueError("Shared frozen split differs from repository")
+        protocol, protocol_sha = read_protocol(Path(repo) / "protocols/forecast_v1.json")
         device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
         environment = check_environment(repo)
         info = {**metadata(request, split, protocol, protocol_sha, checkpoint_sha, device, environment, repo),
                 "run_id": run_id, "attempt": attempt, "split": partition, "tier": tier, "status": "running"}
+        require_clean(info, repo)
         from .conformance import last_conformance
         info["conformance"] = last_conformance(storage, split_id, protocol_sha, environment,tier='full' if tier=='full' and full_tier_ready(protocol) else 'quick')
         info["no_verify_data"] = no_verify_data
@@ -295,6 +308,7 @@ def evaluate(request_path, split_id, partition="validation", tier="quick", devic
         info["status"] = "complete"
         writer.json("run.json", info)
         bundle_checksums(writer)
+        require_clean(info, repo)
         target = publish(storage, root, split_id, request["model"])
     except UnsealedRunError as error:
         return {"ok": False, "next": "gval seal " + str(error.target), "unsealed": True,

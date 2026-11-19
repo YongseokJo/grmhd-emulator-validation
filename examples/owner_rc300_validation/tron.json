@@ -1,0 +1,9 @@
+{
+ "adapter": "tron",
+ "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+ "model": "tron",
+ "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required.",
+ "options": {},
+ "training_record": "/work/nvme/bgun/share/validation/training_records/tron/a81d05b4.json",
+ "version": "v1"
+}

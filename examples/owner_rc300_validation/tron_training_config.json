@@ -1,0 +1,53 @@
+{
+ "batch_size": 8,
+ "curriculum_ramp_epochs": 100,
+ "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+ "description": "TRON (uno_simple_ds_v3) on the rc300 reduced run with vit_rc300_v1's split. TRON's recipe: 2 detached unrolled steps, lr 1e-3 (50-epoch warmup from 1e-5, then halved after 15 epochs without improvement), up to 500 epochs, fp32, physics phase-in 50 + 100 epochs, early stopping after 50 epochs without improvement from epoch 150. Loss: TRON's mass shells; guard 7.0 and div B vs the truth's, as for the ViT.",
+ "early_stop_patience": 50,
+ "epochs": 500,
+ "experiment": "tron_rc300_v1",
+ "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+ "grad_clip": 1.0,
+ "grad_monitor_every": 10,
+ "in_channels": 8,
+ "init_lr": 1e-05,
+ "learning_rate": 0.001,
+ "mass_shell": "tron",
+ "model": "tron",
+ "plateau_factor": 0.5,
+ "plateau_patience": 15,
+ "provenance": {
+  "known_prior_data_exposure": "Historical checkpoint trained/selected on Kevin 80/10/10 data, overlapping the frozen benchmark. Existing best_blind evaluation artifacts; no blind claim.",
+  "normalization_split": "fixed_transform_no_fit",
+  "original_config_path": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/config.json",
+  "original_config_sha256": "7541e8dcfc583fc318a0cb5d3752c4801e175145ecb97298324f9cbff35d52c5",
+  "prior_data_exposure": [
+   "kevin_fall26_80_10_10 training/selection",
+   "historical best_blind evaluation artifacts"
+  ],
+  "selection_dump_ranges": [
+   [
+    10708,
+    11671
+   ]
+  ],
+  "source_split": "kevin_fall26_80_10_10",
+  "training_code_commit": "2667a5fc405a8467fa77614072786eef63c4eb9a",
+  "training_dump_ranges": [
+   [
+    3000,
+    10707
+   ]
+  ]
+ },
+ "recon_only_epochs": 50,
+ "rollout_K": 50,
+ "rollout_eval_every": 10,
+ "seed": 0,
+ "stable_epoch": 150,
+ "unroll_steps": 2,
+ "use_amp": false,
+ "val_frac": 0.11116236162361623,
+ "warmup_epochs": 50,
+ "world_size": 4
+}

@@ -5,8 +5,12 @@ to end. Every model is scored on the same frozen data splits, with the same infe
 metric and figure code, and the same output layout. Results go to one group folder, where anyone can
 compare them.
 
-**Status: milestones 1–5 merged; milestone 6 is complete for review.** Reporting,
+**Status: ready for participants on locked DeltaAI.** Reporting,
 portable result replay, CI and canonical participant instructions are implemented.
+The six-model rc300 validation dry run passed quick and full tiers; see the
+[final owner receipt](docs/milestone_7_validation.md) and
+[leaderboard](reports/rc300_reduced_v1/leaderboard.md). Historical TRON/ViT
+training overlap is labelled explicitly. This milestone ran validation only.
 See [report usage](docs/milestone_6.md) and the
 [compact-summary owner decision](docs/notes/summary_format_correction.md).
 New summaries contain bounded headlines and metric hashes (at most 1 MB);

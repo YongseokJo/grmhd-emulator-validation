@@ -67,6 +67,12 @@
        "string",
        "null"
       ]
+     },
+     "repo_modified": {
+      "type": [
+       "boolean",
+       "null"
+      ]
      }
     },
     "required": [

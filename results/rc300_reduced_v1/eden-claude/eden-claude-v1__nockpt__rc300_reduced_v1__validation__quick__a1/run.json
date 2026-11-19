@@ -1,0 +1,102 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "f2cd9660836e53028f70fb396e103a697e9d5942f2fbae50c80095ab347c8079",
+ "attempt": 1,
+ "checkpoint": null,
+ "checkpoint_sha256": null,
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:08:41.761928+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cpu",
+ "end_time": "2026-11-19T01:27:10.130609+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": null,
+ "history_length": 1,
+ "host": "gh046.hsn.cm.delta.internal.ncsa.edu",
+ "model": "eden-claude",
+ "model_provenance": {
+  "author": "Eden Growney",
+  "known_prior_data_exposure": "Developed in Eden rc300 start-11672 pilot; blindness to current split is not established",
+  "originating_agent": "claude",
+  "protocol": "A",
+  "source_commit": "f8cd379a562e9b0fc6f96ee36d5f9855ddc1d27a",
+  "source_sha256": {
+   "_eden_claude.py": "e373edef9bb2230b17ae599a0a1d0171c9ca7e42ae11536f385282a57793fbf3",
+   "_eden_gemini.py": "a125e22ee9a954ae5372a617a424acdae79fcd35d2a2dff7b873a5e0a665949c",
+   "_eden_gpt.py": "32d68c3883f32534cd4831af1ac03b60478460ef0827ade9dcf3679c222d1c54"
+  }
+ },
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "eden-claude",
+  "checkpoint": null,
+  "model": "eden-claude",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required. Protocol A, credited Eden start-11672 method; known pilot exposure, not a blind development claim.",
+  "options": {},
+  "training_record": null,
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/rollout_curve.json": "171eb601acfe46540085601ee1afb6a260d82f64a9434c0902008cc73ea89d4c",
+  "metrics/single_step.json": "e81d41ad70b71252dca97b78ca43055ac11a6ff3a6afd8ed0c39db5a23ed9691",
+  "summary.json": "8a3890f9a34cacfe71a8d46373aaf633247f1923ba33bfb907b3f758f276afe3",
+  "tables/rollout_curve.csv": "476bfc7615795b1f4fd702c3e8335b2505c23550e5bb5763bea3a6b32a6c3430",
+  "tables/single_step.csv": "2d51a4c089acff5e79c8684023a42ac4c508adbe4a5a306aa3c3114beec889b0"
+ },
+ "result_fingerprint": "8835375694940e89c608a0cdfeebd31a5aef7d1d95f8f32112defaedd3f221d7",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-19T01:19:02.714559+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "quick",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "reason": "No training record supplied",
+  "record_sha256": null,
+  "trained_on_this_split": "unknown"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

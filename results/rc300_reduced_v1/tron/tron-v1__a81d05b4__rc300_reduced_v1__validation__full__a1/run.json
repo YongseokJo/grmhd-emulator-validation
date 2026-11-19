@@ -1,0 +1,464 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "d6757c5cc16bb5840998ccd39b7ec59bbd238139ac36f42aea18d0635e221595",
+ "analysis_runtime": {
+  "cost": {
+   "all_start_statistics": {
+    "bootstrap": {
+     "block_length": 10,
+     "method": "chunk_block_bootstrap",
+     "n_blocks": 3,
+     "resamples": 1000,
+     "seed": 42
+    },
+    "lower": {
+     "milliseconds_per_step": 27.83382551251634
+    },
+    "mean": {
+     "milliseconds_per_step": 27.898778233323657
+    },
+    "n_starts": 12,
+    "upper": {
+     "milliseconds_per_step": 27.952813649972086
+    },
+    "valid_counts": {}
+   },
+   "milliseconds_per_step": 27.816233550038305,
+   "parameters": 77601456,
+   "timed_steps": 20
+  }
+ },
+ "attempt": 1,
+ "channel_scales_sha256": "3fcb682ba38a9c6d64e4c1c2599f7fbd82d9324e99ec6ec319538c8e1e1f96d9",
+ "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+ "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:32:34.787411+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cuda",
+ "end_time": "2026-11-19T00:39:11.605099+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": "NVIDIA GH200 120GB",
+ "history_length": 1,
+ "host": "gh074.hsn.cm.delta.internal.ncsa.edu",
+ "model": "tron",
+ "model_provenance": {
+  "architecture": "tron",
+  "config": {
+   "batch_size": 8,
+   "curriculum_ramp_epochs": 100,
+   "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+   "description": "TRON (uno_simple_ds_v3) on the rc300 reduced run with vit_rc300_v1's split. TRON's recipe: 2 detached unrolled steps, lr 1e-3 (50-epoch warmup from 1e-5, then halved after 15 epochs without improvement), up to 500 epochs, fp32, physics phase-in 50 + 100 epochs, early stopping after 50 epochs without improvement from epoch 150. Loss: TRON's mass shells; guard 7.0 and div B vs the truth's, as for the ViT.",
+   "early_stop_patience": 50,
+   "epochs": 500,
+   "experiment": "tron_rc300_v1",
+   "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+   "grad_clip": 1.0,
+   "grad_monitor_every": 10,
+   "in_channels": 8,
+   "init_lr": 1e-05,
+   "learning_rate": 0.001,
+   "log_every": 50,
+   "mass_shell": "tron",
+   "max_batches": null,
+   "model": "tron",
+   "num_workers": 4,
+   "out_dir": "/u/kfortune/neural_operator_tron/Fall26/outputs",
+   "plateau_factor": 0.5,
+   "plateau_patience": 15,
+   "recon_only_epochs": 50,
+   "rollout_K": 50,
+   "rollout_eval_every": 10,
+   "seed": 0,
+   "stable_epoch": 150,
+   "stop_after": null,
+   "unroll_steps": 2,
+   "use_amp": false,
+   "val_frac": 0.11116236162361623,
+   "warmup_epochs": 50
+  },
+  "normalization": "Kevin main@ebcc218 fixed log10/arcsinh; exact gamma<=50 decode",
+  "source_sha256": {
+   "_tron_model.py": "db04e58c783dd7301bb52f7a570445923f394ee9098a50f415173a003aafad3d",
+   "_vit_model.py": "1dd178b9ca6315d9953dea208d0beda65d714f4e3b76020eb088870f0389e48b"
+  },
+  "use_amp": false
+ },
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "tron",
+  "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+  "model": "tron",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required.",
+  "options": {},
+  "training_record": "/work/nvme/bgun/share/validation/training_records/tron/a81d05b4.json",
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/accretion_diagnostics.json": "52b3d2baa12b32c90f799c30c6bdd0c0c9e05575d9ec872552d8c1843b63a1b0",
+  "metrics/azimuthal_spectra.json": "be33c0363f5e969506a2fa0a99ae477a49bd992df92430e9b2778ec8d110f828",
+  "metrics/bias_analysis.json": "066f1844fa79ee8f0e85fa449795c9787b0431c0d62dfcc3f0ee496cd1909e2a",
+  "metrics/coherence.json": "ea6c6ba06eb9500a88b90e15d7666aef0dcad5e5a9f96af8381d009e74f0adfe",
+  "metrics/conditional_error.json": "45bec974367164c36d231f7ad35f6a5dc0562e0b983ca518a5b3b09b446d2b9d",
+  "metrics/conservation_closure.json": "f0be781db488a4cbd4aad0cb391510d0809bdbb6b085bcfe6d687cb8d1831c87",
+  "metrics/correlation_times.json": "83ec2d6745b854fcf9cd43a7f58c1072bc98e19ba7158adfa34ecbab060af932",
+  "metrics/cost.json": "26c722973deb63791e0575b9163963d2d8d8c97f073ab49168905c7583858bb0",
+  "metrics/error_correlation.json": "3b95632bcbc87b1eb697a0b1a3f648146a0a82efff3c664449f06320f7de0512",
+  "metrics/lorentz.json": "98fc40b373020fcbc901138b77dd3b2e3384597508d4d889a2841c2915e3d31c",
+  "metrics/mdot.json": "82da418144fe0e668b6bebb073a9941c7bfde348269b54de4d9ab103fea18ede",
+  "metrics/mean_profiles.json": "3b4d2c875661d4bfaf25fd475d96a9b0cd1e727db4192917d187736cce259897",
+  "metrics/meridional_slice.json": "58f08acbd2fa81a7ed1d47c15ec0fe44b025029e7d5272b94e5576ebab01f2a1",
+  "metrics/physics_table.json": "26de3be1f5917f63104e217fc0f3dd5589c0f486964af985e4e1863b0828f378",
+  "metrics/rollout_curve.json": "6f5b1a422fc22c9ade0d215132cc0d1fc20c6079c4f4413c270752dc1ddd5203",
+  "metrics/rollout_evolution.json": "762b6c10dc8d7015c20a4c4806b000659d7916180d731c95fd178b02f579a850",
+  "metrics/shell_profiles.json": "ec92ab11347f1e7419b65dfa087c53497cc39b5c386f2896764303796fa4deab",
+  "metrics/single_step.json": "c81a247385bc617c8f903b14cce056abca633d8732fb1c2b2318c04ffbfe2265",
+  "metrics/spatial_error.json": "26e10e48bdf6035bda19d5d93cff6d3fda7deac96a9b1a3ea4f239bfa588815e",
+  "metrics/spectrum.json": "f5e28976107b9e0e6822c5621fe2cd64cdb576d4b792eef5dc17d79bb69c3f58",
+  "metrics/stability.json": "cfa39b8d1d6bd3bde3e9b890a3bc338ce76882ac6aee0f3787a53a85722adfe5",
+  "metrics/statistical_props.json": "42fb103ec4fc3dcdebbe63bb0cbb0d48795007987ebaf30d7f3ead38e62d8f2b",
+  "metrics/temporal_consistency.json": "dedeb1875f99bd9b5025fb845489731d503892f0d3252a6b2aaba132236aef7e",
+  "metrics/temporal_spectrum.json": "b5c3545b9ca31d34f1f81fa0adef0c86a81a20804bf38cb95fd5fbe3389a67dd",
+  "metrics/turbulence_stats.json": "8d5c6543eb6489c6e7669bd1b6ef0f55dea641ca64ff04c4b8a643878339dd1a",
+  "summary.json": "88a65aa80754ad6f5d5f3ba824c08209a39dde49a779e92d3331a362010a573e",
+  "tables/accretion_diagnostics.csv": "121f193187bd9d51ab4f0e6c0cdc0336e0776f7fcab4102abe18b0d3dd33ac8b",
+  "tables/azimuthal_spectra.csv": "9308d3edc34773ef5e09fdbfdbe685965fc24318d10b3a2a7d471c871a3cba0f",
+  "tables/bias_analysis.csv": "80d0c7745b2db345e2fc15d88028c77050f6b23fa46d0e714c0f3177ed4a13a3",
+  "tables/coherence.csv": "a82e45840dd6e58721654b5802f8729d65960ffdd2490da747fb20886aa4a0fb",
+  "tables/conditional_error.csv": "06b170081963d16a0ddb6eaab811e4de7341153a1a78f5b7e0aabca2c70b87ac",
+  "tables/conservation_closure.csv": "e70bc9b4450c78af5626062eb9c6ec9dd9c559222eb1916ecd745ac282d90d8e",
+  "tables/correlation_times.csv": "44b9f5798620870e221397b6562b16b90f49ffe7880d0f062bbde41ce1813882",
+  "tables/cost.csv": "69113851012cbee195c7ec1805d401e5efeaf9db19dce582b42923c8bc7b3611",
+  "tables/error_correlation.csv": "98ec662ae7d4391ab023cf7f340a75f6436a961f62a02faea6545906c495f045",
+  "tables/lorentz.csv": "efabc70d8ed86a06bb62e01aaf05b3851ba8f863d1a9ccfa87f73b9f3d4f3f9d",
+  "tables/mdot.csv": "ecfb850d4394ac6a286117412a53511c8a6a7a4eea570a97c55173c126d06fa0",
+  "tables/mean_profiles.csv": "92de36af955febe48c8bee038d2221c0faa692c3947af6fd4adc6e5afa6fbd23",
+  "tables/meridional_slice.csv": "d8edb92a1cd7200fe6f12045c6ce03f1c2e9be1f35520c96dcf042ef9f158561",
+  "tables/physics_table.csv": "aaa36ff97bfdbf1df4818cd7127a2a7cdffc7b133d9c40e64878b0bb04094ba7",
+  "tables/rollout_curve.csv": "4aca038e31e0a6d84ec4f33edb82bbfe0579801a3eb1d96622d012414c5c86af",
+  "tables/rollout_evolution.csv": "2eebc497e343b31f91179e95c56c2f36d1ad9b760b51cf9302c49c1c8a9176e9",
+  "tables/shell_profiles.csv": "7bb33d90c2a674922359668a9c5c43180660a9c53087182a472568dd66b811c3",
+  "tables/single_step.csv": "0aee216f464dda766289783a46a03c1001978a62e289ee150e98ef309f3d7fae",
+  "tables/spatial_error.csv": "fd24c2438f4b96c75b10a4d96380f85ca19dc6146c646fef4e387dd3d5c89595",
+  "tables/spectrum.csv": "d7bbbb96839d77c6f9c56395769b68c62d6e630b229aa5edecc0b59b06718d33",
+  "tables/stability.csv": "7e3a9490a864e565caae25b544cbcc5334900cef93efeacd71b7cb49f0de9552",
+  "tables/statistical_props.csv": "2ba1124033c50a8158bdad4724c632db3c29aba2517decfc6fa91f1f076cf0f6",
+  "tables/temporal_consistency.csv": "96285e51015ca16ae9b3456e2d02eecbf05bb8c4ab3b4037f27dd2282a04b6df",
+  "tables/temporal_spectrum.csv": "67984aa0be1e9ec88134b12081e1898f9c895f3268fa35caf62e041ede9ee6b6",
+  "tables/turbulence_stats.csv": "e54bb16cd0a1785b3afc7bebb38252b9b49e9b851fce7757e046135dffafe23f"
+ },
+ "result_fingerprint": "48eb9bf79ab76b4247ef878ea4a1924925050012a665efcdcd13acb92fd012e0",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-19T00:14:50.894612+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "full",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "chunk_counts": {
+   "selection": {
+    "excluded_1": 0,
+    "excluded_10": 0,
+    "excluded_11": 10,
+    "excluded_12": 10,
+    "excluded_2": 0,
+    "excluded_3": 0,
+    "excluded_4": 0,
+    "excluded_5": 0,
+    "excluded_6": 0,
+    "excluded_7": 0,
+    "excluded_8": 0,
+    "excluded_9": 0,
+    "test_1": 0,
+    "test_2": 0,
+    "test_3": 475,
+    "train_1": 0,
+    "train_2": 0,
+    "train_3": 0,
+    "train_4": 0,
+    "train_5": 0,
+    "train_6": 235,
+    "train_7": 234,
+    "validation_1": 0,
+    "validation_2": 0,
+    "validation_3": 0
+   },
+   "training": {
+    "excluded_1": 10,
+    "excluded_10": 10,
+    "excluded_11": 0,
+    "excluded_12": 0,
+    "excluded_2": 10,
+    "excluded_3": 10,
+    "excluded_4": 10,
+    "excluded_5": 10,
+    "excluded_6": 10,
+    "excluded_7": 10,
+    "excluded_8": 10,
+    "excluded_9": 10,
+    "test_1": 476,
+    "test_2": 476,
+    "test_3": 0,
+    "train_1": 1197,
+    "train_2": 853,
+    "train_3": 853,
+    "train_4": 854,
+    "train_5": 853,
+    "train_6": 619,
+    "train_7": 0,
+    "validation_1": 476,
+    "validation_2": 476,
+    "validation_3": 475
+   }
+  },
+  "evidence": "operator declaration",
+  "label": "no, overlaps validation/test (2379 dumps)",
+  "normalization_flagged": true,
+  "outside_split_counts": {
+   "selection": 0,
+   "training": 0
+  },
+  "partition_counts": {
+   "selection": {
+    "excluded": 20,
+    "test": 475,
+    "train": 469,
+    "validation": 0
+   },
+   "training": {
+    "excluded": 100,
+    "test": 952,
+    "train": 5229,
+    "validation": 1427
+   }
+  },
+  "ranges": {
+   "selection": [
+    [
+     10708,
+     11671
+    ]
+   ],
+   "training": [
+    [
+     3000,
+     10707
+    ]
+   ]
+  },
+  "reasons": [
+   "training_outside_train",
+   "selection_outside_validation",
+   "normalization_not_train"
+  ],
+  "record": {
+   "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+   "computed": {
+    "chunk_counts": {
+     "selection": {
+      "excluded_1": 0,
+      "excluded_10": 0,
+      "excluded_11": 10,
+      "excluded_12": 10,
+      "excluded_2": 0,
+      "excluded_3": 0,
+      "excluded_4": 0,
+      "excluded_5": 0,
+      "excluded_6": 0,
+      "excluded_7": 0,
+      "excluded_8": 0,
+      "excluded_9": 0,
+      "test_1": 0,
+      "test_2": 0,
+      "test_3": 475,
+      "train_1": 0,
+      "train_2": 0,
+      "train_3": 0,
+      "train_4": 0,
+      "train_5": 0,
+      "train_6": 235,
+      "train_7": 234,
+      "validation_1": 0,
+      "validation_2": 0,
+      "validation_3": 0
+     },
+     "training": {
+      "excluded_1": 10,
+      "excluded_10": 10,
+      "excluded_11": 0,
+      "excluded_12": 0,
+      "excluded_2": 10,
+      "excluded_3": 10,
+      "excluded_4": 10,
+      "excluded_5": 10,
+      "excluded_6": 10,
+      "excluded_7": 10,
+      "excluded_8": 10,
+      "excluded_9": 10,
+      "test_1": 476,
+      "test_2": 476,
+      "test_3": 0,
+      "train_1": 1197,
+      "train_2": 853,
+      "train_3": 853,
+      "train_4": 854,
+      "train_5": 853,
+      "train_6": 619,
+      "train_7": 0,
+      "validation_1": 476,
+      "validation_2": 476,
+      "validation_3": 475
+     }
+    },
+    "label": "no, overlaps validation/test (2379 dumps)",
+    "normalization_flagged": true,
+    "outside_split_counts": {
+     "selection": 0,
+     "training": 0
+    },
+    "partition_counts": {
+     "selection": {
+      "excluded": 20,
+      "test": 475,
+      "train": 469,
+      "validation": 0
+     },
+     "training": {
+      "excluded": 100,
+      "test": 952,
+      "train": 5229,
+      "validation": 1427
+     }
+    },
+    "ranges": {
+     "selection": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "training": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "reasons": [
+     "training_outside_train",
+     "selection_outside_validation",
+     "normalization_not_train"
+    ],
+    "trained_on_this_split": "no"
+   },
+   "config": {
+    "batch_size": 8,
+    "curriculum_ramp_epochs": 100,
+    "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+    "description": "TRON (uno_simple_ds_v3) on the rc300 reduced run with vit_rc300_v1's split. TRON's recipe: 2 detached unrolled steps, lr 1e-3 (50-epoch warmup from 1e-5, then halved after 15 epochs without improvement), up to 500 epochs, fp32, physics phase-in 50 + 100 epochs, early stopping after 50 epochs without improvement from epoch 150. Loss: TRON's mass shells; guard 7.0 and div B vs the truth's, as for the ViT.",
+    "early_stop_patience": 50,
+    "epochs": 500,
+    "experiment": "tron_rc300_v1",
+    "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+    "grad_clip": 1.0,
+    "grad_monitor_every": 10,
+    "in_channels": 8,
+    "init_lr": 1e-05,
+    "learning_rate": 0.001,
+    "mass_shell": "tron",
+    "model": "tron",
+    "plateau_factor": 0.5,
+    "plateau_patience": 15,
+    "provenance": {
+     "known_prior_data_exposure": "Historical checkpoint trained/selected on Kevin 80/10/10 data, overlapping the frozen benchmark. Existing best_blind evaluation artifacts; no blind claim.",
+     "normalization_split": "fixed_transform_no_fit",
+     "original_config_path": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/config.json",
+     "original_config_sha256": "7541e8dcfc583fc318a0cb5d3752c4801e175145ecb97298324f9cbff35d52c5",
+     "prior_data_exposure": [
+      "kevin_fall26_80_10_10 training/selection",
+      "historical best_blind evaluation artifacts"
+     ],
+     "selection_dump_ranges": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "source_split": "kevin_fall26_80_10_10",
+     "training_code_commit": "2667a5fc405a8467fa77614072786eef63c4eb9a",
+     "training_dump_ranges": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "recon_only_epochs": 50,
+    "rollout_K": 50,
+    "rollout_eval_every": 10,
+    "seed": 0,
+    "stable_epoch": 150,
+    "unroll_steps": 2,
+    "use_amp": false,
+    "val_frac": 0.11116236162361623,
+    "warmup_epochs": 50,
+    "world_size": 4
+   },
+   "config_sha256": "a96192981289fe784cc235bf7fb3547e444b78fae30599dcb737c90d3f6df0c0",
+   "evidence": "operator declaration",
+   "log_sha256": "b4eab92c499e62df1301c65e77ddb43d552c98dc36f3f38b0322b3de4502d023",
+   "model": "tron",
+   "schema_version": 1,
+   "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+   "split_id": "rc300_reduced_v1",
+   "verified": false,
+   "version": "v1"
+  },
+  "record_sha256": "276550965e022f8d3a7f5f6bb01af96638fff0e9cb8a33f6a050122bebec0efe",
+  "trained_on_this_split": "no"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

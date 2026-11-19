@@ -1,0 +1,36 @@
+{
+ "eden-claude": {
+  "checkpoint": null,
+  "checkpoint_sha256": null,
+  "request_sha256": "f9b9b17821b5219b43f6ad4ae01d40578fb826460035e7c39cc65bc711aeb5e1"
+ },
+ "eden-gemini": {
+  "checkpoint": null,
+  "checkpoint_sha256": null,
+  "request_sha256": "d49352afeab86edfdfbe9e885881dca589f46781c275353b0418e6d87ccb36b9"
+ },
+ "eden-gpt": {
+  "checkpoint": null,
+  "checkpoint_sha256": null,
+  "request_sha256": "50575f222c644fa9c7f6aa23fe143fa08f4acb343cb3a0b4fcaf086dc050dacb"
+ },
+ "persistence": {
+  "checkpoint": null,
+  "checkpoint_sha256": null,
+  "request_sha256": "560838f3831c4a4d7b30bb6219af6bdaa6678310399f19d64cadcf65b54b4dd0"
+ },
+ "tron": {
+  "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+  "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+  "request_sha256": "413092dcd0d9e12eaeb8bd89affac72d8bcded0ad84616d0918236acb89c3029",
+  "source_config_sha256": "7541e8dcfc583fc318a0cb5d3752c4801e175145ecb97298324f9cbff35d52c5",
+  "training_log_sha256": "b4eab92c499e62df1301c65e77ddb43d552c98dc36f3f38b0322b3de4502d023"
+ },
+ "vit": {
+  "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/best.pth",
+  "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+  "request_sha256": "8a4c1db702b5e6f40292d47fcbd54e3c7f8a5fd42c5b1e75feca5fc2131a35f9",
+  "source_config_sha256": "5c6fdb7767d0c3a6430ccf7bbec2b4845112745cf6829fb7d75cd41a3d2d6a93",
+  "training_log_sha256": "aa9d9bd29577ee44ef6bc0be4c6d2fb645e764272c287ca92baf63538fba5fd3"
+ }
+}

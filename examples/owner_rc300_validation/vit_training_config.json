@@ -1,0 +1,57 @@
+{
+ "batch_size": 8,
+ "curriculum_ramp_epochs": 20,
+ "d_model": 512,
+ "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+ "depth": 12,
+ "description": "ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.",
+ "early_stop_patience": 20,
+ "epochs": 100,
+ "experiment": "vit_rc300_v1",
+ "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+ "grad_checkpoint": false,
+ "grad_clip": 1.0,
+ "learning_rate": 0.0005,
+ "min_lr": 1e-06,
+ "mlp_ratio": 8,
+ "n_heads": 8,
+ "patch": [
+  4,
+  4,
+  4
+ ],
+ "provenance": {
+  "known_prior_data_exposure": "Historical checkpoint trained/selected on Kevin 80/10/10 data, overlapping the frozen benchmark. Existing best_blind evaluation artifacts; no blind claim.",
+  "normalization_split": "fixed_transform_no_fit",
+  "original_config_path": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/config.json",
+  "original_config_sha256": "5c6fdb7767d0c3a6430ccf7bbec2b4845112745cf6829fb7d75cd41a3d2d6a93",
+  "prior_data_exposure": [
+   "kevin_fall26_80_10_10 training/selection",
+   "historical best_blind evaluation artifacts"
+  ],
+  "selection_dump_ranges": [
+   [
+    10708,
+    11671
+   ]
+  ],
+  "source_split": "kevin_fall26_80_10_10",
+  "training_code_commit": "ae8d0403c0a4b96068e4a369682d270eb90964a2",
+  "training_dump_ranges": [
+   [
+    3000,
+    10707
+   ]
+  ]
+ },
+ "recon_only_epochs": 10,
+ "seed": 0,
+ "stable_epoch": 30,
+ "token_mode": "per_patch",
+ "unroll_steps": 1,
+ "use_amp": true,
+ "val_frac": 0.11116236162361623,
+ "warmup_epochs": 5,
+ "weight_decay": 0.05,
+ "world_size": 4
+}

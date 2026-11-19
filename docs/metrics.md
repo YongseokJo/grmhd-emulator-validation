@@ -346,3 +346,15 @@ shared runs/references/leaderboard. The older checkpoint trained on Kevin's
 80/10/10 split, including this validation chunk; **these are port-regression
 checks, never benchmark model scores**. Public CI runs synthetic tests; it cannot
 claim the required private-data regression passed.
+
+## Milestone 7: Eden-Claude wrapper acceptance
+
+The original Claude kernel applies `0.5*(x + x[:, ::-1])` to its ring profiles.
+This is an operation on theta indices; the kernel never reads geometry `h`.
+The wrapper had added a physical equatorial-symmetry requirement absent from
+that source, which rejected the actual rc300 grid before forecasting. Remove
+that extra requirement and retain the source operation exactly. Do not resample
+theta, symmetrize physical inputs, alter predictions or change metric formulas.
+The asymmetric-theta regression verifies identical predictions; original-source
+kernel regressions remain unchanged. Uniform periodic phi, uniform log-radius
+and the source's valid-spin requirements remain checked.

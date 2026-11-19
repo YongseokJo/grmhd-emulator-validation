@@ -1,0 +1,428 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "d6757c5cc16bb5840998ccd39b7ec59bbd238139ac36f42aea18d0635e221595",
+ "attempt": 1,
+ "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/best.pth",
+ "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:08:41.761928+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cuda",
+ "end_time": "2026-11-19T00:45:08.935835+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": "NVIDIA GH200 120GB",
+ "history_length": 1,
+ "host": "gh074.hsn.cm.delta.internal.ncsa.edu",
+ "model": "vit",
+ "model_provenance": {
+  "architecture": "vit",
+  "config": {
+   "batch_size": 8,
+   "curriculum_ramp_epochs": 20,
+   "d_model": 512,
+   "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+   "depth": 12,
+   "description": "ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.",
+   "early_stop_patience": 20,
+   "epochs": 100,
+   "experiment": "vit_rc300_v1",
+   "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+   "grad_checkpoint": false,
+   "grad_clip": 1.0,
+   "learning_rate": 0.0005,
+   "min_lr": 1e-06,
+   "mlp_ratio": 8,
+   "n_heads": 8,
+   "patch": [
+    4,
+    4,
+    4
+   ],
+   "recon_only_epochs": 10,
+   "seed": 0,
+   "stable_epoch": 30,
+   "token_mode": "per_patch",
+   "unroll_steps": 1,
+   "use_amp": true,
+   "val_frac": 0.11116236162361623,
+   "warmup_epochs": 5,
+   "weight_decay": 0.05,
+   "world_size": 4
+  },
+  "normalization": "Kevin main@ebcc218 fixed log10/arcsinh; exact gamma<=50 decode",
+  "source_sha256": {
+   "_tron_model.py": "db04e58c783dd7301bb52f7a570445923f394ee9098a50f415173a003aafad3d",
+   "_vit_model.py": "1dd178b9ca6315d9953dea208d0beda65d714f4e3b76020eb088870f0389e48b"
+  },
+  "use_amp": true
+ },
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "vit",
+  "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/best.pth",
+  "model": "vit",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required.",
+  "options": {
+   "config": {
+    "batch_size": 8,
+    "curriculum_ramp_epochs": 20,
+    "d_model": 512,
+    "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+    "depth": 12,
+    "description": "ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.",
+    "early_stop_patience": 20,
+    "epochs": 100,
+    "experiment": "vit_rc300_v1",
+    "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+    "grad_checkpoint": false,
+    "grad_clip": 1.0,
+    "learning_rate": 0.0005,
+    "min_lr": 1e-06,
+    "mlp_ratio": 8,
+    "n_heads": 8,
+    "patch": [
+     4,
+     4,
+     4
+    ],
+    "recon_only_epochs": 10,
+    "seed": 0,
+    "stable_epoch": 30,
+    "token_mode": "per_patch",
+    "unroll_steps": 1,
+    "use_amp": true,
+    "val_frac": 0.11116236162361623,
+    "warmup_epochs": 5,
+    "weight_decay": 0.05,
+    "world_size": 4
+   }
+  },
+  "training_record": "/work/nvme/bgun/share/validation/training_records/vit/6ebddd83.json",
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/rollout_curve.json": "9a194f2ca148e06047326e80a0f4797f598abdebc2493a61fa86824866068a37",
+  "metrics/single_step.json": "c39d6da444c009784d1f188bb9c6f463cb413c86d825f965f049315d4d6ceda4",
+  "summary.json": "38c401e208dbf8533437e54c80210fe63494967b92dd68ddb0e0fb73ed98fab2",
+  "tables/rollout_curve.csv": "ad60fd8117a818c362748e0cd1a51776b2025ef225e04903f906fd77c56170dd",
+  "tables/single_step.csv": "d77825c247758cb165a2860eeffd2469c85a96db45aa1a9bc7fbda21583fe380"
+ },
+ "result_fingerprint": "b2215e6cb75070ec6b2422cd7cf6c843df31d6e45ef6b12750f8e4d72e5a5e71",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-19T00:40:35.515454+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "quick",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "chunk_counts": {
+   "selection": {
+    "excluded_1": 0,
+    "excluded_10": 0,
+    "excluded_11": 10,
+    "excluded_12": 10,
+    "excluded_2": 0,
+    "excluded_3": 0,
+    "excluded_4": 0,
+    "excluded_5": 0,
+    "excluded_6": 0,
+    "excluded_7": 0,
+    "excluded_8": 0,
+    "excluded_9": 0,
+    "test_1": 0,
+    "test_2": 0,
+    "test_3": 475,
+    "train_1": 0,
+    "train_2": 0,
+    "train_3": 0,
+    "train_4": 0,
+    "train_5": 0,
+    "train_6": 235,
+    "train_7": 234,
+    "validation_1": 0,
+    "validation_2": 0,
+    "validation_3": 0
+   },
+   "training": {
+    "excluded_1": 10,
+    "excluded_10": 10,
+    "excluded_11": 0,
+    "excluded_12": 0,
+    "excluded_2": 10,
+    "excluded_3": 10,
+    "excluded_4": 10,
+    "excluded_5": 10,
+    "excluded_6": 10,
+    "excluded_7": 10,
+    "excluded_8": 10,
+    "excluded_9": 10,
+    "test_1": 476,
+    "test_2": 476,
+    "test_3": 0,
+    "train_1": 1197,
+    "train_2": 853,
+    "train_3": 853,
+    "train_4": 854,
+    "train_5": 853,
+    "train_6": 619,
+    "train_7": 0,
+    "validation_1": 476,
+    "validation_2": 476,
+    "validation_3": 475
+   }
+  },
+  "evidence": "operator declaration",
+  "label": "no, overlaps validation/test (2379 dumps)",
+  "normalization_flagged": true,
+  "outside_split_counts": {
+   "selection": 0,
+   "training": 0
+  },
+  "partition_counts": {
+   "selection": {
+    "excluded": 20,
+    "test": 475,
+    "train": 469,
+    "validation": 0
+   },
+   "training": {
+    "excluded": 100,
+    "test": 952,
+    "train": 5229,
+    "validation": 1427
+   }
+  },
+  "ranges": {
+   "selection": [
+    [
+     10708,
+     11671
+    ]
+   ],
+   "training": [
+    [
+     3000,
+     10707
+    ]
+   ]
+  },
+  "reasons": [
+   "training_outside_train",
+   "selection_outside_validation",
+   "normalization_not_train"
+  ],
+  "record": {
+   "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+   "computed": {
+    "chunk_counts": {
+     "selection": {
+      "excluded_1": 0,
+      "excluded_10": 0,
+      "excluded_11": 10,
+      "excluded_12": 10,
+      "excluded_2": 0,
+      "excluded_3": 0,
+      "excluded_4": 0,
+      "excluded_5": 0,
+      "excluded_6": 0,
+      "excluded_7": 0,
+      "excluded_8": 0,
+      "excluded_9": 0,
+      "test_1": 0,
+      "test_2": 0,
+      "test_3": 475,
+      "train_1": 0,
+      "train_2": 0,
+      "train_3": 0,
+      "train_4": 0,
+      "train_5": 0,
+      "train_6": 235,
+      "train_7": 234,
+      "validation_1": 0,
+      "validation_2": 0,
+      "validation_3": 0
+     },
+     "training": {
+      "excluded_1": 10,
+      "excluded_10": 10,
+      "excluded_11": 0,
+      "excluded_12": 0,
+      "excluded_2": 10,
+      "excluded_3": 10,
+      "excluded_4": 10,
+      "excluded_5": 10,
+      "excluded_6": 10,
+      "excluded_7": 10,
+      "excluded_8": 10,
+      "excluded_9": 10,
+      "test_1": 476,
+      "test_2": 476,
+      "test_3": 0,
+      "train_1": 1197,
+      "train_2": 853,
+      "train_3": 853,
+      "train_4": 854,
+      "train_5": 853,
+      "train_6": 619,
+      "train_7": 0,
+      "validation_1": 476,
+      "validation_2": 476,
+      "validation_3": 475
+     }
+    },
+    "label": "no, overlaps validation/test (2379 dumps)",
+    "normalization_flagged": true,
+    "outside_split_counts": {
+     "selection": 0,
+     "training": 0
+    },
+    "partition_counts": {
+     "selection": {
+      "excluded": 20,
+      "test": 475,
+      "train": 469,
+      "validation": 0
+     },
+     "training": {
+      "excluded": 100,
+      "test": 952,
+      "train": 5229,
+      "validation": 1427
+     }
+    },
+    "ranges": {
+     "selection": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "training": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "reasons": [
+     "training_outside_train",
+     "selection_outside_validation",
+     "normalization_not_train"
+    ],
+    "trained_on_this_split": "no"
+   },
+   "config": {
+    "batch_size": 8,
+    "curriculum_ramp_epochs": 20,
+    "d_model": 512,
+    "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+    "depth": 12,
+    "description": "ViT on the rc300 reduced run: one token per 4x4x4 patch holding all 8 variables (8,064 tokens), width 512 with 8 heads of 64, 12 blocks, MLP ratio 8 (~63M parameters), vit_baseline_v1's schedule. 112x48x96 grid (r 1.1-1,048), dumps 3000-11671 (test 11672-12635 in blind/). Physics loss: div B error vs the truth's, unweighted mass shells.",
+    "early_stop_patience": 20,
+    "epochs": 100,
+    "experiment": "vit_rc300_v1",
+    "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+    "grad_checkpoint": false,
+    "grad_clip": 1.0,
+    "learning_rate": 0.0005,
+    "min_lr": 1e-06,
+    "mlp_ratio": 8,
+    "n_heads": 8,
+    "patch": [
+     4,
+     4,
+     4
+    ],
+    "provenance": {
+     "known_prior_data_exposure": "Historical checkpoint trained/selected on Kevin 80/10/10 data, overlapping the frozen benchmark. Existing best_blind evaluation artifacts; no blind claim.",
+     "normalization_split": "fixed_transform_no_fit",
+     "original_config_path": "/work/hdd/bgun/kfortune/fall26_outputs/vit_rc300_v1/seed0/config.json",
+     "original_config_sha256": "5c6fdb7767d0c3a6430ccf7bbec2b4845112745cf6829fb7d75cd41a3d2d6a93",
+     "prior_data_exposure": [
+      "kevin_fall26_80_10_10 training/selection",
+      "historical best_blind evaluation artifacts"
+     ],
+     "selection_dump_ranges": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "source_split": "kevin_fall26_80_10_10",
+     "training_code_commit": "ae8d0403c0a4b96068e4a369682d270eb90964a2",
+     "training_dump_ranges": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "recon_only_epochs": 10,
+    "seed": 0,
+    "stable_epoch": 30,
+    "token_mode": "per_patch",
+    "unroll_steps": 1,
+    "use_amp": true,
+    "val_frac": 0.11116236162361623,
+    "warmup_epochs": 5,
+    "weight_decay": 0.05,
+    "world_size": 4
+   },
+   "config_sha256": "25c80d4067c5573fa3e03028fed87eddc6eef99d399ace2a706ff9a86e4c06f3",
+   "evidence": "operator declaration",
+   "log_sha256": "aa9d9bd29577ee44ef6bc0be4c6d2fb645e764272c287ca92baf63538fba5fd3",
+   "model": "vit",
+   "schema_version": 1,
+   "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+   "split_id": "rc300_reduced_v1",
+   "verified": false,
+   "version": "v1"
+  },
+  "record_sha256": "5e8c25b03ea2d2f2c1425348756f5676b2c65b2c6dd791a88a0bc2931e6a4f80",
+  "trained_on_this_split": "no"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

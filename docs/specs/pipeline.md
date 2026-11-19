@@ -967,6 +967,41 @@ report; local replay may generate ignored PNGs for inspection. CI verifies
 schemas/hash bindings and exact leaderboard JSON/CSV/Markdown without requiring
 committed PNGs. Comparison figure tests check their data/labels separately.
 
+### 7.2 Protected repository state (owner requirement before milestone 7)
+
+Before evaluating, the runner executes `git status --porcelain=v1
+--untracked-files=all -- splits/ protocols/ grmhd_validation/ schemas/ prompts/`
+from this repository's root. Staged, unstaged, deleted and untracked files in
+these paths all count as modifications. Failure to inspect the Git repository
+fails closed. Changes outside these paths, including requests, training
+declarations, results and reports, do not trigger this gate.
+
+New run.json metadata records `repo_modified` (boolean) and the protected status
+entries. A dirty evaluation is recorded as a failed staging attempt, with
+repo_modified=true, and never runs inference or publishes COMPLETE. Recheck the
+same paths after evaluation and immediately before publication, so a change
+during inference also prevents publication. Once a modification has been seen,
+the attempt remains flagged even if it is later reverted. Reference/conformance
+metadata records the same state; no dirty execution may establish a golden or
+passing conformance certificate. This is metadata, never result content, and
+does not change the protocol hash or numerical outputs.
+
+Historical runs without this field retain their original metadata; display
+their state as unknown. Reports expose repo_modified in rows and attempt
+snapshots, flag modified repository state, and list rejected dirty attempts with
+the reason `repository modified`. Such attempts remain visible and count under
+the existing attempt-count rules, while staying off eligible leaderboard rows.
+Do not rewrite old completed runs to add this field.
+
+Claude Edit/Write protection is independently tested in a fresh Claude Code
+session rooted in this repository. Use disposable probe files under splits/
+and grmhd_validation/, attempt both edits, and retain actual tool denials and
+before/after hashes. Do not change frozen split definitions. If the current
+settings paths permit an edit, correct their settings-relative paths and repeat
+in a fresh session. The settings do not protect shell/Codex writes; the runner's
+Git gate covers those. Explicit owner maintenance is authorized to implement
+and commit reviewed changes, but there is no evaluation bypass for dirty code.
+
 ## 8. Shared folder and permissions (created; owner gkerex, group delta_bgun)
 
 ```
@@ -1089,7 +1124,9 @@ and tier; never overlay validation and test. Sort groups lexically and rows by
 model then run_id. This refines the comparison identity without changing any
 metric. The headline columns are rollout skill and channel-mean nMAE at the last
 protocol report step; physical rel_l1 comes from single_step per_channel. Also
-include single-step mean skill/nMAE. Full-tier key physics errors are the final
+include single-step mean skill/nMAE. Display single-step skill next to the
+rollout skill labelled with its report step, and label the physical relative L1
+table as single-step. Full-tier key physics errors are the final
 physics_table mass/energy/angular errors. Missing quantities remain null.
 Display floats with six significant digits (undefined = em dash); JSON retains
 original float precision, and CSV uses repr floats. Escape Markdown cells.
@@ -1101,7 +1138,13 @@ establish a full checkpoint identity are listed as unattributed, with a visible
 flag; do not guess a SHA256 from its eight-character run-ID prefix.
 A completed validation row shows that checkpoint's total test attempts too.
 Read the computed training label from the record embedded in run.json and expose
-its operator-declaration status. Missing training evidence is unknown. Show
+its operator-declaration status. Also list its training and checkpoint selection
+boundary violations in Flags, with the affected partitions and dump counts,
+and show the normalization flag when the record declares it. Show method type
+from recorded evidence: persistence is the baseline, checkpoint-backed or
+documented trained methods are trained, and checkpoint-free agent methods are
+zero-shot agent methods. Leave the type unknown when the record lacks evidence.
+Missing training evidence is unknown. Show
 unlocked environments and unattested prediction imports as flags. Ordinary
 adapters have prediction attestation not applicable; no blind claim is inferred.
 
@@ -1323,7 +1366,14 @@ privately and commit a redacted action trace and receipt. Stop after milestone 6
    bundle scoring/provenance and host attestation, and Eden's three credited start-11672 adapters.
    All 12 rollout starts × 50 steps are mandatory; incomplete inputs are `not evaluated`.
 6. `report`, leaderboard, GitHub CI, agent instructions and skill.
-7. Owner dry run: persistence, TRON and ViT on `rc300_reduced_v1` validation; then publish references.
+7. Before the owner dry run, verify real Claude tool denials and implement §7.2
+   (spec first). Owner dry run: persistence, TRON, ViT and eden-claude/eden-gpt/
+   eden-gemini, each quick and full, on `rc300_reduced_v1` validation only.
+   Record Kevin's TRON/ViT training declarations with source_split
+   kevin_fall26_80_10_10, training 3000–10707 and selection 10708–11671, preserving
+   computed overlap labels. No test-split evaluations. Publish reports/export
+   result pairs, update README to ready for participants, and stop for final
+   owner review. Existing verified persistence references/caches are reused.
 
 ## Protocol settings (decided 2026-11-14)
 

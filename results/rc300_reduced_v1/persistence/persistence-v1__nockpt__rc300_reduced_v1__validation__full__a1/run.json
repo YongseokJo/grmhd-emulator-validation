@@ -1,0 +1,165 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "e3007636e8a40dab54fa67f643731e0fcc9edea977e5795f3071f5afec686b92",
+ "analysis_runtime": {
+  "cost": {
+   "all_start_statistics": {
+    "bootstrap": {
+     "block_length": 10,
+     "method": "chunk_block_bootstrap",
+     "n_blocks": 3,
+     "resamples": 1000,
+     "seed": 42
+    },
+    "lower": {
+     "milliseconds_per_step": 16.50910191249295
+    },
+    "mean": {
+     "milliseconds_per_step": 16.75653746666133
+    },
+    "n_starts": 12,
+    "upper": {
+     "milliseconds_per_step": 17.01359555000863
+    },
+    "valid_counts": {}
+   },
+   "milliseconds_per_step": 16.4744524499838,
+   "parameters": 0,
+   "timed_steps": 20
+  }
+ },
+ "attempt": 1,
+ "channel_scales_sha256": "3fcb682ba38a9c6d64e4c1c2599f7fbd82d9324e99ec6ec319538c8e1e1f96d9",
+ "checkpoint": null,
+ "checkpoint_sha256": null,
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:32:34.787411+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cpu",
+ "end_time": "2026-11-19T00:08:14.352065+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": null,
+ "history_length": 1,
+ "host": "gh074.hsn.cm.delta.internal.ncsa.edu",
+ "model": "persistence",
+ "model_provenance": null,
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "persistence",
+  "checkpoint": null,
+  "model": "persistence",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required.",
+  "options": {},
+  "training_record": null,
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/accretion_diagnostics.json": "bd35d6e5a264733dba7f6152b68b437a2a9caa512c9ae0ed648c7055a9de8447",
+  "metrics/azimuthal_spectra.json": "9f984eaee5fa063937c7c778ad950f372e8bb72d798619b4fc2c3b86c5f25ed5",
+  "metrics/bias_analysis.json": "5b6eb326d0c4d038543997677710c95caf374fbb3af623fdea42d2f58d2656b9",
+  "metrics/coherence.json": "b0a336066fcc6a4f0d298b7abcc19d98f9e58eddf7e6b75fc9b9a6fa20d5cca3",
+  "metrics/conditional_error.json": "20f4ee6e18ad74314a6a249d33c7102de1d6675db18da296b31787e82cf2acf9",
+  "metrics/conservation_closure.json": "d3d8df1946a2fe8d5dae430ccffa9331a655681c33becf7488f3fb990113eec7",
+  "metrics/correlation_times.json": "85ff3461f943ad79d67cf8f05a0f422ac9747ecd9a09b2ecc2894a284089bd31",
+  "metrics/cost.json": "eb3e081f3195217bbe328c52daaf5c84aa36a66a3eb8c16b06b792a2ac07becb",
+  "metrics/error_correlation.json": "3d3008d7d13ab5be17a2cfad334572e0b57aed974cd9550b992c9c6722feb9aa",
+  "metrics/lorentz.json": "5b438313c8912c248951c66a7fedc766b357f0a3da4626c34a53b81f167ea715",
+  "metrics/mdot.json": "2ebe0ceac3c4403a970e489980d22c0760e5d6ef4569e111c86a7705248d2da2",
+  "metrics/mean_profiles.json": "f5b5e6409b8261b0441cf2c5b827a98e9d2df6bba073893df2400679ac20e70d",
+  "metrics/meridional_slice.json": "aa411f2595589ca06e476bba19e14054ecf6b3b17a60866a307af3f7d4359749",
+  "metrics/physics_table.json": "51b156804c9c1bdd1a319ac123adbb21c4c41e729324d4cfdba14b735e01d957",
+  "metrics/rollout_curve.json": "9d32e4530e2059858e9b1948e2912f443c10b85cf07ae5b2e1e854fc32126281",
+  "metrics/rollout_evolution.json": "c7edb10be5131e2c2a5d290c83fb53c9a16f9b2338d135563a29e3ae30c40715",
+  "metrics/shell_profiles.json": "78d03a0320e3c5cf83846dd50d1571b80738c74a4315d6de9e99a634e96eb005",
+  "metrics/single_step.json": "a4340d1790d5b62ae42dffc647503e660080fc0d238786bca2bc12f99cf3fbf6",
+  "metrics/spatial_error.json": "2e69b4dbeb980984393929874d64b5fffef457041dcde4e1b6ea3c29349c4890",
+  "metrics/spectrum.json": "2bf48df084edaf3fb703fbf0de340803b8ad40b7852eb410cda1f176638ed606",
+  "metrics/stability.json": "073fb771d63219eb193dc91d215d6f77a09a202a309b6e5133fab7b8331f3aea",
+  "metrics/statistical_props.json": "e9f9d6fb37499e30b8ae26a282f50c60a4e02c1fd8c01af1da31b54c0e91b5f4",
+  "metrics/temporal_consistency.json": "a0a82f4dbbaa6929762ea1a22f3423deec31dc8183177ecc979aaf260d11c0b2",
+  "metrics/temporal_spectrum.json": "b9ae9fdccb740388f05e49ec17fc7d62c55cb31710c3323732720088a945c4de",
+  "metrics/turbulence_stats.json": "5b774b5ee56d1f6a80efbed0ea189fcb283fd3d8a2a55e27d2a77ff4ca146e0c",
+  "summary.json": "03866b6391bcafcc1e3da0d24b72f12874f4276cb6b206562c3c975bf38c2177",
+  "tables/accretion_diagnostics.csv": "3e197d277a7ee696fe2fae28bf16a2631e1e4274591b7d11feb16273b1bb86e4",
+  "tables/azimuthal_spectra.csv": "e13d7fb2e5590fffb11614a1a10177e355d46cd6753a2c5e97b8c6aed759ec04",
+  "tables/bias_analysis.csv": "567bf7fb3cf2df078322867b92244b8587f802af1442ecc7ebd23b3469692b19",
+  "tables/coherence.csv": "06c35a213b1fa50f9a05f7fc4172165defaaa0f6ff48d7ffcfc7760e7af88b54",
+  "tables/conditional_error.csv": "729f2fe51b49ad375775c79e55dd42d77f25818bb71103fa4b94f079df3d0ce7",
+  "tables/conservation_closure.csv": "4497fa9718ddd8e0de7356a3776c97b7bc8c4dbbfc326cd35566acafc676b5d8",
+  "tables/correlation_times.csv": "5cea359fa5955fac7670c293333fa5ef9361be656238d9b01f550d6e8ab107a2",
+  "tables/cost.csv": "3c1304cad0b2a47e0dc1d2f94114a147e7659539f25d7245e47e3b1f49e36d4e",
+  "tables/error_correlation.csv": "d3ba0a428687e3f54b2631e16547d6cf465c0a36ae44c1a0127e384dc36eb303",
+  "tables/lorentz.csv": "75e2663b407264a6df02fbe1a3350bc7a9b7e9579e54abc050845cc635b361cc",
+  "tables/mdot.csv": "de61126730186a16a74ad8c446cacb579344f3e86f6509663785cecea6935cd1",
+  "tables/mean_profiles.csv": "bda1c15b06db07113d131a98e82e02e3e865bb0ea18442c41eca22b9544c2cea",
+  "tables/meridional_slice.csv": "3cb15e4495f3094fdc325d252f9ccd92869c3ea154a3dc29378c8a63885a756d",
+  "tables/physics_table.csv": "825939fd31095413defeebcddeda606ba9b448b929c71a3e6cc1d41a4715770c",
+  "tables/rollout_curve.csv": "8f39160c2cb5501934d1d8a5f108b53317e618330c4367329cfdc4fc6f210f3e",
+  "tables/rollout_evolution.csv": "714a514a9be30eb90312e6130e7af2fe7c2bc7a0984fe4fd4bc70be0bb17e5ac",
+  "tables/shell_profiles.csv": "cf8cb9c464027173d81246f208a1d44e7ed857a9e53e8a7c0482fae99a5b49a1",
+  "tables/single_step.csv": "ef1e466112ed4048b1faff9f08ea8aec07f0a1449ff5d6a90d547ebafe70b644",
+  "tables/spatial_error.csv": "5d791a19d11624af96179405f9ebcf34347364d4a9bb89db303464827d1abf3f",
+  "tables/spectrum.csv": "7397128b4451bcd0235c9c3717754941061902c6c8552618240060932c18a7d1",
+  "tables/stability.csv": "b8dfcb1fa71ae1d47e80ea0979756879109397b4c7173fff28d51e0d8ae4e5c8",
+  "tables/statistical_props.csv": "db7c526e7b54aa7ee09cdaf40f01a376f44e774fa3f157ab3033efaeab344a77",
+  "tables/temporal_consistency.csv": "b7e46f6c6dd5f5cd21a10c058367b753821833d85656167fc11738f2a53a77c6",
+  "tables/temporal_spectrum.csv": "b4a36490d126efb1c85d2e3a3aecfdf48e6cb3aca1db4280fc6ef7ff36137788",
+  "tables/turbulence_stats.csv": "728db914a9b8804decf3ae9e90f32d25c6e98db4bca8306d4358f59673a73a09"
+ },
+ "result_fingerprint": "d8112a7c97d350144a07cb41ad76fa8898e5caf4a4e6c8ae42410cfde4309d09",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-18T23:43:49.054960+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "full",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "reason": "No training record supplied",
+  "record_sha256": null,
+  "trained_on_this_split": "unknown"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

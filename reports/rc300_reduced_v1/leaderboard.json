@@ -17,6 +17,779 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "zero-shot agent method",
+     "model": "eden-claude",
+     "nmae": 0.6210608454407256,
+     "physical_rel_l1": {
+      "B1": 0.09526379972434008,
+      "B2": 0.33255795715216874,
+      "B3": 0.1346992713680283,
+      "rho": 0.3299334592011663,
+      "ug": 0.7382059438352518,
+      "utilde1": 0.11785620408013282,
+      "utilde2": 0.6405675783587543,
+      "utilde3": 0.13470619394179859
+     },
+     "physics_errors": {
+      "angular": 9.113252381291753,
+      "energy": 11.218735955392027,
+      "mass": 2.94521099566742
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.08324761753720258,
+       "skill": -0.20086337057908454,
+       "skill_ci": [
+        -0.29124268039862905,
+        -0.11239714625297627
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.2728333713735559,
+       "skill": -1.7969101074839715,
+       "skill_ci": [
+        -2.0726996826874555,
+        -1.5418982545911948
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.5012978128374553,
+       "skill": -3.9151511736552846,
+       "skill_ci": [
+        -4.479369517583382,
+        -3.409040205295975
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.6210608454407256,
+       "skill": -4.635259988282181,
+       "skill_ci": [
+        -5.333295583597118,
+        -4.034316474342214
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "single_step_nmae": 0.08625075826900003,
+     "single_step_skill": -0.17669595816083847,
+     "skill": -4.635259988282181,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "full",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "zero-shot agent method",
+     "model": "eden-gemini",
+     "nmae": 0.11522502418241454,
+     "physical_rel_l1": {
+      "B1": 0.0877751577901926,
+      "B2": 0.4322430825557053,
+      "B3": 0.13852577972785288,
+      "rho": 0.3475357036789196,
+      "ug": 0.8958866390935576,
+      "utilde1": 0.10843781174237108,
+      "utilde2": 0.7421551946322941,
+      "utilde3": 0.12589638800091474
+     },
+     "physics_errors": {
+      "angular": 0.2202259140871121,
+      "energy": 0.27569067622438687,
+      "mass": 0.13181013994413057
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.08281814097303704,
+       "skill": -0.1946680860810257,
+       "skill_ci": [
+        -0.28222858123992994,
+        -0.11208075478959977
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.09975773294272065,
+       "skill": -0.022651335364560987,
+       "skill_ci": [
+        -0.05870578164653912,
+        0.012479483942231254
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.10415010085084696,
+       "skill": -0.021176389212261393,
+       "skill_ci": [
+        -0.06641149078372932,
+        0.021116906169460412
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.11522502418241454,
+       "skill": -0.04550620634154767,
+       "skill_ci": [
+        -0.10853191269351724,
+        0.008059141049147003
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "single_step_nmae": 0.0881694843792894,
+     "single_step_skill": -0.18042026862973934,
+     "skill": -0.04550620634154767,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "full",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "zero-shot agent method",
+     "model": "eden-gpt",
+     "nmae": 0.4303108015362566,
+     "physical_rel_l1": {
+      "B1": 0.18337451900204785,
+      "B2": 0.44663451512018637,
+      "B3": 0.23581909427709852,
+      "rho": 0.3588617121624408,
+      "ug": 0.7290868430104854,
+      "utilde1": 0.15150329012047467,
+      "utilde2": 0.5978589135677869,
+      "utilde3": 0.1474620406644552
+     },
+     "physics_errors": {
+      "angular": 5.800419769219322,
+      "energy": 8.428858961745812,
+      "mass": 0.9680425300596838
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.08272761922484899,
+       "skill": -0.19336229193513055,
+       "skill_ci": [
+        -0.2654260370141855,
+        -0.12420341272551264
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.22876465857023956,
+       "skill": -1.34514635276848,
+       "skill_ci": [
+        -1.588792047560128,
+        -1.1339623014237052
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.359963301681083,
+       "skill": -2.5293871216316064,
+       "skill_ci": [
+        -2.896972357283169,
+        -2.1999313680511845
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.4303108015362566,
+       "skill": -2.9044696831630104,
+       "skill_ci": [
+        -3.3311242347050327,
+        -2.529138338867348
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "single_step_nmae": 0.08546102283532835,
+     "single_step_skill": -0.2163694675972786,
+     "skill": -2.9044696831630104,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "full",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "baseline",
+     "model": "persistence",
+     "nmae": 0.11020979453159997,
+     "physical_rel_l1": {
+      "B1": 0.08438146003799969,
+      "B2": 0.3707883560061995,
+      "B3": 0.12114298482467509,
+      "rho": 0.3310247445334943,
+      "ug": 0.8772419227550765,
+      "utilde1": 0.09355596969032917,
+      "utilde2": 0.6247072906480811,
+      "utilde3": 0.10044395830050525
+     },
+     "physics_errors": {
+      "angular": 0.22016422344136855,
+      "energy": 0.27559618550915427,
+      "mass": 0.13178795685909403
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.06932313831594232,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.09754813736898744,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.10199031426019227,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.11020979453159997,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1",
+     "single_step_nmae": 0.07412070942209116,
+     "single_step_skill": 0.0,
+     "skill": 0.0,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "full",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
+     "model": "tron",
+     "nmae": 0.11010067590521037,
+     "physical_rel_l1": {
+      "B1": 0.009137878083908996,
+      "B2": 0.06508384755385536,
+      "B3": 0.010467509697066018,
+      "rho": 0.07085522636002153,
+      "ug": 0.11220607985431875,
+      "utilde1": 0.03982682778625927,
+      "utilde2": 0.2300938778633419,
+      "utilde3": 0.03510801502775304
+     },
+     "physics_errors": {
+      "angular": 5.474581327954675,
+      "energy": 1.8178092843099547,
+      "mass": 0.15583478074034887
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.017545818509555628,
+       "skill": 0.7468980929629869,
+       "skill_ci": [
+        0.73634207346583,
+        0.7566167476916956
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.05121759674586105,
+       "skill": 0.4749505410633891,
+       "skill_ci": [
+        0.41594640921967185,
+        0.5302906842855585
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.08760759902252267,
+       "skill": 0.14102040318237652,
+       "skill_ci": [
+        0.052758554659082184,
+        0.21554648590356917
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.11010067590521037,
+       "skill": 0.0009900991727038733,
+       "skill_ci": [
+        -0.08215747964774867,
+        0.0856673033773796
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1",
+     "single_step_nmae": 0.018004617322749328,
+     "single_step_skill": 0.7219491605956073,
+     "skill": 0.0009900991727038733,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "full",
+     "training_evidence": "operator declaration",
+     "training_label": "no, overlaps validation/test (2379 dumps)",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
+     "model": "vit",
+     "nmae": 0.16963253876507597,
+     "physical_rel_l1": {
+      "B1": 0.02481977948406685,
+      "B2": 0.1485813674425358,
+      "B3": 0.036598087757874403,
+      "rho": 0.12997774455766561,
+      "ug": 0.3241069461202845,
+      "utilde1": 0.04867625990593185,
+      "utilde2": 0.28216065024893416,
+      "utilde3": 0.04686640170371186
+     },
+     "physics_errors": {
+      "angular": 12.340856736630947,
+      "energy": 4.157682845156132,
+      "mass": 0.672500340187851
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.029588443072201546,
+       "skill": 0.5731808485450945,
+       "skill_ci": [
+        0.5522188649392322,
+        0.5923077836680364
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.09501796552872634,
+       "skill": 0.025937674552312884,
+       "skill_ci": [
+        -0.06538058402514947,
+        0.12062389234636513
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.12129551637081147,
+       "skill": -0.1892846614960788,
+       "skill_ci": [
+        -0.29121755829058193,
+        -0.10875470344544426
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.16963253876507597,
+       "skill": -0.5391784322439508,
+       "skill_ci": [
+        -0.643516344939645,
+        -0.4236891686813732
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1",
+     "single_step_nmae": 0.03021926300051443,
+     "single_step_skill": 0.571891772696297,
+     "skill": -0.5391784322439508,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "full",
+     "training_evidence": "operator declaration",
+     "training_label": "no, overlaps validation/test (2379 dumps)",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    }
+   ],
+   "split": "validation",
+   "split_id": "rc300_reduced_v1",
+   "tier": "full"
+  },
+  {
+   "protocol_id": "forecast_v1",
+   "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+   "rows": [
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "zero-shot agent method",
+     "model": "eden-claude",
+     "nmae": 0.6210608454407256,
+     "physical_rel_l1": {
+      "B1": 0.09526379972434008,
+      "B2": 0.33255795715216874,
+      "B3": 0.1346992713680283,
+      "rho": 0.3299334592011663,
+      "ug": 0.7382059438352518,
+      "utilde1": 0.11785620408013282,
+      "utilde2": 0.6405675783587543,
+      "utilde3": 0.13470619394179859
+     },
+     "physics_errors": {
+      "angular": null,
+      "energy": null,
+      "mass": null
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.08324761753720258,
+       "skill": -0.20086337057908454,
+       "skill_ci": [
+        -0.29124268039862905,
+        -0.11239714625297627
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.2728333713735559,
+       "skill": -1.7969101074839715,
+       "skill_ci": [
+        -2.0726996826874555,
+        -1.5418982545911948
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.5012978128374553,
+       "skill": -3.9151511736552846,
+       "skill_ci": [
+        -4.479369517583382,
+        -3.409040205295975
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.6210608454407256,
+       "skill": -4.635259988282181,
+       "skill_ci": [
+        -5.333295583597118,
+        -4.034316474342214
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "single_step_nmae": 0.08625075826900003,
+     "single_step_skill": -0.17669595816083847,
+     "skill": -4.635259988282181,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "quick",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "zero-shot agent method",
+     "model": "eden-gemini",
+     "nmae": 0.11522502418241454,
+     "physical_rel_l1": {
+      "B1": 0.0877751577901926,
+      "B2": 0.4322430825557053,
+      "B3": 0.13852577972785288,
+      "rho": 0.3475357036789196,
+      "ug": 0.8958866390935576,
+      "utilde1": 0.10843781174237108,
+      "utilde2": 0.7421551946322941,
+      "utilde3": 0.12589638800091474
+     },
+     "physics_errors": {
+      "angular": null,
+      "energy": null,
+      "mass": null
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.08281814097303704,
+       "skill": -0.1946680860810257,
+       "skill_ci": [
+        -0.28222858123992994,
+        -0.11208075478959977
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.09975773294272065,
+       "skill": -0.022651335364560987,
+       "skill_ci": [
+        -0.05870578164653912,
+        0.012479483942231254
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.10415010085084696,
+       "skill": -0.021176389212261393,
+       "skill_ci": [
+        -0.06641149078372932,
+        0.021116906169460412
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.11522502418241454,
+       "skill": -0.04550620634154767,
+       "skill_ci": [
+        -0.10853191269351724,
+        0.008059141049147003
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "single_step_nmae": 0.0881694843792894,
+     "single_step_skill": -0.18042026862973934,
+     "skill": -0.04550620634154767,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "quick",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "zero-shot agent method",
+     "model": "eden-gpt",
+     "nmae": 0.4303108015362566,
+     "physical_rel_l1": {
+      "B1": 0.18337451900204785,
+      "B2": 0.44663451512018637,
+      "B3": 0.23581909427709852,
+      "rho": 0.3588617121624408,
+      "ug": 0.7290868430104854,
+      "utilde1": 0.15150329012047467,
+      "utilde2": 0.5978589135677869,
+      "utilde3": 0.1474620406644552
+     },
+     "physics_errors": {
+      "angular": null,
+      "energy": null,
+      "mass": null
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.08272761922484899,
+       "skill": -0.19336229193513055,
+       "skill_ci": [
+        -0.2654260370141855,
+        -0.12420341272551264
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.22876465857023956,
+       "skill": -1.34514635276848,
+       "skill_ci": [
+        -1.588792047560128,
+        -1.1339623014237052
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.359963301681083,
+       "skill": -2.5293871216316064,
+       "skill_ci": [
+        -2.896972357283169,
+        -2.1999313680511845
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.4303108015362566,
+       "skill": -2.9044696831630104,
+       "skill_ci": [
+        -3.3311242347050327,
+        -2.529138338867348
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1",
+     "single_step_nmae": 0.08546102283532835,
+     "single_step_skill": -0.2163694675972786,
+     "skill": -2.9044696831630104,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "quick",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -37,6 +810,7 @@
      "prediction_attestation": "not applicable",
      "protocol_id": "forecast_v1",
      "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": null,
      "report_step": 50,
      "rollout": [
       {
@@ -98,6 +872,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -118,6 +893,7 @@
      "prediction_attestation": "not applicable",
      "protocol_id": "forecast_v1",
      "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": null,
      "report_step": 50,
      "rollout": [
       {
@@ -179,6 +955,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -199,6 +976,7 @@
      "prediction_attestation": "not applicable",
      "protocol_id": "forecast_v1",
      "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": null,
      "report_step": 50,
      "rollout": [
       {
@@ -252,6 +1030,271 @@
      "tier": "quick",
      "training_evidence": "unknown",
      "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": null,
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [],
+     "method_type": "baseline",
+     "model": "persistence",
+     "nmae": 0.11020979453159997,
+     "physical_rel_l1": {
+      "B1": 0.08438146003799969,
+      "B2": 0.3707883560061995,
+      "B3": 0.12114298482467509,
+      "rho": 0.3310247445334943,
+      "ug": 0.8772419227550765,
+      "utilde1": 0.09355596969032917,
+      "utilde2": 0.6247072906480811,
+      "utilde3": 0.10044395830050525
+     },
+     "physics_errors": {
+      "angular": null,
+      "energy": null,
+      "mass": null
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.06932313831594232,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.09754813736898744,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.10199031426019227,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.11020979453159997,
+       "skill": 0.0,
+       "skill_ci": [
+        0.0,
+        0.0
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4",
+     "single_step_nmae": 0.07412070942209116,
+     "single_step_skill": 0.0,
+     "skill": 0.0,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "quick",
+     "training_evidence": "unknown",
+     "training_label": "unknown",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
+     "model": "tron",
+     "nmae": 0.11010067590521037,
+     "physical_rel_l1": {
+      "B1": 0.009137878083908996,
+      "B2": 0.06508384755385536,
+      "B3": 0.010467509697066018,
+      "rho": 0.07085522636002153,
+      "ug": 0.11220607985431875,
+      "utilde1": 0.03982682778625927,
+      "utilde2": 0.2300938778633419,
+      "utilde3": 0.03510801502775304
+     },
+     "physics_errors": {
+      "angular": null,
+      "energy": null,
+      "mass": null
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.017545818509555628,
+       "skill": 0.7468980929629869,
+       "skill_ci": [
+        0.73634207346583,
+        0.7566167476916956
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.05121759674586105,
+       "skill": 0.4749505410633891,
+       "skill_ci": [
+        0.41594640921967185,
+        0.5302906842855585
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.08760759902252267,
+       "skill": 0.14102040318237652,
+       "skill_ci": [
+        0.052758554659082184,
+        0.21554648590356917
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.11010067590521037,
+       "skill": 0.0009900991727038733,
+       "skill_ci": [
+        -0.08215747964774867,
+        0.0856673033773796
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+     "single_step_nmae": 0.018004617322749328,
+     "single_step_skill": 0.7219491605956073,
+     "skill": 0.0009900991727038733,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "quick",
+     "training_evidence": "operator declaration",
+     "training_label": "no, overlaps validation/test (2379 dumps)",
+     "unattributed_test_attempts": [],
+     "version": "v1"
+    },
+    {
+     "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
+     "data_verified": true,
+     "environment_locked": true,
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
+     "model": "vit",
+     "nmae": 0.16963253876507597,
+     "physical_rel_l1": {
+      "B1": 0.02481977948406685,
+      "B2": 0.1485813674425358,
+      "B3": 0.036598087757874403,
+      "rho": 0.12997774455766561,
+      "ug": 0.3241069461202845,
+      "utilde1": 0.04867625990593185,
+      "utilde2": 0.28216065024893416,
+      "utilde3": 0.04686640170371186
+     },
+     "physics_errors": {
+      "angular": null,
+      "energy": null,
+      "mass": null
+     },
+     "prediction_attestation": "not applicable",
+     "protocol_id": "forecast_v1",
+     "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+     "repo_modified": false,
+     "report_step": 50,
+     "rollout": [
+      {
+       "nmae": 0.029588443072201546,
+       "skill": 0.5731808485450945,
+       "skill_ci": [
+        0.5522188649392322,
+        0.5923077836680364
+       ],
+       "step": 1,
+       "time_rg_c": 100.0
+      },
+      {
+       "nmae": 0.09501796552872634,
+       "skill": 0.025937674552312884,
+       "skill_ci": [
+        -0.06538058402514947,
+        0.12062389234636513
+       ],
+       "step": 10,
+       "time_rg_c": 1000.0
+      },
+      {
+       "nmae": 0.12129551637081147,
+       "skill": -0.1892846614960788,
+       "skill_ci": [
+        -0.29121755829058193,
+        -0.10875470344544426
+       ],
+       "step": 25,
+       "time_rg_c": 2500.0
+      },
+      {
+       "nmae": 0.16963253876507597,
+       "skill": -0.5391784322439508,
+       "skill_ci": [
+        -0.643516344939645,
+        -0.4236891686813732
+       ],
+       "step": 50,
+       "time_rg_c": 5000.0
+      }
+     ],
+     "run_id": "vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1",
+     "single_step_nmae": 0.03021926300051443,
+     "single_step_skill": 0.571891772696297,
+     "skill": -0.5391784322439508,
+     "split": "validation",
+     "split_id": "rc300_reduced_v1",
+     "test_attempts": 0,
+     "tier": "quick",
+     "training_evidence": "operator declaration",
+     "training_label": "no, overlaps validation/test (2379 dumps)",
      "unattributed_test_attempts": [],
      "version": "v1"
     }

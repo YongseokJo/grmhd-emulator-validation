@@ -1,0 +1,390 @@
+{
+ "adapter_repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "adapter_sha256": "d6757c5cc16bb5840998ccd39b7ec59bbd238139ac36f42aea18d0635e221595",
+ "attempt": 1,
+ "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+ "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+ "conformance": {
+  "cross_platform": false,
+  "end_time": "2026-11-18T23:08:41.761928+00:00",
+  "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+  "golden_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6",
+  "platform": "deltaai-aarch64",
+  "result_fingerprint": "2e288dd0a15e4480ce8727b76bb07f6c033bcb5c7e14bc48f30120808fe05ca6"
+ },
+ "cuda": "13.2",
+ "data_verified": true,
+ "device": "cuda",
+ "end_time": "2026-11-19T00:14:42.491435+00:00",
+ "environment_lock_sha256": "35994d88a30a821cac354665ffee35adfc0a5090fe9052d27816d6c241bad525",
+ "environment_locked": true,
+ "gpu": "NVIDIA GH200 120GB",
+ "history_length": 1,
+ "host": "gh074.hsn.cm.delta.internal.ncsa.edu",
+ "model": "tron",
+ "model_provenance": {
+  "architecture": "tron",
+  "config": {
+   "batch_size": 8,
+   "curriculum_ramp_epochs": 100,
+   "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+   "description": "TRON (uno_simple_ds_v3) on the rc300 reduced run with vit_rc300_v1's split. TRON's recipe: 2 detached unrolled steps, lr 1e-3 (50-epoch warmup from 1e-5, then halved after 15 epochs without improvement), up to 500 epochs, fp32, physics phase-in 50 + 100 epochs, early stopping after 50 epochs without improvement from epoch 150. Loss: TRON's mass shells; guard 7.0 and div B vs the truth's, as for the ViT.",
+   "early_stop_patience": 50,
+   "epochs": 500,
+   "experiment": "tron_rc300_v1",
+   "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+   "grad_clip": 1.0,
+   "grad_monitor_every": 10,
+   "in_channels": 8,
+   "init_lr": 1e-05,
+   "learning_rate": 0.001,
+   "log_every": 50,
+   "mass_shell": "tron",
+   "max_batches": null,
+   "model": "tron",
+   "num_workers": 4,
+   "out_dir": "/u/kfortune/neural_operator_tron/Fall26/outputs",
+   "plateau_factor": 0.5,
+   "plateau_patience": 15,
+   "recon_only_epochs": 50,
+   "rollout_K": 50,
+   "rollout_eval_every": 10,
+   "seed": 0,
+   "stable_epoch": 150,
+   "stop_after": null,
+   "unroll_steps": 2,
+   "use_amp": false,
+   "val_frac": 0.11116236162361623,
+   "warmup_epochs": 50
+  },
+  "normalization": "Kevin main@ebcc218 fixed log10/arcsinh; exact gamma<=50 decode",
+  "source_sha256": {
+   "_tron_model.py": "db04e58c783dd7301bb52f7a570445923f394ee9098a50f415173a003aafad3d",
+   "_vit_model.py": "1dd178b9ca6315d9953dea208d0beda65d714f4e3b76020eb088870f0389e48b"
+  },
+  "use_amp": false
+ },
+ "no_verify_data": false,
+ "numpy": "2.5.4",
+ "platform": "deltaai-aarch64",
+ "protocol_id": "forecast_v1",
+ "protocol_sha256": "74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2",
+ "python": "3.12.9",
+ "repo_commit": "e143076f42d6b7e01d691aa1ed6079c2d801b412",
+ "repo_modified": false,
+ "repo_status": [],
+ "request": {
+  "adapter": "tron",
+  "checkpoint": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/best.pth",
+  "model": "tron",
+  "notes": "Owner milestone-7 validation-only dry run; all protocol starts/steps required.",
+  "options": {},
+  "training_record": "/work/nvme/bgun/share/validation/training_records/tron/a81d05b4.json",
+  "version": "v1"
+ },
+ "result_content_sha256": {
+  "metrics/rollout_curve.json": "6f5b1a422fc22c9ade0d215132cc0d1fc20c6079c4f4413c270752dc1ddd5203",
+  "metrics/single_step.json": "c81a247385bc617c8f903b14cce056abca633d8732fb1c2b2318c04ffbfe2265",
+  "summary.json": "a5a20f087566a5659d47ac7809a763d03302c12d220f1d5469558e421f19b57c",
+  "tables/rollout_curve.csv": "4aca038e31e0a6d84ec4f33edb82bbfe0579801a3eb1d96622d012414c5c86af",
+  "tables/single_step.csv": "0aee216f464dda766289783a46a03c1001978a62e289ee150e98ef309f3d7fae"
+ },
+ "result_fingerprint": "6fb6fc98512f6e261f14cc64086a08c048b71b2e04b66f9dcc392736b6c01981",
+ "rollout_starts": {
+  "validation_1": [
+   4216,
+   4355,
+   4493,
+   4632
+  ],
+  "validation_2": [
+   8264,
+   8403,
+   8541,
+   8680
+  ],
+  "validation_3": [
+   9613,
+   9751,
+   9890,
+   10028
+  ]
+ },
+ "run_id": "tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1",
+ "runner_autocast": false,
+ "split": "validation",
+ "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+ "split_id": "rc300_reduced_v1",
+ "start_time": "2026-11-19T00:09:38.399214+00:00",
+ "status": "complete",
+ "summary_format_version": 2,
+ "tier": "quick",
+ "torch": "2.15.0+cu132",
+ "training_provenance": {
+  "chunk_counts": {
+   "selection": {
+    "excluded_1": 0,
+    "excluded_10": 0,
+    "excluded_11": 10,
+    "excluded_12": 10,
+    "excluded_2": 0,
+    "excluded_3": 0,
+    "excluded_4": 0,
+    "excluded_5": 0,
+    "excluded_6": 0,
+    "excluded_7": 0,
+    "excluded_8": 0,
+    "excluded_9": 0,
+    "test_1": 0,
+    "test_2": 0,
+    "test_3": 475,
+    "train_1": 0,
+    "train_2": 0,
+    "train_3": 0,
+    "train_4": 0,
+    "train_5": 0,
+    "train_6": 235,
+    "train_7": 234,
+    "validation_1": 0,
+    "validation_2": 0,
+    "validation_3": 0
+   },
+   "training": {
+    "excluded_1": 10,
+    "excluded_10": 10,
+    "excluded_11": 0,
+    "excluded_12": 0,
+    "excluded_2": 10,
+    "excluded_3": 10,
+    "excluded_4": 10,
+    "excluded_5": 10,
+    "excluded_6": 10,
+    "excluded_7": 10,
+    "excluded_8": 10,
+    "excluded_9": 10,
+    "test_1": 476,
+    "test_2": 476,
+    "test_3": 0,
+    "train_1": 1197,
+    "train_2": 853,
+    "train_3": 853,
+    "train_4": 854,
+    "train_5": 853,
+    "train_6": 619,
+    "train_7": 0,
+    "validation_1": 476,
+    "validation_2": 476,
+    "validation_3": 475
+   }
+  },
+  "evidence": "operator declaration",
+  "label": "no, overlaps validation/test (2379 dumps)",
+  "normalization_flagged": true,
+  "outside_split_counts": {
+   "selection": 0,
+   "training": 0
+  },
+  "partition_counts": {
+   "selection": {
+    "excluded": 20,
+    "test": 475,
+    "train": 469,
+    "validation": 0
+   },
+   "training": {
+    "excluded": 100,
+    "test": 952,
+    "train": 5229,
+    "validation": 1427
+   }
+  },
+  "ranges": {
+   "selection": [
+    [
+     10708,
+     11671
+    ]
+   ],
+   "training": [
+    [
+     3000,
+     10707
+    ]
+   ]
+  },
+  "reasons": [
+   "training_outside_train",
+   "selection_outside_validation",
+   "normalization_not_train"
+  ],
+  "record": {
+   "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
+   "computed": {
+    "chunk_counts": {
+     "selection": {
+      "excluded_1": 0,
+      "excluded_10": 0,
+      "excluded_11": 10,
+      "excluded_12": 10,
+      "excluded_2": 0,
+      "excluded_3": 0,
+      "excluded_4": 0,
+      "excluded_5": 0,
+      "excluded_6": 0,
+      "excluded_7": 0,
+      "excluded_8": 0,
+      "excluded_9": 0,
+      "test_1": 0,
+      "test_2": 0,
+      "test_3": 475,
+      "train_1": 0,
+      "train_2": 0,
+      "train_3": 0,
+      "train_4": 0,
+      "train_5": 0,
+      "train_6": 235,
+      "train_7": 234,
+      "validation_1": 0,
+      "validation_2": 0,
+      "validation_3": 0
+     },
+     "training": {
+      "excluded_1": 10,
+      "excluded_10": 10,
+      "excluded_11": 0,
+      "excluded_12": 0,
+      "excluded_2": 10,
+      "excluded_3": 10,
+      "excluded_4": 10,
+      "excluded_5": 10,
+      "excluded_6": 10,
+      "excluded_7": 10,
+      "excluded_8": 10,
+      "excluded_9": 10,
+      "test_1": 476,
+      "test_2": 476,
+      "test_3": 0,
+      "train_1": 1197,
+      "train_2": 853,
+      "train_3": 853,
+      "train_4": 854,
+      "train_5": 853,
+      "train_6": 619,
+      "train_7": 0,
+      "validation_1": 476,
+      "validation_2": 476,
+      "validation_3": 475
+     }
+    },
+    "label": "no, overlaps validation/test (2379 dumps)",
+    "normalization_flagged": true,
+    "outside_split_counts": {
+     "selection": 0,
+     "training": 0
+    },
+    "partition_counts": {
+     "selection": {
+      "excluded": 20,
+      "test": 475,
+      "train": 469,
+      "validation": 0
+     },
+     "training": {
+      "excluded": 100,
+      "test": 952,
+      "train": 5229,
+      "validation": 1427
+     }
+    },
+    "ranges": {
+     "selection": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "training": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "reasons": [
+     "training_outside_train",
+     "selection_outside_validation",
+     "normalization_not_train"
+    ],
+    "trained_on_this_split": "no"
+   },
+   "config": {
+    "batch_size": 8,
+    "curriculum_ramp_epochs": 100,
+    "data_dir": "/work/nvme/bgun/kfortune/rc300_reduced",
+    "description": "TRON (uno_simple_ds_v3) on the rc300 reduced run with vit_rc300_v1's split. TRON's recipe: 2 detached unrolled steps, lr 1e-3 (50-epoch warmup from 1e-5, then halved after 15 epochs without improvement), up to 500 epochs, fp32, physics phase-in 50 + 100 epochs, early stopping after 50 epochs without improvement from epoch 150. Loss: TRON's mass shells; guard 7.0 and div B vs the truth's, as for the ViT.",
+    "early_stop_patience": 50,
+    "epochs": 500,
+    "experiment": "tron_rc300_v1",
+    "geometry_file": "/work/nvme/bgun/kfortune/rc300_reduced/geometry.npz",
+    "grad_clip": 1.0,
+    "grad_monitor_every": 10,
+    "in_channels": 8,
+    "init_lr": 1e-05,
+    "learning_rate": 0.001,
+    "mass_shell": "tron",
+    "model": "tron",
+    "plateau_factor": 0.5,
+    "plateau_patience": 15,
+    "provenance": {
+     "known_prior_data_exposure": "Historical checkpoint trained/selected on Kevin 80/10/10 data, overlapping the frozen benchmark. Existing best_blind evaluation artifacts; no blind claim.",
+     "normalization_split": "fixed_transform_no_fit",
+     "original_config_path": "/work/hdd/bgun/kfortune/fall26_outputs/tron_rc300_v1/seed0/config.json",
+     "original_config_sha256": "7541e8dcfc583fc318a0cb5d3752c4801e175145ecb97298324f9cbff35d52c5",
+     "prior_data_exposure": [
+      "kevin_fall26_80_10_10 training/selection",
+      "historical best_blind evaluation artifacts"
+     ],
+     "selection_dump_ranges": [
+      [
+       10708,
+       11671
+      ]
+     ],
+     "source_split": "kevin_fall26_80_10_10",
+     "training_code_commit": "2667a5fc405a8467fa77614072786eef63c4eb9a",
+     "training_dump_ranges": [
+      [
+       3000,
+       10707
+      ]
+     ]
+    },
+    "recon_only_epochs": 50,
+    "rollout_K": 50,
+    "rollout_eval_every": 10,
+    "seed": 0,
+    "stable_epoch": 150,
+    "unroll_steps": 2,
+    "use_amp": false,
+    "val_frac": 0.11116236162361623,
+    "warmup_epochs": 50,
+    "world_size": 4
+   },
+   "config_sha256": "a96192981289fe784cc235bf7fb3547e444b78fae30599dcb737c90d3f6df0c0",
+   "evidence": "operator declaration",
+   "log_sha256": "b4eab92c499e62df1301c65e77ddb43d552c98dc36f3f38b0322b3de4502d023",
+   "model": "tron",
+   "schema_version": 1,
+   "split_file_sha256": "29bff045d7b63bc7b873b176acbf4df017f89eb62124e8a3fc0f0114aa5be65f",
+   "split_id": "rc300_reduced_v1",
+   "verified": false,
+   "version": "v1"
+  },
+  "record_sha256": "276550965e022f8d3a7f5f6bb01af96638fff0e9cb8a33f6a050122bebec0efe",
+  "trained_on_this_split": "no"
+ },
+ "truth_cache_manifest_sha256": "614f63dd4afb42428d7a2e1e60614f626bb17abf96a7d60b415c7496a4f23eee",
+ "truth_cache_sha256": "34220e14f11229d8fe45e546c3fdb7b99f3c27196d9d73ce1d872f31bc0cbc18",
+ "user": "gkerex",
+ "version": "v1"
+}

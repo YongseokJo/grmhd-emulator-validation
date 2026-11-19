@@ -191,6 +191,8 @@ def reference(split_id, tier="quick", partition="validation", device="cpu", stor
     finally:
         if cache is not None:cache.close()
     info.update(split=partition, tier=tier, purpose="reference", status="complete")
+    from .repo_state import require_clean
+    require_clean(info, repo)
     writer.json("run.json", info)
     files = result_files(candidate)
     record = {"result_fingerprint": fingerprint(files), "files": files, "platform": platform,
@@ -263,12 +265,14 @@ def conformance(split_id, storage=None, repo=None, data_root=None,tier='quick'):
         info.update(purpose="conformance", split="validation", tier=tier, status="complete")
         writer.json("run.json", info)
         comparison = compare_results(output, golden_dir, tolerance=1e-12 if cross else None)
+        from .repo_state import require_clean
+        require_clean(info, repo)
         verdict = {**comparison, "next": "gval new-adapter <dir>" if comparison["ok"] else "Inspect differing_files and ask the owner to investigate the golden/environment",
                    "status": "warn" if cross and comparison["ok"] else "pass" if comparison["ok"] else "fail",
                    "cross_platform": cross, "platform": platform, "split_id": split_id,
                    "protocol_sha256": protocol_sha, "tier":tier,"environment_lock_sha256": info["environment_lock_sha256"],
                    "result_fingerprint": info["result_fingerprint"], "golden_fingerprint": golden["result_fingerprint"], "summary_format_version":2,
-                   "output_dir": str(output), "end_time": info["end_time"]}
+                   "output_dir": str(output), "end_time": info["end_time"], "repo_modified": info['repo_modified']}
         writer.json("conformance.json", verdict)
         writer.write("COMPLETE" if verdict["ok"] else "FAILED", (info["result_fingerprint"] + "\n").encode())
         return verdict
@@ -286,7 +290,7 @@ def last_conformance(storage, split_id, protocol_sha, environment,tier='quick'):
     # Metadata only: never read or discover simulation data here.
     for path in root.glob("*/conformance.json"):
         data = json.loads(path.read_text())
-        if data.get("summary_format_version")==2 and data.get("ok") and (path.parent / "COMPLETE").is_file() and data.get("split_id") == split_id and data.get('tier','quick')==tier and data.get("platform") == environment["platform"] and data.get("environment_lock_sha256") == environment.get("lock_sha256") and data.get("protocol_sha256") == protocol_sha:
+        if data.get('repo_modified') is not True and data.get("summary_format_version")==2 and data.get("ok") and (path.parent / "COMPLETE").is_file() and data.get("split_id") == split_id and data.get('tier','quick')==tier and data.get("platform") == environment["platform"] and data.get("environment_lock_sha256") == environment.get("lock_sha256") and data.get("protocol_sha256") == protocol_sha:
             if fingerprint(result_files(path.parent)) == data.get("result_fingerprint"):
                 matches.append(data)
     if not matches:
