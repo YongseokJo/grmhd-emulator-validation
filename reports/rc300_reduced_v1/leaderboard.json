@@ -17,6 +17,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "zero-shot agent method",
      "model": "eden-claude",
      "nmae": 0.6210608454407256,
      "physical_rel_l1": {
@@ -99,6 +100,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "zero-shot agent method",
      "model": "eden-gemini",
      "nmae": 0.11522502418241454,
      "physical_rel_l1": {
@@ -181,6 +183,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "zero-shot agent method",
      "model": "eden-gpt",
      "nmae": 0.4303108015362566,
      "physical_rel_l1": {
@@ -263,6 +266,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -344,7 +348,16 @@
      "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
      "data_verified": true,
      "environment_locked": true,
-     "flags": [],
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
      "model": "tron",
      "nmae": 0.11010067590521037,
      "physical_rel_l1": {
@@ -426,7 +439,16 @@
      "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
      "data_verified": true,
      "environment_locked": true,
-     "flags": [],
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
      "model": "vit",
      "nmae": 0.16963253876507597,
      "physical_rel_l1": {
@@ -518,6 +540,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "zero-shot agent method",
      "model": "eden-claude",
      "nmae": 0.6210608454407256,
      "physical_rel_l1": {
@@ -600,6 +623,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "zero-shot agent method",
      "model": "eden-gemini",
      "nmae": 0.11522502418241454,
      "physical_rel_l1": {
@@ -682,6 +706,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "zero-shot agent method",
      "model": "eden-gpt",
      "nmae": 0.4303108015362566,
      "physical_rel_l1": {
@@ -764,6 +789,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -846,6 +872,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -928,6 +955,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -1010,6 +1038,7 @@
      "data_verified": true,
      "environment_locked": true,
      "flags": [],
+     "method_type": "baseline",
      "model": "persistence",
      "nmae": 0.11020979453159997,
      "physical_rel_l1": {
@@ -1091,7 +1120,16 @@
      "checkpoint_sha256": "a81d05b44a86752e45c14ad91f6bf827f5213632b36a29d19ce47a16dbc188eb",
      "data_verified": true,
      "environment_locked": true,
-     "flags": [],
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
      "model": "tron",
      "nmae": 0.11010067590521037,
      "physical_rel_l1": {
@@ -1173,7 +1211,16 @@
      "checkpoint_sha256": "6ebddd839acf2d2991878aeaaf8a55bf71b774e752577adcc51af5501b7b1053",
      "data_verified": true,
      "environment_locked": true,
-     "flags": [],
+     "flags": [
+      "training overlaps validation (1427 dumps)",
+      "training overlaps test (952 dumps)",
+      "training overlaps excluded (100 dumps)",
+      "checkpoint selection overlaps train (469 dumps)",
+      "checkpoint selection overlaps test (475 dumps)",
+      "checkpoint selection overlaps excluded (20 dumps)",
+      "normalization not train"
+     ],
+     "method_type": "trained",
      "model": "vit",
      "nmae": 0.16963253876507597,
      "physical_rel_l1": {

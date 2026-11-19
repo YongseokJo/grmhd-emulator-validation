@@ -1,1 +1,1 @@
-split_id,protocol_id,protocol_sha256,split,tier,model,run_id,skill,nmae,test_attempts
+split_id,protocol_id,protocol_sha256,split,tier,model,method_type,run_id,skill,single_step_skill,nmae,test_attempts

@@ -63,14 +63,26 @@ class ReportTests(RunnerFixture):
         result=self.run_eval();root=Path(result['run_dir'])
         # Alter an internal projected row to check presentation without modifying
         # a completed bundle or claiming a new production evaluation.
-        from grmhd_validation.report import scan,record_row,markdown
+        from grmhd_validation.report import scan,markdown
         records,ledger=scan(self.storage(),'synthetic_v1',self.repo)
         info,summary,path=records[0];info=copy.deepcopy(info)
-        info.update(environment_locked=False,training_provenance={'label':'no, overlaps validation/test (25 dumps)','evidence':'operator declaration'},predictions={'attestation':'unattested'})
+        info.update(environment_locked=False, predictions={'attestation':'unattested'}, training_provenance={
+            'label':'no, overlaps validation/test (25 dumps)',
+            'evidence':'operator declaration',
+            'reasons':['training_outside_train','selection_outside_validation','normalization_not_train'],
+            'partition_counts':{'training':{'validation':25},'selection':{'test':475}},
+        })
         payload=make_report([(info,summary,path)],ledger,self.repo);row=payload['groups'][0]['rows'][0]
-        self.assertEqual(row['flags'],['unlocked','unattested'])
+        self.assertEqual(row['flags'],[
+            'unlocked', 'unattested', 'training overlaps validation (25 dumps)',
+            'checkpoint selection overlaps test (475 dumps)', 'normalization not train',
+        ])
         self.assertEqual(row['training_label'],'no, overlaps validation/test (25 dumps)')
-        self.assertIn('no, overlaps validation/test (25 dumps)',markdown(payload).decode())
+        self.assertEqual(row['method_type'], 'baseline')
+        rendered = markdown(payload).decode()
+        self.assertIn('no, overlaps validation/test (25 dumps)', rendered)
+        self.assertIn(f"Skill @ step {row['report_step']} | Single-step skill", rendered)
+        self.assertIn('Single-step physical relative L1 by channel', rendered)
 
     def test_corrupt_complete_does_not_replace_existing_report(self):
         result=self.run_eval();self.run_report()

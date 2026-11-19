@@ -153,6 +153,47 @@ def scan(storage,split_id,repo):
     return records,ledger
 
 
+def method_type(info, training):
+    if info.get('request', {}).get('adapter') == 'persistence' and info['model'] == 'persistence':
+        return 'baseline'
+    if info['checkpoint_sha256'] is not None or training.get('ranges', {}).get('training'):
+        return 'trained'
+    provenance = info.get('model_provenance') or {}
+    predictions = info.get('predictions') or {}
+    if provenance.get('originating_agent') or predictions.get('protocol') in ('A', 'B'):
+        return 'zero-shot agent method'
+    return None
+
+
+def training_flags(training):
+    partitions = training.get('partition_counts', {})
+    outside = training.get('outside_split_counts', {})
+    labels = {'training': 'training', 'selection': 'checkpoint selection'}
+    flags = []
+    for reason in training.get('reasons', []):
+        if reason == 'normalization_not_train':
+            flags.append('normalization not train')
+            continue
+        role, _, boundary = reason.partition('_outside_')
+        if role in labels and boundary == 'frozen_split':
+            count = outside.get(role)
+            if count:
+                flags.append(f'{labels[role]} outside frozen split ({count} dumps)')
+                continue
+        if role in labels and boundary in ('train', 'validation'):
+            counts = partitions.get(role, {})
+            overlaps = [
+                f'{labels[role]} overlaps {partition} ({counts[partition]} dumps)'
+                for partition in ('train', 'validation', 'test', 'excluded')
+                if partition != boundary and counts.get(partition)
+            ]
+            if overlaps:
+                flags.extend(overlaps)
+                continue
+        flags.append(reason.replace('_', ' '))
+    return flags
+
+
 def record_row(info,summary,ledger,protocol):
     curve=summary['rollout_curve']['at_steps'];step=max(int(k) for k in curve);headline=curve[str(step)]
     single=summary['single_step'];training=info.get('training_provenance') or {}
@@ -165,15 +206,17 @@ def record_row(info,summary,ledger,protocol):
     tests=[a for a in ledger['attempts'] if a['split']=='test' and a['model']==info['model'] and a['checkpoint_known'] and a['checkpoint_sha256']==info['checkpoint_sha256']]
     unknown=[a['run_id'] for a in ledger['attempts'] if a['split']=='test' and not a['checkpoint_known']]
     if unknown:flags.append('unattributed test attempts present')
+    flags.extend(training_flags(training))
     physics={'mass':None,'energy':None,'angular':None}
     values=summary.get('physics_table',{}).get('data',{}).get('aggregate',{}).get('mean',{})
     samples=values.get('samples',[])
     final=next((s for s in samples if int(s['step'])==step),{})
     compact=summary.get('physics_table',{}).get('headlines',{})
     physics.update({name:compact.get('step_'+str(step)+'_'+name+'_error',final.get(name+'_error')) for name in physics})
-    return {**{key:info[key] for key in GROUP_FIELDS},'model':info['model'],'version':info['version'],'run_id':info['run_id'],
-            'checkpoint_sha256':info['checkpoint_sha256'],'report_step':step,'skill':headline['skill'],'nmae':headline['mean_nmae'],
-            'single_step_skill':single['mean']['skill'],'single_step_nmae':single['mean']['nmae_model'],
+    return {**{key:info[key] for key in GROUP_FIELDS},'model':info['model'],'method_type':method_type(info, training),
+            'version':info['version'],'run_id':info['run_id'],
+            'checkpoint_sha256':info['checkpoint_sha256'],'report_step':step,'skill':headline['skill'],
+            'single_step_skill':single['mean']['skill'],'nmae':headline['mean_nmae'],'single_step_nmae':single['mean']['nmae_model'],
             'physical_rel_l1':{name:single['per_channel'][name]['rel_l1'] for name in CHANNELS},'physics_errors':physics,
             'test_attempts':len(tests),'unattributed_test_attempts':unknown,'data_verified':info['data_verified'],
             'training_label':training.get('label',training.get('trained_on_this_split','unknown')),
@@ -209,15 +252,18 @@ def markdown(report):
            'Every row is one sealed artifact-verified run. Training evidence is an operator declaration; host attestation does not independently prove blindness.','']
     if not report['groups']:lines+=['No eligible completed runs.','']
     for group in report['groups']:
+        steps={row['report_step'] for row in group['rows']}
+        skill_header=f'Skill @ step {next(iter(steps))}' if len(steps)==1 else 'Final-step skill'
         lines+=['## '+group['split']+' / '+group['tier']+' / '+group['protocol_id'], '',
-                'Protocol SHA256: `'+group['protocol_sha256']+'`. Headline scores use the final report step.','',
-                '| Model | Run | Skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |',
-                '|---|---|---:|---:|---:|---|---|---|---|']
+                'Protocol SHA256: `'+group['protocol_sha256']+'`. Rollout skill and nMAE use the final report step.','',
+                f'| Model | Method type | Run | {skill_header} | Single-step skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |',
+                '|---|---|---|---:|---:|---:|---:|---|---|---|---|']
         for row in group['rows']:
-            values=[row['model'],row['run_id'],fmt(row['skill']),fmt(row['nmae']),row['test_attempts'],
+            values=[row['model'],row['method_type'] or 'unknown',row['run_id'],fmt(row['skill']),
+                    fmt(row['single_step_skill']),fmt(row['nmae']),row['test_attempts'],
                     'yes' if row['data_verified'] else 'no', 'unknown' if row['repo_modified'] is None else 'yes' if row['repo_modified'] else 'no',row['training_label'],', '.join(row['flags']) or '—']
             lines+=['| '+' | '.join(cell(v) for v in values)+' |']
-        lines+=['','Physical relative L1 (per channel):','', '| Run | '+' | '.join(CHANNELS)+' |','|---|'+'---:|'*8]
+        lines+=['','Single-step physical relative L1 by channel','', '| Run | '+' | '.join(CHANNELS)+' |','|---|'+'---:|'*8]
         for row in group['rows']:lines+=['| '+cell(row['run_id'])+' | '+' | '.join(fmt(row['physical_rel_l1'][c]) for c in CHANNELS)+' |']
         lines+=['','Final-step physics errors (undefined for quick):','', '| Run | Mass | Energy | Angular momentum |','|---|---:|---:|---:|']
         for row in group['rows']:lines+=['| '+cell(row['run_id'])+' | '+' | '.join(fmt(row['physics_errors'][c]) for c in ('mass','energy','angular'))+' |']
@@ -286,7 +332,7 @@ def artifacts(report,repo,render=True):
         result.update(images)
         presentation.append({'group':{k:group[k] for k in GROUP_FIELDS},'data_sha256':hashlib.sha256(json_bytes(group)).hexdigest(),
                              'files':{name:hashlib.sha256(value).hexdigest() for name,value in images.items()}})
-    fields=list(rows[0]) if rows else ['split_id','protocol_id','protocol_sha256','split','tier','model','run_id','skill','nmae','test_attempts']
+    fields=list(rows[0]) if rows else ['split_id','protocol_id','protocol_sha256','split','tier','model','method_type','run_id','skill','single_step_skill','nmae','test_attempts']
     result['leaderboard.csv']=csv_bytes(rows,fields)
     if render:result['figures.json']=json_bytes({'schema_version':1,'groups':presentation})
     return result

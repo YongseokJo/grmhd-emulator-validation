@@ -214,6 +214,9 @@
         "training_label": {
          "type": "string"
         },
+        "method_type": {
+         "enum": ["trained", "zero-shot agent method", "baseline", null]
+        },
         "training_evidence": {
          "type": "string"
         },
@@ -306,6 +309,7 @@
         "unattributed_test_attempts",
         "data_verified",
         "training_label",
+        "method_type",
         "training_evidence",
         "environment_locked",
         "prediction_attestation",

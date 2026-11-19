@@ -5,18 +5,18 @@ Every row is one sealed artifact-verified run. Training evidence is an operator 
 
 ## validation / full / forecast_v1
 
-Protocol SHA256: `74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2`. Headline scores use the final report step.
+Protocol SHA256: `74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2`. Rollout skill and nMAE use the final report step.
 
-| Model | Run | Skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |
-|---|---|---:|---:|---:|---|---|---|---|
-| eden-claude | eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1 | -4.63526 | 0.621061 | 0 | yes | no | unknown | — |
-| eden-gemini | eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1 | -0.0455062 | 0.115225 | 0 | yes | no | unknown | — |
-| eden-gpt | eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1 | -2.90447 | 0.430311 | 0 | yes | no | unknown | — |
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1 | 0 | 0.11021 | 0 | yes | no | unknown | — |
-| tron | tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1 | 0.000990099 | 0.110101 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | — |
-| vit | vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1 | -0.539178 | 0.169633 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | — |
+| Model | Method type | Run | Skill @ step 50 | Single-step skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |
+|---|---|---|---:|---:|---:|---:|---|---|---|---|
+| eden-claude | zero-shot agent method | eden-claude-v1__nockpt__rc300_reduced_v1__validation__full__a1 | -4.63526 | -0.176696 | 0.621061 | 0 | yes | no | unknown | — |
+| eden-gemini | zero-shot agent method | eden-gemini-v1__nockpt__rc300_reduced_v1__validation__full__a1 | -0.0455062 | -0.18042 | 0.115225 | 0 | yes | no | unknown | — |
+| eden-gpt | zero-shot agent method | eden-gpt-v1__nockpt__rc300_reduced_v1__validation__full__a1 | -2.90447 | -0.216369 | 0.430311 | 0 | yes | no | unknown | — |
+| persistence | baseline | persistence-v1__nockpt__rc300_reduced_v1__validation__full__a1 | 0 | 0 | 0.11021 | 0 | yes | no | unknown | — |
+| tron | trained | tron-v1__a81d05b4__rc300_reduced_v1__validation__full__a1 | 0.000990099 | 0.721949 | 0.110101 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | training overlaps validation (1427 dumps), training overlaps test (952 dumps), training overlaps excluded (100 dumps), checkpoint selection overlaps train (469 dumps), checkpoint selection overlaps test (475 dumps), checkpoint selection overlaps excluded (20 dumps), normalization not train |
+| vit | trained | vit-v1__6ebddd83__rc300_reduced_v1__validation__full__a1 | -0.539178 | 0.571892 | 0.169633 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | training overlaps validation (1427 dumps), training overlaps test (952 dumps), training overlaps excluded (100 dumps), checkpoint selection overlaps train (469 dumps), checkpoint selection overlaps test (475 dumps), checkpoint selection overlaps excluded (20 dumps), normalization not train |
 
-Physical relative L1 (per channel):
+Single-step physical relative L1 by channel
 
 | Run | rho | ug | utilde1 | utilde2 | utilde3 | B1 | B2 | B3 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -43,21 +43,21 @@ Comparison figures (shared reports or local replay; not stored in Git):
 
 ## validation / quick / forecast_v1
 
-Protocol SHA256: `74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2`. Headline scores use the final report step.
+Protocol SHA256: `74d6f91071413ccc7154770312ea40b2d2c007225d094b0a2bbfba383e3a93e2`. Rollout skill and nMAE use the final report step.
 
-| Model | Run | Skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |
-|---|---|---:|---:|---:|---|---|---|---|
-| eden-claude | eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | -4.63526 | 0.621061 | 0 | yes | no | unknown | — |
-| eden-gemini | eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | -0.0455062 | 0.115225 | 0 | yes | no | unknown | — |
-| eden-gpt | eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | -2.90447 | 0.430311 | 0 | yes | no | unknown | — |
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a2 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
-| persistence | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4 | 0 | 0.11021 | 0 | yes | no | unknown | — |
-| tron | tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1 | 0.000990099 | 0.110101 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | — |
-| vit | vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1 | -0.539178 | 0.169633 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | — |
+| Model | Method type | Run | Skill @ step 50 | Single-step skill | nMAE | Test attempts | Data verified | Repo modified | Training label | Flags |
+|---|---|---|---:|---:|---:|---:|---|---|---|---|
+| eden-claude | zero-shot agent method | eden-claude-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | -4.63526 | -0.176696 | 0.621061 | 0 | yes | no | unknown | — |
+| eden-gemini | zero-shot agent method | eden-gemini-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | -0.0455062 | -0.18042 | 0.115225 | 0 | yes | no | unknown | — |
+| eden-gpt | zero-shot agent method | eden-gpt-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | -2.90447 | -0.216369 | 0.430311 | 0 | yes | no | unknown | — |
+| persistence | baseline | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a1 | 0 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
+| persistence | baseline | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a2 | 0 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
+| persistence | baseline | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a3 | 0 | 0 | 0.11021 | 0 | yes | unknown | unknown | — |
+| persistence | baseline | persistence-v1__nockpt__rc300_reduced_v1__validation__quick__a4 | 0 | 0 | 0.11021 | 0 | yes | no | unknown | — |
+| tron | trained | tron-v1__a81d05b4__rc300_reduced_v1__validation__quick__a1 | 0.000990099 | 0.721949 | 0.110101 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | training overlaps validation (1427 dumps), training overlaps test (952 dumps), training overlaps excluded (100 dumps), checkpoint selection overlaps train (469 dumps), checkpoint selection overlaps test (475 dumps), checkpoint selection overlaps excluded (20 dumps), normalization not train |
+| vit | trained | vit-v1__6ebddd83__rc300_reduced_v1__validation__quick__a1 | -0.539178 | 0.571892 | 0.169633 | 0 | yes | no | no, overlaps validation/test (2379 dumps) | training overlaps validation (1427 dumps), training overlaps test (952 dumps), training overlaps excluded (100 dumps), checkpoint selection overlaps train (469 dumps), checkpoint selection overlaps test (475 dumps), checkpoint selection overlaps excluded (20 dumps), normalization not train |
 
-Physical relative L1 (per channel):
+Single-step physical relative L1 by channel
 
 | Run | rho | ug | utilde1 | utilde2 | utilde3 | B1 | B2 | B3 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
